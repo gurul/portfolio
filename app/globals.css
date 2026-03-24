@@ -1,0 +1,269 @@
+:root {
+  --bg: #211d1c;
+  --text: rgba(255, 255, 255, 0.58);
+  --muted: rgba(255, 255, 255, 0.48);
+  --accent: #c45a5a;
+  --rule: rgba(255, 255, 255, 0.08);
+  --crosshair: rgba(255, 255, 255, 0.2);
+  /* Viewport-locked intersection; text offset = crosshair + gap */
+  --crosshair-x: 3.25rem;
+  --crosshair-y: 3.25rem;
+  --crosshair-copy-gap-x: 5.25rem;
+  --crosshair-copy-gap-y: 4.5rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.18em;
+}
+
+.page-shell {
+  position: relative;
+  z-index: 1;
+  height: 100dvh;
+  padding: 0;
+  overflow: hidden;
+}
+
+.crosshair {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.crosshair__line {
+  position: absolute;
+}
+
+.crosshair__line--v {
+  top: 0;
+  left: var(--crosshair-x);
+  width: 0;
+  height: 100%;
+  border-left: 1px dotted var(--crosshair);
+  transform: translateX(-0.5px);
+}
+
+.crosshair__line--h {
+  top: var(--crosshair-y);
+  left: 0;
+  width: 100%;
+  height: 0;
+  border-top: 1px dotted var(--crosshair);
+  transform: translateY(-0.5px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crosshair {
+    display: none;
+  }
+}
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  width: 100%;
+  margin: calc(var(--crosshair-y) + var(--crosshair-copy-gap-y)) 0 0;
+  padding: 0 0 0
+    calc(var(--crosshair-x) + var(--crosshair-copy-gap-x));
+  justify-items: start;
+}
+
+.copy-column {
+  max-width: 44rem;
+  text-align: left;
+}
+
+.copy-column p {
+  margin: 0 0 0.75rem;
+  font-size: clamp(0.91rem, 0.78rem + 0.29vw, 1.24rem);
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  text-transform: lowercase;
+}
+
+.inline-nowrap {
+  white-space: nowrap;
+}
+
+.name-link {
+  color: var(--accent);
+}
+
+.commit-history {
+  margin: 0.15rem 0 0;
+  width: min(100%, 25rem);
+  display: flex;
+  align-items: stretch;
+  gap: 0.65rem;
+}
+
+.commit-history-count {
+  margin: 0;
+  font-size: clamp(0.72rem, 0.66rem + 0.11vw, 0.8rem);
+  line-height: 1.35;
+  font-style: italic;
+}
+
+.commit-history-count span {
+  display: block;
+}
+
+.commit-history-count span:first-child {
+  white-space: nowrap;
+}
+
+.commit-history-count span:last-child {
+  white-space: nowrap;
+}
+
+.commit-history-meta {
+  flex: 0 0 12rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-self: stretch;
+  padding: 0 0 1.6rem;
+}
+
+.commit-history-link {
+  display: inline;
+  color: var(--accent);
+  text-decoration: underline;
+  font-size: clamp(0.91rem, 0.78rem + 0.29vw, 1.24rem);
+  line-height: inherit;
+}
+
+.gif-ascii-block {
+  position: fixed;
+  right: 2.2rem;
+  bottom: 2rem;
+  margin: 0;
+  width: min(100%, 42rem);
+  z-index: 1;
+}
+
+.gif-ascii-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--bg);
+}
+
+.gif-ascii-source {
+  display: none;
+}
+
+.commit-history-viewport {
+  flex: 0 0 12.96rem;
+  overflow: hidden;
+  height: 6.1rem;
+}
+
+.commit-history-image {
+  display: block;
+  width: 306%;
+  max-width: none;
+  height: auto;
+  transform: translateX(-67.3%) translateY(-0.62rem);
+  transform-origin: left center;
+  opacity: 1;
+  clip-path: inset(0 0 1.6rem 0);
+}
+
+@media (max-width: 1100px) {
+  :root {
+    --crosshair-x: 2.75rem;
+    --crosshair-y: 2.75rem;
+    --crosshair-copy-gap-x: 4.25rem;
+    --crosshair-copy-gap-y: 3.75rem;
+  }
+
+  .page-shell {
+    padding-top: 0;
+  }
+
+  .intro-grid {
+    margin-top: calc(var(--crosshair-y) + var(--crosshair-copy-gap-y));
+    padding-left: calc(var(--crosshair-x) + var(--crosshair-copy-gap-x));
+  }
+
+  .intro-spacer {
+    display: none;
+  }
+
+  .copy-column {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --crosshair-x: 1.15rem;
+    --crosshair-y: 2.85rem;
+    --crosshair-copy-gap-x: 2.35rem;
+    --crosshair-copy-gap-y: 3.25rem;
+  }
+
+  .page-shell {
+    padding: 0 1rem 1rem;
+  }
+
+  .intro-grid {
+    margin-top: calc(var(--crosshair-y) + var(--crosshair-copy-gap-y));
+    padding-left: calc(
+      var(--crosshair-x) + var(--crosshair-copy-gap-x) - 1rem
+    );
+  }
+
+  .copy-column p {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin-bottom: 0.65rem;
+  }
+
+  .commit-history {
+    width: 100%;
+    margin-bottom: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+
+  .commit-history-meta {
+    flex-basis: auto;
+    justify-content: flex-start;
+    gap: 0.2rem;
+    padding: 0;
+  }
+
+  .commit-history-viewport {
+    flex-basis: auto;
+  }
+
+  .gif-ascii-block {
+    right: 1rem;
+    bottom: 1rem;
+    width: calc(100vw - 2rem);
+  }
+}
