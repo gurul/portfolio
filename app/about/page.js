@@ -21,7 +21,7 @@ export default async function AboutPage() {
         , or Guru (గురు) for short.
       </p>
       <p>
-        I work at the intersection of AI, memory, and human experience while
+        I build at the intersection of AI, memory, and human experience while
         studying Computer Science at the University of Washington.
       </p>
       <p>
