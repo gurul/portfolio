@@ -69,7 +69,9 @@ a {
   left: calc(var(--crosshair-x) + var(--crosshair-copy-gap-x));
   z-index: 2;
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
+  max-width: calc(100vw - var(--crosshair-x) - var(--crosshair-copy-gap-x) - 1.5rem);
 }
 
 .site-nav--flow {
@@ -82,6 +84,7 @@ a {
   text-transform: lowercase;
   font-size: clamp(0.91rem, 0.78rem + 0.29vw, 1.24rem);
   line-height: 1.45;
+  white-space: nowrap;
 }
 
 .site-nav__link.is-active {
@@ -210,6 +213,11 @@ a {
   margin: 0;
   width: min(100%, 33.6rem);
   z-index: 1;
+  display: none;
+}
+
+.route-about .gif-ascii-block {
+  display: block;
 }
 
 .gif-ascii-canvas {
@@ -334,6 +342,7 @@ a {
     --crosshair-y: 2.85rem;
     --crosshair-copy-gap-x: 2.35rem;
     --crosshair-copy-gap-y: 3.25rem;
+    --nav-body-gap: 4.2rem;
   }
 
   .page-shell {
@@ -344,11 +353,19 @@ a {
   .site-nav {
     top: calc(var(--crosshair-y) + 0.9rem);
     left: calc(var(--crosshair-x) + var(--crosshair-copy-gap-x) - 0.55rem);
-    gap: 0.7rem;
+    gap: 0.25rem 0.7rem;
+    max-width: calc(100vw - var(--crosshair-x) - var(--crosshair-copy-gap-x) - 1.5rem);
+  }
+
+  .site-nav__link {
+    font-size: 0.8rem;
+    line-height: 1.3;
   }
 
   .intro-grid {
-    margin-top: calc(var(--crosshair-y) + var(--crosshair-copy-gap-y));
+    margin-top: calc(
+      var(--crosshair-y) + var(--crosshair-copy-gap-x) + var(--nav-body-gap)
+    );
     padding-left: calc(
       var(--crosshair-x) + var(--crosshair-copy-gap-x) - 0.55rem
     );

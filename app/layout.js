@@ -10,8 +10,18 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://portfolio-guruls-projects.vercel.app"),
   title: "Gurucharan Lingamallu",
   description: "Personal website for Gurucharan Lingamallu.",
+  openGraph: {
+    title: "Gurucharan Lingamallu",
+    description: "Personal website for Gurucharan Lingamallu.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gurucharan Lingamallu",
+    description: "Personal website for Gurucharan Lingamallu.",
+  },
 };
 
 export default function RootLayout({ children }) {
