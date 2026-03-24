@@ -272,6 +272,10 @@ a {
   color: var(--text);
 }
 
+.copy-column p.people-note {
+  color: var(--accent);
+}
+
 .route-experience .page-shell--scrollable {
   overflow: visible;
   padding-bottom: 3rem;
