@@ -1,10 +1,10 @@
 :root {
   --bg: #a82410;
-  --text: rgba(255, 255, 255, 0.58);
-  --muted: rgba(255, 255, 255, 0.48);
-  --accent: rgba(255, 244, 240, 0.92);
-  --rule: rgba(255, 244, 240, 0.08);
-  --crosshair: rgba(255, 244, 240, 0.38);
+  --text: #e8d9c5;
+  --muted: rgba(232, 217, 197, 0.78);
+  --accent: #fdfcf0;
+  --rule: rgba(253, 252, 240, 0.08);
+  --crosshair: rgba(253, 252, 240, 0.34);
   /* Viewport-locked intersection; text offset = crosshair + gap */
   --crosshair-x: 3.25rem;
   --crosshair-y: 3.25rem;
@@ -30,6 +30,7 @@ body {
   min-height: 100%;
   background: var(--bg);
   color: var(--text);
+  font-weight: 500;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -104,7 +105,7 @@ a {
 }
 
 .site-nav__link.is-active {
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--accent);
   text-decoration: underline;
 }
 
