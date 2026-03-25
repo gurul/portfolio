@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 const ASCII_CHARS = " .'`^,:;Il!i~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
 const FRAME_COUNT = 43;
@@ -17,11 +18,14 @@ function luminance(r, g, b) {
 }
 
 export default function GifAsciiPlayer() {
+  const pathname = usePathname();
+  const blockRef = useRef(null);
   const canvasRef = useRef(null);
   const frameRef = useRef(null);
   const imagesRef = useRef([]);
   const frameIndexRef = useRef(0);
   const lastTimeRef = useRef(0);
+  const [showScrollCue, setShowScrollCue] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -138,8 +142,53 @@ export default function GifAsciiPlayer() {
     };
   }, []);
 
+  useEffect(() => {
+    setShowScrollCue(false);
+
+    const updateScrollCue = () => {
+      const isMobile = window.innerWidth <= 900;
+      const footerHeight =
+        blockRef.current?.getBoundingClientRect().height ?? 0;
+      const copyColumn = document.querySelector(".copy-column");
+      const lastContent = copyColumn?.lastElementChild;
+
+      if (!isMobile || !footerHeight || !lastContent) {
+        setShowScrollCue(false);
+        return;
+      }
+
+      const lastContentBottom = lastContent.getBoundingClientRect().bottom;
+      const footerTop = window.innerHeight - footerHeight;
+
+      setShowScrollCue(lastContentBottom > footerTop + 12);
+    };
+
+    const frameOne = window.requestAnimationFrame(() => {
+      updateScrollCue();
+      window.requestAnimationFrame(updateScrollCue);
+    });
+    const delayed = window.setTimeout(updateScrollCue, 180);
+
+    window.addEventListener("scroll", updateScrollCue, { passive: true });
+    window.addEventListener("resize", updateScrollCue);
+
+    return () => {
+      window.cancelAnimationFrame(frameOne);
+      window.clearTimeout(delayed);
+      window.removeEventListener("scroll", updateScrollCue);
+      window.removeEventListener("resize", updateScrollCue);
+    };
+  }, [pathname]);
+
   return (
-    <section className="gif-ascii-block" aria-label="ASCII animation experiment">
+    <section
+      ref={blockRef}
+      className="gif-ascii-block"
+      aria-label="ASCII animation experiment"
+    >
+      {showScrollCue ? (
+        <span className="gif-ascii-scroll-cue">scroll to continue</span>
+      ) : null}
       <canvas ref={canvasRef} className="gif-ascii-canvas" />
     </section>
   );

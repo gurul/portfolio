@@ -224,6 +224,10 @@ a {
   background: var(--bg);
 }
 
+.gif-ascii-scroll-cue {
+  display: none;
+}
+
 .gif-ascii-source {
   display: none;
 }
@@ -376,7 +380,7 @@ a {
   }
 
   .commit-history {
-    width: min(100%, 18rem);
+    width: min(100%, 12.6rem);
     margin-bottom: 0;
     flex-direction: column;
     align-items: flex-start;
@@ -408,8 +412,9 @@ a {
     width: 100%;
     height: var(--horse-clearance);
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
     padding-top: 1rem;
     padding-bottom: 0.2rem;
     background: var(--bg);
@@ -419,5 +424,15 @@ a {
   .gif-ascii-canvas {
     width: min(64.96vw, 15.68rem);
     opacity: 0.68;
+  }
+
+  .gif-ascii-scroll-cue {
+    display: block;
+    margin: 0 0 0.45rem;
+    color: var(--muted);
+    font-size: 0.68rem;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: lowercase;
   }
 }
