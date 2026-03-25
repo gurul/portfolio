@@ -8,8 +8,7 @@ const FRAME_COUNT = 43;
 const FRAME_DURATION = 1000 / 25;
 const BACKGROUND_THRESHOLD = 18;
 const CONTRAST = 1.45;
-const DEFAULT_BG = "#a82410";
-const ACTIVE_BG = "#211d1c";
+const DEFAULT_BG = "#001918";
 const STORAGE_KEY = "horse-theme-active";
 
 function clamp(value, min, max) {
@@ -34,7 +33,10 @@ export default function GifAsciiPlayer() {
 
   useEffect(() => {
     try {
-      setIsActivated(window.localStorage.getItem(STORAGE_KEY) === "true");
+      const storedTheme = window.localStorage.getItem(STORAGE_KEY);
+      const nextTheme = storedTheme == null ? false : storedTheme !== "true";
+      setIsActivated(nextTheme);
+      window.localStorage.setItem(STORAGE_KEY, String(nextTheme));
     } catch {}
   }, []);
 
@@ -101,7 +103,11 @@ export default function GifAsciiPlayer() {
       offscreenContext.drawImage(image, 0, 0, width, height);
       const { data } = offscreenContext.getImageData(0, 0, width, height);
 
-      context.fillStyle = isActivated ? ACTIVE_BG : DEFAULT_BG;
+      const themeBackground =
+        getComputedStyle(document.documentElement)
+          .getPropertyValue("--bg")
+          .trim() || DEFAULT_BG;
+      context.fillStyle = themeBackground;
       context.fillRect(0, 0, canvas.width, canvas.height);
       context.font = "11px JetBrains Mono, monospace";
       context.textBaseline = "top";
@@ -129,14 +135,14 @@ export default function GifAsciiPlayer() {
           const intensity = brightness / 255;
           const alpha = Math.min(1, 0.34 + intensity * 0.78);
           const red = isActivated
-            ? Math.round(136 + intensity * 70)
-            : Math.round(240 + intensity * 15);
+            ? Math.round(240 + intensity * 15)
+            : Math.round(228 + intensity * 24);
           const green = isActivated
-            ? Math.round(14 + intensity * 38)
-            : Math.round(228 + intensity * 20);
+            ? Math.round(228 + intensity * 20)
+            : Math.round(224 + intensity * 28);
           const blue = isActivated
-            ? Math.round(14 + intensity * 38)
-            : Math.round(220 + intensity * 24);
+            ? Math.round(220 + intensity * 24)
+            : Math.round(220 + intensity * 32);
 
           context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
           context.fillText(char, x * 8, y * 14);

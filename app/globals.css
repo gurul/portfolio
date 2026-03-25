@@ -1,17 +1,17 @@
 :root {
-  --bg: #a82410;
-  --text: #e8d9c5;
-  --muted: rgba(232, 217, 197, 0.78);
-  --accent: #fdfcf0;
-  --rule: rgba(253, 252, 240, 0.08);
-  --crosshair: rgba(253, 252, 240, 0.34);
+  --bg: #001918;
+  --text: rgba(255, 255, 255, 0.58);
+  --muted: rgba(255, 255, 255, 0.48);
+  --accent: rgba(255, 255, 255, 0.92);
+  --rule: rgba(255, 255, 255, 0.08);
+  --crosshair: rgba(255, 255, 255, 0.32);
   /* Viewport-locked intersection; text offset = crosshair + gap */
   --crosshair-x: 3.25rem;
   --crosshair-y: 3.25rem;
   --crosshair-copy-gap-x: 5.25rem;
   --crosshair-copy-gap-y: 4.5rem;
   --nav-body-gap: 2.4rem;
-  --horse-clearance: 18rem;
+  --horse-clearance: 27rem;
 }
 
 * {
@@ -49,11 +49,11 @@ body.route-flow {
 
 html.horse-theme-active,
 body.horse-theme-active {
-  --bg: #211d1c;
-  --text: rgba(255, 255, 255, 0.58);
-  --muted: rgba(255, 255, 255, 0.48);
-  --accent: rgba(255, 255, 255, 0.92);
-  --crosshair: rgba(255, 255, 255, 0.32);
+  --bg: #6b1815;
+  --text: #e8d9c5;
+  --muted: rgba(232, 217, 197, 0.78);
+  --accent: #fdfcf0;
+  --crosshair: rgba(253, 252, 240, 0.34);
 }
 
 a {
@@ -187,8 +187,7 @@ a {
 .horse-theme-active .projects-page-title a,
 .horse-theme-active .blog-title-link,
 .horse-theme-active .blog-post-title,
-.horse-theme-active .experience-company,
-.horse-theme-active .copy-column p.people-note {
+.horse-theme-active .experience-company {
   font-weight: 700;
 }
 
@@ -241,7 +240,7 @@ a {
   right: 2.2rem;
   bottom: 2rem;
   margin: 0;
-  width: min(100%, 33.6rem);
+  width: min(100%, 50.4rem);
   z-index: 1;
   cursor: pointer;
 }
@@ -291,7 +290,8 @@ a {
   color: var(--accent);
 }
 
-.experience-list {
+.experience-list,
+.experience-notes {
   display: grid;
   gap: 0.95rem;
   max-width: 46rem;
@@ -302,16 +302,33 @@ a {
   gap: 0.12rem;
 }
 
-.experience-company {
-  color: var(--accent);
+.experience-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
-.experience-role {
+.experience-company {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.experience-time {
+  margin: 0;
+  color: var(--muted);
+}
+
+.experience-role,
+.experience-description {
+  margin: 0;
   color: var(--text);
 }
 
 .copy-column p.people-note {
   color: var(--accent);
+  font-weight: 400;
 }
 
 .commit-history-viewport {
@@ -381,7 +398,7 @@ a {
     --crosshair-copy-gap-x: 2.35rem;
     --crosshair-copy-gap-y: 3.25rem;
     --nav-body-gap: 4.2rem;
-    --horse-clearance: 10.5rem;
+    --horse-clearance: 11.03rem;
   }
 
   .page-shell {
@@ -456,6 +473,16 @@ a {
     transform: translateX(-65.2%) translateY(-0.22rem);
   }
 
+  .experience-notes {
+    margin-top: 1rem;
+  }
+
+  .experience-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.08rem;
+  }
+
   .gif-ascii-block {
     left: 0;
     right: 0;
@@ -474,7 +501,7 @@ a {
   }
 
   .gif-ascii-canvas {
-    width: min(64.96vw, 15.68rem);
+    width: min(68.21vw, 16.46rem);
     opacity: 0.82;
   }
 

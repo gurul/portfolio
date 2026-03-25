@@ -110,13 +110,17 @@ export default function ExperiencePage() {
             key={`${item.company}-${item.role}-${item.time}`}
             className="experience-item"
           >
-            <p className="experience-company">{item.company}</p>
-            <p className="experience-role">
-              {item.role} ({item.time})
-            </p>
+            <div className="experience-header">
+              <p className="experience-company">{item.company}</p>
+              <p className="experience-time">{item.time}</p>
+            </div>
+            <p className="experience-role">{item.role}</p>
             <p className="experience-description">{item.description}</p>
           </article>
         ))}
+      </section>
+
+      <section className="experience-notes" aria-label="Additional involvement">
         <article className="experience-item">
           <p className="experience-company">Activities</p>
           <p className="experience-description">
