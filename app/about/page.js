@@ -18,7 +18,7 @@ export default async function AboutPage() {
         >
           Gurucharan Lingamallu
         </a>
-        , or Guru (గురు) for short.
+        , <span className="inline-nowrap">or Guru (గురు) for short.</span>
       </p>
       <p>
         I build at the intersection of AI, memory, and human experience while

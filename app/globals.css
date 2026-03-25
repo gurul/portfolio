@@ -465,8 +465,9 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    align-items: center;
+    align-items: flex-end;
     padding-top: 1rem;
+    padding-right: 0.85rem;
     padding-bottom: 0.2rem;
     background: var(--bg);
     z-index: 1;
@@ -480,10 +481,12 @@ a {
   .gif-ascii-scroll-cue {
     display: block;
     margin: 0 0 0.45rem;
+    align-self: flex-end;
     color: var(--muted);
     font-size: 0.68rem;
     line-height: 1;
     letter-spacing: 0.08em;
+    text-align: right;
     text-transform: lowercase;
   }
 }
