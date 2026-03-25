@@ -7,7 +7,7 @@ const ASCII_CHARS = " .'`^,:;Il!i~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#M
 const FRAME_COUNT = 43;
 const FRAME_DURATION = 1000 / 25;
 const BACKGROUND_THRESHOLD = 18;
-const CONTRAST = 1.3;
+const CONTRAST = 1.45;
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -94,10 +94,10 @@ export default function GifAsciiPlayer() {
           const charIndex = Math.floor((brightness / 255) * (ASCII_CHARS.length - 1));
           const char = ASCII_CHARS[ASCII_CHARS.length - 1 - charIndex];
           const intensity = brightness / 255;
-          const alpha = Math.min(1, 0.22 + intensity * 0.82);
-          const red = Math.round(120 + intensity * 111);
-          const green = Math.round(28 + intensity * 78);
-          const blue = Math.round(28 + intensity * 78);
+          const alpha = Math.min(1, 0.34 + intensity * 0.78);
+          const red = Math.round(142 + intensity * 94);
+          const green = Math.round(30 + intensity * 84);
+          const blue = Math.round(30 + intensity * 84);
 
           context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
           context.fillText(char, x * 8, y * 14);

@@ -401,8 +401,8 @@ a {
   }
 
   .commit-history-image {
-    width: 278%;
-    transform: translateX(-66.8%) translateY(-0.22rem);
+    width: 270%;
+    transform: translateX(-65.2%) translateY(-0.22rem);
   }
 
   .gif-ascii-block {
@@ -423,7 +423,7 @@ a {
 
   .gif-ascii-canvas {
     width: min(64.96vw, 15.68rem);
-    opacity: 0.68;
+    opacity: 0.82;
   }
 
   .gif-ascii-scroll-cue {
