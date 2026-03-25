@@ -6,6 +6,11 @@ const ASCII_CHARS = " .'`^,:;Il!i~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#M
 const FRAME_COUNT = 43;
 const FRAME_DURATION = 1000 / 25;
 const BACKGROUND_THRESHOLD = 18;
+const CONTRAST = 1.22;
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
 
 function luminance(r, g, b) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
@@ -48,7 +53,7 @@ export default function GifAsciiPlayer() {
         return;
       }
 
-      const width = 96;
+      const width = 116;
       const height = Math.round((image.naturalHeight / image.naturalWidth) * width * 0.52);
       offscreen.width = width;
       offscreen.height = height;
@@ -74,22 +79,28 @@ export default function GifAsciiPlayer() {
 
           if (a < 30) continue;
 
-          const brightness = luminance(r, g, b);
+          const baseBrightness = luminance(r, g, b);
+          const brightness = clamp(
+            (baseBrightness - 128) * CONTRAST + 128,
+            0,
+            255,
+          );
           if (brightness < BACKGROUND_THRESHOLD) continue;
 
           const charIndex = Math.floor((brightness / 255) * (ASCII_CHARS.length - 1));
           const char = ASCII_CHARS[ASCII_CHARS.length - 1 - charIndex];
-          const alpha = Math.min(0.96, 0.18 + brightness / 255);
-          const red = r;
-          const green = g;
-          const blue = b;
+          const intensity = brightness / 255;
+          const alpha = Math.min(1, 0.22 + intensity * 0.82);
+          const red = Math.round(120 + intensity * 111);
+          const green = Math.round(28 + intensity * 78);
+          const blue = Math.round(28 + intensity * 78);
 
           context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
           context.fillText(char, x * 8, y * 14);
 
-          if (x % 7 === 0 && y % 5 === 0) {
+          if (x % 11 === 0 && y % 7 === 0 && brightness > 96) {
             context.fillStyle = `rgba(${Math.min(255, red + 18)}, ${Math.min(255, green + 18)}, ${Math.min(255, blue + 18)}, ${alpha * 0.18})`;
-            context.fillText(char, x * 8 + 1.5, y * 14);
+            context.fillText(char, x * 8 + 1, y * 14);
           }
         }
       }

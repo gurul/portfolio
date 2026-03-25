@@ -11,6 +11,7 @@
   --crosshair-copy-gap-x: 5.25rem;
   --crosshair-copy-gap-y: 4.5rem;
   --nav-body-gap: 2.4rem;
+  --horse-clearance: 18rem;
 }
 
 * {
@@ -54,12 +55,13 @@ a {
   position: relative;
   z-index: 1;
   min-height: 100dvh;
-  padding: 0;
+  padding: 0 0 var(--horse-clearance);
   overflow: visible;
 }
 
 .page-shell--scrollable {
   min-height: 100dvh;
+  padding-bottom: var(--horse-clearance);
   overflow: visible;
 }
 
@@ -67,7 +69,7 @@ a {
   position: fixed;
   top: calc(var(--crosshair-y) + var(--crosshair-copy-gap-x));
   left: calc(var(--crosshair-x) + var(--crosshair-copy-gap-x));
-  z-index: 2;
+  z-index: 4;
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -95,7 +97,7 @@ a {
   position: absolute;
   inset: 0;
   min-height: 100%;
-  z-index: 0;
+  z-index: 2;
   pointer-events: none;
 }
 
@@ -279,11 +281,6 @@ a {
   color: var(--accent);
 }
 
-.route-experience .page-shell--scrollable {
-  overflow: visible;
-  padding-bottom: 3rem;
-}
-
 .commit-history-viewport {
   flex: 0 0 12.96rem;
   overflow: hidden;
@@ -338,10 +335,11 @@ a {
     --crosshair-copy-gap-x: 2.35rem;
     --crosshair-copy-gap-y: 3.25rem;
     --nav-body-gap: 4.2rem;
+    --horse-clearance: 10.5rem;
   }
 
   .page-shell {
-    padding: 0 1rem 1rem;
+    padding: 0 1rem var(--horse-clearance);
     overflow: hidden;
   }
 
@@ -373,6 +371,10 @@ a {
     margin-bottom: 0.65rem;
   }
 
+  .copy-column {
+    padding-bottom: var(--horse-clearance);
+  }
+
   .commit-history {
     width: min(100%, 18rem);
     margin-bottom: 0;
@@ -400,13 +402,22 @@ a {
   }
 
   .gif-ascii-block {
-    right: 0.75rem;
-    bottom: 0.75rem;
-    width: min(64.96vw, 15.68rem);
-    opacity: 0.38;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: var(--horse-clearance);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-top: 1rem;
+    padding-bottom: 0.2rem;
+    background: var(--bg);
+    z-index: 1;
   }
 
-  body:not(.route-about) .gif-ascii-block {
-    display: none;
+  .gif-ascii-canvas {
+    width: min(64.96vw, 15.68rem);
+    opacity: 0.68;
   }
 }
