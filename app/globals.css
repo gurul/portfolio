@@ -357,11 +357,6 @@ a {
   color: var(--text);
 }
 
-.copy-column p.people-note {
-  color: var(--accent);
-  font-weight: 400;
-}
-
 .commit-history-viewport {
   flex: 0 0 12.96rem;
   position: relative;

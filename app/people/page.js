@@ -16,9 +16,7 @@ export default function PeoplePage() {
         Kim (Genic), Rachel Kaye Kloepfer (Lenora Capitol), Ellen Yan
         (Microsoft), Tim Bombeli (Making Cosmetics), Abe Thomas (Microsoft)
       </p>
-      <p className="people-note">
-        Started this in September 2025 to track coffee chats.
-      </p>
+      <p>Started this in September 2025 to track coffee chats.</p>
     </PageScaffold>
   );
 }

@@ -27,7 +27,7 @@ const experience = [
     role: "Editorial Associate",
     time: "Dec 2025 – Mar 2026",
     description:
-      "trained preference-aligned LLMs to reduce newsletter revision cycles by 40% across 300K+ subscribers",
+      "designed automation systems for newsletter editorial workflows across 300K+ subscribers",
   },
   {
     company: "AfterQuery",
