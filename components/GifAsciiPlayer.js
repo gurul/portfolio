@@ -6,7 +6,7 @@ const ASCII_CHARS = " .'`^,:;Il!i~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#M
 const FRAME_COUNT = 43;
 const FRAME_DURATION = 1000 / 25;
 const BACKGROUND_THRESHOLD = 18;
-const CONTRAST = 1.22;
+const CONTRAST = 1.3;
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -53,7 +53,7 @@ export default function GifAsciiPlayer() {
         return;
       }
 
-      const width = 116;
+      const width = 132;
       const height = Math.round((image.naturalHeight / image.naturalWidth) * width * 0.52);
       offscreen.width = width;
       offscreen.height = height;
@@ -98,9 +98,9 @@ export default function GifAsciiPlayer() {
           context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
           context.fillText(char, x * 8, y * 14);
 
-          if (x % 11 === 0 && y % 7 === 0 && brightness > 96) {
+          if (x % 16 === 0 && y % 10 === 0 && brightness > 118) {
             context.fillStyle = `rgba(${Math.min(255, red + 18)}, ${Math.min(255, green + 18)}, ${Math.min(255, blue + 18)}, ${alpha * 0.18})`;
-            context.fillText(char, x * 8 + 1, y * 14);
+            context.fillText(char, x * 8 + 0.5, y * 14);
           }
         }
       }
