@@ -8,6 +8,9 @@ const FRAME_COUNT = 43;
 const FRAME_DURATION = 1000 / 25;
 const BACKGROUND_THRESHOLD = 18;
 const CONTRAST = 1.45;
+const DEFAULT_BG = "#a82410";
+const ACTIVE_BG = "#211d1c";
+const STORAGE_KEY = "horse-theme-active";
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -19,6 +22,7 @@ function luminance(r, g, b) {
 
 export default function GifAsciiPlayer() {
   const pathname = usePathname();
+  const isAbout = pathname === "/about" || pathname === "/";
   const blockRef = useRef(null);
   const canvasRef = useRef(null);
   const frameRef = useRef(null);
@@ -26,8 +30,37 @@ export default function GifAsciiPlayer() {
   const frameIndexRef = useRef(0);
   const lastTimeRef = useRef(0);
   const [showScrollCue, setShowScrollCue] = useState(false);
+  const [isActivated, setIsActivated] = useState(false);
 
   useEffect(() => {
+    try {
+      setIsActivated(window.localStorage.getItem(STORAGE_KEY) === "true");
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, String(isActivated));
+    } catch {}
+  }, [isActivated]);
+
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const active = isActivated;
+
+    html.classList.toggle("horse-theme-active", active);
+    body.classList.toggle("horse-theme-active", active);
+
+    return () => {
+      html.classList.remove("horse-theme-active");
+      body.classList.remove("horse-theme-active");
+    };
+  }, [isActivated]);
+
+  useEffect(() => {
+    if (!isAbout) return undefined;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -68,7 +101,7 @@ export default function GifAsciiPlayer() {
       offscreenContext.drawImage(image, 0, 0, width, height);
       const { data } = offscreenContext.getImageData(0, 0, width, height);
 
-      context.fillStyle = "#211d1c";
+      context.fillStyle = isActivated ? ACTIVE_BG : DEFAULT_BG;
       context.fillRect(0, 0, canvas.width, canvas.height);
       context.font = "11px JetBrains Mono, monospace";
       context.textBaseline = "top";
@@ -95,9 +128,15 @@ export default function GifAsciiPlayer() {
           const char = ASCII_CHARS[ASCII_CHARS.length - 1 - charIndex];
           const intensity = brightness / 255;
           const alpha = Math.min(1, 0.34 + intensity * 0.78);
-          const red = Math.round(142 + intensity * 94);
-          const green = Math.round(30 + intensity * 84);
-          const blue = Math.round(30 + intensity * 84);
+          const red = isActivated
+            ? Math.round(136 + intensity * 70)
+            : Math.round(240 + intensity * 15);
+          const green = isActivated
+            ? Math.round(14 + intensity * 38)
+            : Math.round(228 + intensity * 20);
+          const blue = isActivated
+            ? Math.round(14 + intensity * 38)
+            : Math.round(220 + intensity * 24);
 
           context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
           context.fillText(char, x * 8, y * 14);
@@ -140,9 +179,14 @@ export default function GifAsciiPlayer() {
         cancelAnimationFrame(frameRef.current);
       }
     };
-  }, []);
+  }, [isAbout, isActivated]);
 
   useEffect(() => {
+    if (!isAbout) {
+      setShowScrollCue(false);
+      return undefined;
+    }
+
     setShowScrollCue(false);
 
     const updateScrollCue = () => {
@@ -178,13 +222,18 @@ export default function GifAsciiPlayer() {
       window.removeEventListener("scroll", updateScrollCue);
       window.removeEventListener("resize", updateScrollCue);
     };
-  }, [pathname]);
+  }, [isAbout, pathname]);
+
+  if (!isAbout) {
+    return null;
+  }
 
   return (
     <section
       ref={blockRef}
       className="gif-ascii-block"
       aria-label="ASCII animation experiment"
+      onClick={() => setIsActivated((current) => !current)}
     >
       {showScrollCue ? (
         <span className="gif-ascii-scroll-cue">scroll to continue</span>

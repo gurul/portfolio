@@ -1,10 +1,10 @@
 :root {
-  --bg: #211d1c;
+  --bg: #a82410;
   --text: rgba(255, 255, 255, 0.58);
   --muted: rgba(255, 255, 255, 0.48);
-  --accent: #c45a5a;
-  --rule: rgba(255, 255, 255, 0.08);
-  --crosshair: rgba(255, 255, 255, 0.2);
+  --accent: rgba(255, 244, 240, 0.92);
+  --rule: rgba(255, 244, 240, 0.08);
+  --crosshair: rgba(255, 244, 240, 0.38);
   /* Viewport-locked intersection; text offset = crosshair + gap */
   --crosshair-x: 3.25rem;
   --crosshair-y: 3.25rem;
@@ -46,6 +46,15 @@ body.route-flow {
   min-height: 100%;
 }
 
+html.horse-theme-active,
+body.horse-theme-active {
+  --bg: #211d1c;
+  --text: rgba(255, 255, 255, 0.58);
+  --muted: rgba(255, 255, 255, 0.48);
+  --accent: rgba(255, 255, 255, 0.92);
+  --crosshair: rgba(255, 255, 255, 0.32);
+}
+
 a {
   color: inherit;
   text-underline-offset: 0.18em;
@@ -55,14 +64,19 @@ a {
   position: relative;
   z-index: 1;
   min-height: 100dvh;
-  padding: 0 0 var(--horse-clearance);
+  padding: 0;
   overflow: visible;
 }
 
 .page-shell--scrollable {
   min-height: 100dvh;
-  padding-bottom: var(--horse-clearance);
+  padding-bottom: 0;
   overflow: visible;
+}
+
+.route-about .page-shell,
+.route-about .page-shell--scrollable {
+  padding-bottom: var(--horse-clearance);
 }
 
 .site-nav {
@@ -91,6 +105,7 @@ a {
 
 .site-nav__link.is-active {
   color: rgba(255, 255, 255, 0.82);
+  text-decoration: underline;
 }
 
 .crosshair {
@@ -110,7 +125,7 @@ a {
   left: var(--crosshair-x);
   width: 0;
   height: 100%;
-  border-left: 1px dotted var(--crosshair);
+  border-left: 2px dotted var(--crosshair);
   transform: translateX(-0.5px);
 }
 
@@ -119,7 +134,7 @@ a {
   left: 0;
   width: 100%;
   height: 0;
-  border-top: 1px dotted var(--crosshair);
+  border-top: 2px dotted var(--crosshair);
   transform: translateY(-0.5px);
 }
 
@@ -162,6 +177,18 @@ a {
 
 .name-link {
   color: var(--accent);
+}
+
+.horse-theme-active .name-link,
+.horse-theme-active .commit-history-link,
+.horse-theme-active .site-nav__link,
+.horse-theme-active .site-nav__link.is-active,
+.horse-theme-active .projects-page-title a,
+.horse-theme-active .blog-title-link,
+.horse-theme-active .blog-post-title,
+.horse-theme-active .experience-company,
+.horse-theme-active .copy-column p.people-note {
+  font-weight: 700;
 }
 
 .commit-history {
@@ -215,6 +242,7 @@ a {
   margin: 0;
   width: min(100%, 33.6rem);
   z-index: 1;
+  cursor: pointer;
 }
 
 .gif-ascii-canvas {
@@ -287,8 +315,21 @@ a {
 
 .commit-history-viewport {
   flex: 0 0 12.96rem;
+  position: relative;
   overflow: hidden;
   height: 7.25rem;
+}
+
+.commit-history-viewport::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0.92rem;
+  background: var(--bg);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .commit-history-image {
@@ -343,8 +384,13 @@ a {
   }
 
   .page-shell {
-    padding: 0 1rem var(--horse-clearance);
+    padding: 0 1rem 1rem;
     overflow: hidden;
+  }
+
+  .route-about .page-shell,
+  .route-about .page-shell--scrollable {
+    padding-bottom: var(--horse-clearance);
   }
 
   .site-nav {
@@ -375,7 +421,7 @@ a {
     margin-bottom: 0.65rem;
   }
 
-  .copy-column {
+  .route-about .copy-column {
     padding-bottom: var(--horse-clearance);
   }
 
@@ -398,6 +444,10 @@ a {
     flex: none;
     width: 100%;
     height: 5.7rem;
+  }
+
+  .commit-history-viewport::before {
+    height: 0.72rem;
   }
 
   .commit-history-image {
