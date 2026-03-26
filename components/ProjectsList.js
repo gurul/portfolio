@@ -15,21 +15,21 @@ const projects = [
     lines: ["1.8K+ members · demos, research, and community experiences"],
   },
   {
-    name: "heylily",
-    href: "https://heylily.vercel.app/",
-    description: "ai phone assistant for older adults",
-    lines: [
-      "screens calls, summarizes voicemails, remembers context, and follows through on tasks",
-      "end-to-end encrypted, 99.9% scam detection accuracy",
-    ],
-  },
-  {
     name: "slideflow",
     href: "https://slideflow1.vercel.app/",
     description: "presentation intelligence",
     lines: [
       "upload slides → get timing, transcript, and delivery feedback",
       "300+ users, case comp preperation",
+    ],
+  },
+  {
+    name: "heylily",
+    href: "https://github.com/gurul/lilyServes",
+    description: "real-time call safety",
+    lines: [
+      "streams Twilio calls and transcribes phone audio in real time",
+      "uses GPT-4o + Hive AI to flag scam and deepfake risk live",
     ],
   },
 ];
