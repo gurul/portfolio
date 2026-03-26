@@ -9,7 +9,6 @@ const items = [
   { href: "/projects", label: "projects" },
   { href: "/reading", label: "reading" },
   { href: "/blog", label: "writing" },
-  { href: "/people", label: "people" },
 ];
 
 export default function SiteNav() {
