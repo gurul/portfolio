@@ -13,7 +13,7 @@ const experience = [
     role: "Global Shaper",
     time: "Feb 2026 – Present",
     description:
-      "on the founding team for the Shapers AI Initiative and deployed AI systems for small businesses with international pilots",
+      "founding team for the Shapers AI Initiative and deployed AI systems for small businesses with international pilots",
   },
   {
     company: "AI Collective Seattle",
