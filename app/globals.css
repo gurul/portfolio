@@ -328,6 +328,10 @@ a {
   max-width: 46rem;
 }
 
+.experience-notes {
+  margin-top: 1rem;
+}
+
 .experience-item {
   display: grid;
   gap: 0.12rem;
@@ -501,10 +505,6 @@ a {
   .commit-history-image {
     width: 270%;
     transform: translateX(-65.2%) translateY(-0.18rem);
-  }
-
-  .experience-notes {
-    margin-top: 1rem;
   }
 
   .experience-header {
