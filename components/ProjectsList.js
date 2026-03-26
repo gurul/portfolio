@@ -27,10 +27,7 @@ const projects = [
     name: "heylily",
     href: "https://github.com/gurul/lilyServes",
     description: "real-time call safety",
-    lines: [
-      "streams Twilio calls and transcribes phone audio in real time",
-      "uses GPT-4o + Hive AI to flag scam and deepfake risk live",
-    ],
+    lines: [],
   },
 ];
 
