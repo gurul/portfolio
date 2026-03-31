@@ -65,6 +65,13 @@ const experience = [
       "built multilingual pipelines and evaluated LLM bias across models, datasets, and alignment strategies",
   },
   {
+    company: "PwC",
+    role: "Digital Strategy Consultant Extern",
+    time: "Aug 2024 – Oct 2024",
+    description:
+      "built an interactive platform for Goodwill SP that turned trainee data into stories and improved employer engagement",
+  },
+  {
     company: "Quadrant Technologies",
     role: "Software Engineer Intern",
     time: "Jun 2024 – Aug 2024",
@@ -133,7 +140,7 @@ export default function ExperiencePage() {
           <p className="experience-company">Programs</p>
           <p className="experience-description">
             D.E. Shaw Connect, Expedia Career Discovery, BCG Launch, HP Tech
-            Ventures, PwC Non-Profit Consulting, Snap AR Development, HumanX
+            Ventures, Snap AR Development, HumanX
           </p>
         </article>
       </section>
