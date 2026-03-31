@@ -27,7 +27,7 @@ const experience = [
     role: "Editorial Associate",
     time: "Dec 2025 – Mar 2026",
     description:
-      "contributed to editorial planning, curation, and production for a 300K+ subscriber newsletter",
+      "contributed to editorial planning, curation, and production for a newsletter with 200,000+ readers",
   },
   {
     company: "AfterQuery",
