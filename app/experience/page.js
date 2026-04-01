@@ -62,7 +62,7 @@ const experience = [
     role: "Marketing/Creative Lead, Co-President",
     time: "Dec 2023 – Mar 2025",
     description:
-      "grew membership 43x from 30 to 1,000+ by leading a 34-member board and launched the 6-week Buildspace program supporting 150+ students and 60+ projects",
+      "scaled cseed into the largest innovation ecosystem at uw",
   },
   {
     company: "MIT Critical Data",
