@@ -7,20 +7,15 @@ const items = [
   { href: "/about", label: "about" },
   { href: "/experience", label: "experience" },
   { href: "/projects", label: "projects" },
-  { href: "/reading", label: "reading" },
-  { href: "/blog", label: "writing" },
 ];
 
 export default function SiteNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="site-nav site-nav--flow" aria-label="Primary">
+      <nav className="site-nav site-nav--flow" aria-label="Primary">
       {items.map((item) => {
-        const isActive =
-          item.href === "/blog"
-            ? pathname.startsWith("/blog")
-            : pathname === item.href;
+        const isActive = pathname === item.href;
 
         return (
           <Link
