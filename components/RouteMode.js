@@ -11,15 +11,16 @@ export default function RouteMode() {
     const body = document.body;
     html.classList.add("route-flow");
     body.classList.add("route-flow");
-    const isAbout = pathname === "/about" || pathname === "/";
-    html.classList.toggle("route-about", isAbout);
-    body.classList.toggle("route-about", isAbout);
+    const isLockedRoute =
+      pathname === "/" || pathname === "/about" || pathname === "/projects";
+    html.classList.toggle("route-locked", isLockedRoute);
+    body.classList.toggle("route-locked", isLockedRoute);
 
     return () => {
       html.classList.remove("route-flow");
       body.classList.remove("route-flow");
-      html.classList.remove("route-about");
-      body.classList.remove("route-about");
+      html.classList.remove("route-locked");
+      body.classList.remove("route-locked");
     };
   }, [pathname]);
 

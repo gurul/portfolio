@@ -3,25 +3,19 @@ const projects = [
     name: "storeybox",
     href: "https://storeybox.club",
     description: "physical storytelling booth",
-    lines: [
-      "step inside → answer prompts → leave with a film + photo strip",
-      "150+ participants, ★4.6/5, 100% would do it again",
-    ],
+    lines: [],
   },
   {
     name: "ai collective seattle",
     href: "https://www.aicseattle.com/",
     description: "local ai community",
-    lines: ["1.8K+ members · demos, research, and community experiences"],
+    lines: [],
   },
   {
     name: "slideflow",
     href: "https://slideflow1.vercel.app/",
     description: "presentation intelligence",
-    lines: [
-      "upload slides → get timing, transcript, and delivery feedback",
-      "300+ users, case comp preperation",
-    ],
+    lines: [],
   },
   {
     name: "heylily",

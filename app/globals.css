@@ -54,13 +54,13 @@ body.route-flow {
   min-height: 100%;
 }
 
-html.route-about,
-body.route-about {
+html.route-locked,
+body.route-locked {
   height: 100dvh;
   overflow: hidden;
 }
 
-body.route-about {
+body.route-locked {
   max-height: 100dvh;
 }
 
@@ -92,8 +92,8 @@ a {
   overflow: visible;
 }
 
-.route-about .page-shell,
-.route-about .page-shell--scrollable {
+.route-locked .page-shell,
+.route-locked .page-shell--scrollable {
   padding-bottom: 0;
 }
 
@@ -433,8 +433,8 @@ a {
     overflow: hidden;
   }
 
-  .route-about .page-shell,
-  .route-about .page-shell--scrollable {
+  .route-locked .page-shell,
+  .route-locked .page-shell--scrollable {
     padding-bottom: 0;
   }
 
