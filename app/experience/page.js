@@ -58,6 +58,13 @@ const experience = [
       "evaluated startups and developed investment theses across early-stage companies",
   },
   {
+    company: "cseed",
+    role: "Marketing/Creative Lead, Co-President",
+    time: "Dec 2023 – Mar 2025",
+    description:
+      "grew membership 43x from 30 to 1,000+ by leading a 34-member board and launched the 6-week Buildspace program supporting 150+ students and 60+ projects",
+  },
+  {
     company: "MIT Critical Data",
     role: "AI Research Fellow",
     time: "Oct 2024 – Dec 2024",
@@ -125,24 +132,6 @@ export default function ExperiencePage() {
             <p className="experience-description">{item.description}</p>
           </article>
         ))}
-      </section>
-
-      <section className="experience-notes" aria-label="Additional involvement">
-        <article className="experience-item">
-          <p className="experience-company">Activities</p>
-          <p className="experience-description">
-            cseed (Co-President), Delta Sigma Pi (Advisory Board), Claude
-            (Inaugural Ambassador), Perplexity (Campus Partner), UW Solar
-            (Developer), PLOS (Invited Peer Reviewer)
-          </p>
-        </article>
-        <article className="experience-item">
-          <p className="experience-company">Programs</p>
-          <p className="experience-description">
-            D.E. Shaw Connect, Expedia Career Discovery, BCG Launch, HP Tech
-            Ventures, Snap AR Development, HumanX
-          </p>
-        </article>
       </section>
     </PageScaffold>
   );

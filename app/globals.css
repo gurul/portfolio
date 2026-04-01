@@ -321,15 +321,10 @@ a {
   color: var(--accent);
 }
 
-.experience-list,
-.experience-notes {
+.experience-list {
   display: grid;
   gap: 0.95rem;
   max-width: 46rem;
-}
-
-.experience-notes {
-  margin-top: 1rem;
 }
 
 .experience-item {
