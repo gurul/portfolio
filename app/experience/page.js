@@ -55,14 +55,14 @@ const experience = [
     role: "Venture Capital Fellow",
     time: "Jun 2025 – Aug 2025",
     description:
-      "evaluated startups and developed investment theses across early-stage companies",
+      "Participated in mentorship sessions while evaluating early-stage startups and developing investment theses",
   },
   {
     company: "cseed",
     role: "Marketing/Creative Lead, Co-President",
     time: "Dec 2023 – Mar 2025",
     description:
-      "scaled the community into the largest innovation ecosystem at uw and helped kickstart the Buildspace program",
+      "Helped grow the community into one of UW’s largest innovation ecosystems and supported the launch of the Buildspace program",
   },
   {
     company: "MIT Critical Data",
@@ -76,7 +76,7 @@ const experience = [
     role: "Digital Strategy Consultant Extern",
     time: "Aug 2024 – Oct 2024",
     description:
-      "built an interactive platform for Goodwill SP that turned trainee data into stories and improved employer engagement",
+      "Presented an interactive platform concept for Goodwill SP that turned trainee data into stories to support employer engagement",
   },
   {
     company: "Quadrant Technologies",
