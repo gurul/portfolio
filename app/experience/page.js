@@ -83,7 +83,7 @@ const experience = [
     role: "Software Engineer Intern",
     time: "Jun 2024 – Aug 2024",
     description:
-      "engineered a Neo4j-based family memory platform with 1M+ nodes and 40% lower query latency",
+      "engineered a Neo4j-based memory platform with 1M+ nodes and 40% lower query latency",
   },
   {
     company: "MIT IMES",
