@@ -34,7 +34,7 @@ const experience = [
     role: "Growth Strategist Intern",
     time: "Jan 2026 – Mar 2026",
     description:
-      "built CRM and graph-based referral systems that mapped 10K+ candidates and increased conversion by 11%",
+      "built CRM and referral systems that mapped 10K+ candidates and increased conversion by 11%",
   },
   {
     company: "Yelo",
