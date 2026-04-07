@@ -1,4 +1,13 @@
 import PageScaffold from "../../../components/PageScaffold";
+import { buildPageMetadata } from "../../../lib/metadata";
+
+export const metadata = buildPageMetadata({
+  path: "/blog/cauldron",
+  title: "cauldron",
+  description:
+    "A short reflection by Gurucharan Lingamallu on presence, absence, and helping people find themselves.",
+  type: "article",
+});
 
 export default function CauldronPage() {
   return (

@@ -2,6 +2,7 @@ import { JetBrains_Mono } from "next/font/google";
 import GifAsciiPlayer from "../components/GifAsciiPlayer";
 import RouteMode from "../components/RouteMode";
 import SiteNav from "../components/SiteNav";
+import { getMetadataBase, SITE_DESCRIPTION, SITE_NAME } from "../lib/site";
 import "./globals.css";
 
 const jetBrainsMono = JetBrains_Mono({
@@ -10,17 +11,27 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://portfolio-guruls-projects.vercel.app"),
-  title: "Gurucharan Lingamallu",
-  description: "Personal website for Gurucharan Lingamallu.",
+  metadataBase: getMetadataBase(),
+  title: SITE_NAME,
+  description: SITE_DESCRIPTION,
   openGraph: {
-    title: "Gurucharan Lingamallu",
-    description: "Personal website for Gurucharan Lingamallu.",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    siteName: SITE_NAME,
+    type: "website",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1024,
+        height: 576,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gurucharan Lingamallu",
-    description: "Personal website for Gurucharan Lingamallu.",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: ["/twitter-image.png"],
   },
 };
 

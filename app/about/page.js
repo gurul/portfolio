@@ -1,7 +1,13 @@
 import PageScaffold from "../../components/PageScaffold";
 import { getYearContributionCount } from "../../lib/github";
+import { buildPageMetadata } from "../../lib/metadata";
 
 export const revalidate = 3600;
+export const metadata = buildPageMetadata({
+  path: "/about",
+  description:
+    "About Gurucharan Lingamallu: builder, designer, and computer science student focused on AI, memory, and human experience.",
+});
 
 export default async function AboutPage() {
   const yearContributionCount = await getYearContributionCount();

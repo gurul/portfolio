@@ -1,4 +1,13 @@
 import PageScaffold from "../../../components/PageScaffold";
+import { buildPageMetadata } from "../../../lib/metadata";
+
+export const metadata = buildPageMetadata({
+  path: "/blog/the-voice-with-vision",
+  title: "the voice with vision",
+  description:
+    "A reflection by Gurucharan Lingamallu on accessibility, perception, and learning to notice the assumptions built into the world.",
+  type: "article",
+});
 
 export default function TheVoiceWithVisionPage() {
   return (

@@ -1,4 +1,12 @@
 import PageScaffold from "../../components/PageScaffold";
+import { buildPageMetadata } from "../../lib/metadata";
+
+export const metadata = buildPageMetadata({
+  path: "/experience",
+  title: "Experience",
+  description:
+    "Experience across startups, research, community building, and product work by Gurucharan Lingamallu.",
+});
 
 const experience = [
   {
