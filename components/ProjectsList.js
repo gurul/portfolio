@@ -19,8 +19,14 @@ const projects = [
   },
   {
     name: "heylily",
-    href: "https://github.com/gurul/lilyServes",
+    href: "https://heylily.vercel.app/",
     description: "real-time call safety",
+    lines: [],
+  },
+  {
+    name: "diversity and inclusion",
+    href: "https://doi.org/10.1371/journal.pdig.0000486",
+    description: "plos digital health paper",
     lines: [],
   },
 ];

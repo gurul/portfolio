@@ -119,17 +119,25 @@ a {
 }
 
 .site-nav__link {
-  color: var(--muted);
-  text-decoration: none;
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
   text-transform: lowercase;
   font-size: clamp(0.91rem, 0.78rem + 0.29vw, 1.24rem);
   line-height: 1.45;
   white-space: nowrap;
+  transition: color 160ms ease;
 }
 
 .site-nav__link.is-active {
   color: var(--accent);
-  text-decoration: underline;
+}
+
+.site-nav__link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0.2rem;
 }
 
 .site-nav__separator {
