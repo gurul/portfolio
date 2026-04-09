@@ -18,6 +18,12 @@ const projects = [
     lines: [],
   },
   {
+    name: "harborline",
+    href: "https://canva.link/id3dqdobbop5jvn",
+    description: "sentient labs hackathon",
+    lines: [],
+  },
+  {
     name: "heylily",
     href: "https://heylily.vercel.app/",
     description: "real-time call safety",
