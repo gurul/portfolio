@@ -42,7 +42,14 @@ const experience = [
     role: "Growth Strategist Intern",
     time: "Jan 2026 – Mar 2026",
     description:
-      "built CRM and referral systems that mapped 10K+ candidates and increased conversion by 11%",
+      "built growth systems for outreach and referrals that streamlined sourcing and lifted conversion by 11%",
+  },
+  {
+    company: "Yelo",
+    role: "Growth Intern",
+    time: "Nov 2025 – Dec 2025",
+    description:
+      "drove 300K+ views through content-led growth experiments",
   },
   {
     company: "Stealth Startup (Ex-Google AI Team)",
