@@ -45,13 +45,6 @@ const experience = [
       "built CRM and referral systems that mapped 10K+ candidates and increased conversion by 11%",
   },
   {
-    company: "Yelo",
-    role: "Growth Intern",
-    time: "Nov 2025 – Dec 2025",
-    description:
-      "ran early-stage market development and user acquisition experiments",
-  },
-  {
     company: "Stealth Startup (Ex-Google AI Team)",
     role: "Software Engineer Intern",
     time: "Sep 2025 – Nov 2025",
@@ -99,13 +92,6 @@ const experience = [
     time: "Jul 2023 – Feb 2024",
     description:
       "built fuzzy-matching pipelines across 27K+ researchers and co-authored a PLOS Digital Health publication",
-  },
-  {
-    company: "Encode Justice",
-    role: "Policy Research Fellow",
-    time: "Jun 2022 – Mar 2023",
-    description:
-      "researched algorithmic bias and AI governance",
   },
   {
     company: "Forsys Inc",
