@@ -54,7 +54,7 @@ const experience = [
   {
     company: "Stealth Startup (Ex-Google AI Team)",
     role: "Software Engineer Intern",
-    time: "Sep 2025 – Nov 2025",
+    time: "Sep 2025 – Dec 2025",
     description:
       "built a 92%-accurate AI ticket-routing platform and multi-agent workflow UI for investor demos",
   },
