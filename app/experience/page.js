@@ -33,7 +33,7 @@ const experience = [
   {
     company: "AI Collective",
     role: "Editorial Associate",
-    time: "Dec 2025 – Mar 2026",
+    time: "Nov 2025 – Mar 2026",
     description:
       "helped plan, curate, and produce a newsletter reaching 200,000+ readers",
   },
