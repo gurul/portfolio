@@ -12,7 +12,7 @@ const experience = [
   {
     company: "Storeybox",
     role: "Co-Founder",
-    time: "Dec 2025 – Present",
+    time: "Mar 2026 – Present",
     description:
       "built a prompt-driven storytelling kiosk and multi-model video pipeline that captured 600+ stories",
   },
