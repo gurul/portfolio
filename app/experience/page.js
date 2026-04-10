@@ -33,7 +33,7 @@ const experience = [
   {
     company: "AI Collective",
     role: "Editorial Associate",
-    time: "Nov 2025 – Mar 2026",
+    time: "Dec 2025 – Mar 2026",
     description:
       "helped plan, curate, and produce a newsletter reaching 200,000+ readers",
   },
@@ -92,6 +92,13 @@ const experience = [
     time: "Jul 2023 – Feb 2024",
     description:
       "built fuzzy-matching pipelines across 27K+ researchers and co-authored a PLOS Digital Health publication",
+  },
+  {
+    company: "Encode Justice",
+    role: "Artificial Intelligence Policy Research Fellow",
+    time: "Sep 2022 – Dec 2022",
+    description:
+      "researched algorithmic bias and AI governance",
   },
   {
     company: "Forsys Inc",
