@@ -18,15 +18,21 @@ const projects = [
     lines: [],
   },
   {
-    name: "heylily",
-    href: "https://heylily.vercel.app/",
-    description: "real-time call safety",
+    name: "ide bench",
+    href: "https://www.linkedin.com/posts/afterquery_introducing-ide-bench-a-multi-language-ugcPost-7427784381123080192-MHqe",
+    description: "launch video",
     lines: [],
   },
   {
     name: "diversity and inclusion",
     href: "https://doi.org/10.1371/journal.pdig.0000486",
     description: "plos digital health paper",
+    lines: [],
+  },
+  {
+    name: "heylily",
+    href: "https://heylily.vercel.app/",
+    description: "real-time call safety",
     lines: [],
   },
 ];
