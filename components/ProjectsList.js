@@ -49,6 +49,12 @@ const projectSections = [
         description: "social content",
         lines: [],
       },
+      {
+        name: "cseed",
+        href: "https://www.instagram.com/cseeduw/",
+        description: "brand design",
+        lines: [],
+      },
     ],
   },
 ];
