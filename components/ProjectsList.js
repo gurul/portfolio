@@ -32,6 +32,12 @@ const projectSections = [
         description: "real-time call safety",
         lines: [],
       },
+      {
+        name: "harborline",
+        href: "https://canva.link/id3dqdobbop5jvn",
+        description: "sentient labs hackathon",
+        lines: [],
+      },
     ],
   },
   {
