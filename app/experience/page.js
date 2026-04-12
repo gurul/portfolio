@@ -70,7 +70,7 @@ const experience = [
     role: "Marketing/Creative Lead, Co-President",
     time: "Dec 2023 – Mar 2025",
     description:
-      "scaled cseed into one of UW's largest innovation communities and supported the launch of Buildspace",
+      "helped scale cseed into one of UW's largest innovation communities and supported the launch of Buildspace",
   },
   {
     company: "MIT Critical Data",
