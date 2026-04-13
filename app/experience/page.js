@@ -21,21 +21,21 @@ const experience = [
     role: "Global Shaper",
     time: "Feb 2026 – Present",
     description:
-      "supported the launch of the Shapers AI Initiative and deployed AI systems for small businesses in international pilots",
+      "founding team for the Shapers AI Initiative, driving AI adoption for SMBs with WA SBDC and Communal Ventures while expanding globally",
   },
   {
     company: "AI Collective Seattle",
     role: "Technical & Media Lead",
     time: "Jan 2026 – Present",
     description:
-      "architected a full-stack community platform for 1.8K+ members with real-time data and 3D experiences",
+      "architected a full-stack community platform for 1.8K+ members with real-time data and an admin dashboard",
   },
   {
     company: "AI Collective",
     role: "Editorial Associate",
     time: "Dec 2025 – Mar 2026",
     description:
-      "curated and produced a newsletter reaching 200,000+ readers",
+      "curated and produced content for a newsletter reaching 200,000+ readers",
   },
   {
     company: "AfterQuery",
@@ -91,7 +91,7 @@ const experience = [
     role: "Software Engineer Intern",
     time: "Jun 2024 – Aug 2024",
     description:
-      "engineered a Neo4j-based memory platform with 1M+ nodes and 40% lower query latency",
+      "engineered a Neo4j-based family memory platform with 40% faster traversal queries",
   },
   {
     company: "MIT IMES",
