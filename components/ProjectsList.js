@@ -41,7 +41,7 @@ const projectSections = [
     ],
   },
   {
-    title: "miscellaneous",
+    title: "creative",
     projects: [
       {
         name: "ide bench",
