@@ -321,8 +321,6 @@ a {
 
 .projects-page-heading {
   margin: 0;
-  font: inherit;
-  line-height: inherit;
   color: var(--muted);
   font-weight: 600;
   text-transform: lowercase;

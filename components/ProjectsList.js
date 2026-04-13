@@ -70,7 +70,7 @@ export default function ProjectsList() {
     <div className="projects-page-sections" aria-label="Projects">
       {projectSections.map((section) => (
         <section key={section.title} className="projects-page-section">
-          <h2 className="projects-page-heading">{section.title}</h2>
+          <p className="projects-page-heading">{section.title}</p>
           <div className="projects-page-list">
             {section.projects.map((project) => (
               <article key={project.name} className="projects-page-item">
