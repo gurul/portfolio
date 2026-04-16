@@ -9,18 +9,6 @@ const projectSections = [
         lines: [],
       },
       {
-        name: "shapers.ai",
-        href: "https://shapers-ai.vercel.app/",
-        description: "smb consulting",
-        lines: [],
-      },
-      {
-        name: "ai collective seattle",
-        href: "https://www.aicseattle.com/",
-        description: "local ai community",
-        lines: [],
-      },
-      {
         name: "slideflow",
         href: "https://slideflow1.vercel.app/",
         description: "presentation intelligence",
@@ -30,6 +18,18 @@ const projectSections = [
         name: "heylily",
         href: "https://heylily.vercel.app/",
         description: "real-time call safety",
+        lines: [],
+      },
+      {
+        name: "ai collective seattle",
+        href: "https://www.aicseattle.com/",
+        description: "local ai community",
+        lines: [],
+      },
+      {
+        name: "shapers.ai",
+        href: "https://shapers-ai.vercel.app/",
+        description: "smb consulting",
         lines: [],
       },
     ],
