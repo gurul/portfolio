@@ -27,15 +27,20 @@ const projectSections = [
         lines: [],
       },
       {
-        name: "diversity and inclusion",
-        href: "https://doi.org/10.1371/journal.pdig.0000486",
-        description: "plos digital health paper",
-        lines: [],
-      },
-      {
         name: "heylily",
         href: "https://heylily.vercel.app/",
         description: "real-time call safety",
+        lines: [],
+      },
+    ],
+  },
+  {
+    title: "research",
+    projects: [
+      {
+        name: "diversity and inclusion",
+        href: "https://doi.org/10.1371/journal.pdig.0000486",
+        description: "plos digital health paper",
         lines: [],
       },
     ],
