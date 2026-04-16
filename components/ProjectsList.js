@@ -9,6 +9,12 @@ const projectSections = [
         lines: [],
       },
       {
+        name: "shapers.ai",
+        href: "https://shapers-ai.vercel.app/",
+        description: "smb consulting",
+        lines: [],
+      },
+      {
         name: "ai collective seattle",
         href: "https://www.aicseattle.com/",
         description: "local ai community",
