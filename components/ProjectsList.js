@@ -32,6 +32,12 @@ const projectSections = [
         description: "smb consulting",
         lines: [],
       },
+      {
+        name: "cseed",
+        href: "https://www.instagram.com/cseeduw/",
+        description: "student innovation",
+        lines: [],
+      },
     ],
   },
   {
@@ -58,12 +64,6 @@ const projectSections = [
         name: "yelo",
         href: "https://www.instagram.com/yelo.seattle/",
         description: "social content",
-        lines: [],
-      },
-      {
-        name: "cseed",
-        href: "https://www.instagram.com/cseeduw/",
-        description: "brand design",
         lines: [],
       },
     ],
