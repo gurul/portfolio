@@ -1,6 +1,6 @@
 const projectSections = [
   {
-    title: "products",
+    title: "ventures",
     projects: [
       {
         name: "storeybox",
