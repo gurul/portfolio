@@ -1,6 +1,6 @@
 const projectSections = [
   {
-    title: "technical",
+    title: "products",
     projects: [
       {
         name: "storeybox",
@@ -35,7 +35,7 @@ const projectSections = [
     ],
   },
   {
-    title: "research",
+    title: "publications",
     projects: [
       {
         name: "diversity and inclusion",
@@ -46,7 +46,7 @@ const projectSections = [
     ],
   },
   {
-    title: "creative",
+    title: "media",
     projects: [
       {
         name: "ide bench",
