@@ -7,11 +7,6 @@ const routes = [
     priority: 1,
   },
   {
-    path: "/experience",
-    changeFrequency: "monthly",
-    priority: 0.9,
-  },
-  {
     path: "/projects",
     changeFrequency: "monthly",
     priority: 0.9,
