@@ -21,7 +21,7 @@ function luminance(r, g, b) {
 
 export default function GifAsciiPlayer() {
   const pathname = usePathname();
-  const isAbout = pathname === "/about" || pathname === "/";
+  const showsHorse = pathname === "/" || pathname === "/about" || pathname === "/projects";
   const blockRef = useRef(null);
   const canvasRef = useRef(null);
   const frameRef = useRef(null);
@@ -61,7 +61,7 @@ export default function GifAsciiPlayer() {
   }, [isActivated]);
 
   useEffect(() => {
-    if (!isAbout) return undefined;
+    if (!showsHorse) return undefined;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -185,10 +185,10 @@ export default function GifAsciiPlayer() {
         cancelAnimationFrame(frameRef.current);
       }
     };
-  }, [isAbout, isActivated]);
+  }, [showsHorse, isActivated]);
 
   useEffect(() => {
-    if (!isAbout) {
+    if (!showsHorse) {
       setShowScrollCue(false);
       return undefined;
     }
@@ -228,9 +228,9 @@ export default function GifAsciiPlayer() {
       window.removeEventListener("scroll", updateScrollCue);
       window.removeEventListener("resize", updateScrollCue);
     };
-  }, [isAbout, pathname]);
+  }, [showsHorse, pathname]);
 
-  if (!isAbout) {
+  if (!showsHorse) {
     return null;
   }
 
