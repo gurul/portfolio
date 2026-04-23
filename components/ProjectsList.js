@@ -38,7 +38,7 @@ const projects = [
   {
     name: "diversity and inclusion",
     href: "https://doi.org/10.1371/journal.pdig.0000486",
-    description: "plos digital health paper",
+    description: "plos research paper",
     lines: [],
   },
 ];
