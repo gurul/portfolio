@@ -6,9 +6,9 @@ const projects = [
     lines: [],
   },
   {
-    name: "slideflow",
-    href: "https://slideflow1.vercel.app/",
-    description: "presentation intelligence",
+    name: "shapers.ai",
+    href: "https://shapersai.com/",
+    description: "smb consulting",
     lines: [],
   },
   {
@@ -24,12 +24,6 @@ const projects = [
     lines: [],
   },
   {
-    name: "shapers.ai",
-    href: "https://shapers-ai.vercel.app/",
-    description: "smb consulting",
-    lines: [],
-  },
-  {
     name: "cseed",
     href: "https://www.instagram.com/cseeduw/",
     description: "student innovation",
@@ -39,6 +33,12 @@ const projects = [
     name: "diversity and inclusion",
     href: "https://doi.org/10.1371/journal.pdig.0000486",
     description: "plos research paper",
+    lines: [],
+  },
+  {
+    name: "slideflow",
+    href: "https://slideflow1.vercel.app/",
+    description: "presentation intelligence",
     lines: [],
   },
 ];
