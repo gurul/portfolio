@@ -25,7 +25,7 @@ const projects = [
   },
   {
     name: "cseed",
-    href: "https://www.instagram.com/cseeduw/",
+    href: "https://cseed.co",
     description: "student innovation",
     lines: [],
   },
