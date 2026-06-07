@@ -18,7 +18,7 @@ const projects = [
     lines: [],
   },
   {
-    name: "shapers.ai",
+    name: "shapers ai",
     href: "https://shapersai.com/",
     description: "smb consulting",
     lines: [],
