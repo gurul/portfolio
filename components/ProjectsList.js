@@ -6,15 +6,21 @@ const projects = [
     lines: [],
   },
   {
-    name: "shapers.ai",
-    href: "https://shapersai.com/",
-    description: "smb consulting",
-    lines: [],
-  },
-  {
     name: "heylily",
     href: "https://heylily.vercel.app/",
     description: "real-time call safety",
+    lines: [],
+  },
+  {
+    name: "slideflow",
+    href: "https://slideflow1.vercel.app/",
+    description: "presentation intelligence",
+    lines: [],
+  },
+  {
+    name: "shapers.ai",
+    href: "https://shapersai.com/",
+    description: "smb consulting",
     lines: [],
   },
   {
@@ -29,24 +35,12 @@ const projects = [
     description: "student innovation",
     lines: [],
   },
-  {
-    name: "diversity and inclusion",
-    href: "https://doi.org/10.1371/journal.pdig.0000486",
-    description: "plos research paper",
-    lines: [],
-  },
-  {
-    name: "slideflow",
-    href: "https://slideflow1.vercel.app/",
-    description: "presentation intelligence",
-    lines: [],
-  },
 ];
 
-export default function ProjectsList() {
+function WorkList({ items, label }) {
   return (
-    <div className="projects-page-list" aria-label="Projects">
-      {projects.map((project) => (
+    <div className="projects-page-list" aria-label={label}>
+      {items.map((project) => (
         <article key={project.name} className="projects-page-item">
           <p className="projects-page-title">
             <a href={project.href} target="_blank" rel="noreferrer">
@@ -62,5 +56,11 @@ export default function ProjectsList() {
         </article>
       ))}
     </div>
+  );
+}
+
+export default function ProjectsList() {
+  return (
+    <WorkList items={projects} label="Projects" />
   );
 }

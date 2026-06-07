@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const items = [
   { href: "/about", label: "about" },
   { href: "/projects", label: "projects" },
+  { href: "/research", label: "research" },
 ];
 
 export default function SiteNav() {

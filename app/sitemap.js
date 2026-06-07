@@ -12,6 +12,11 @@ const routes = [
     priority: 0.9,
   },
   {
+    path: "/research",
+    changeFrequency: "monthly",
+    priority: 0.9,
+  },
+  {
     path: "/blog/cauldron",
     changeFrequency: "yearly",
     priority: 0.7,

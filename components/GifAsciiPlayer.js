@@ -21,7 +21,7 @@ function luminance(r, g, b) {
 
 export default function GifAsciiPlayer() {
   const pathname = usePathname();
-  const showsHorse = pathname === "/" || pathname === "/about" || pathname === "/projects";
+  const showsHorse = pathname === "/" || pathname === "/about" || pathname === "/projects" || pathname === "/research";
   const blockRef = useRef(null);
   const canvasRef = useRef(null);
   const frameRef = useRef(null);
