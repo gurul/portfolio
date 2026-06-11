@@ -36,7 +36,7 @@ export default async function AboutPage() {
       </p>
 
       <p>
-        <span className="inline-nowrap">you can find my work on github</span>
+        <span className="inline-nowrap">you can find my work on github </span>
         <a
           className="commit-history-link"
           href="https://github.com/gurul"
