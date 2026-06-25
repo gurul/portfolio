@@ -18,6 +18,12 @@ const projects = [
     lines: [],
   },
   {
+    name: "harborline",
+    href: "https://canva.link/id3dqdobbop5jvn",
+    description: "sentient labs hackathon",
+    lines: [],
+  },
+  {
     name: "shapers ai",
     href: "https://shapersai.com/",
     description: "smb consulting",
