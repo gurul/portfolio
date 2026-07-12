@@ -9,9 +9,9 @@ export const metadata = buildPageMetadata({
 
 const research = [
   {
-    name: "diversity and inclusion",
+    name: "ploss",
     href: "https://doi.org/10.1371/journal.pdig.0000486",
-    description: "open data and author diversity in clinical ai",
+    description: "open data in clinical ai",
     lines: [],
   },
   {
@@ -21,7 +21,7 @@ const research = [
     lines: [],
   },
   {
-    name: "terrain generation",
+    name: "cse493",
     href: "https://midi-transport-0b7.notion.site/Terrain-Generation-378c6d84df52800abd61ff9a23175b77?source=copy_link",
     description: "deep learning terrain generator",
     lines: [],
