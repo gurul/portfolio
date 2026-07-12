@@ -12,15 +12,15 @@ const projects = [
     lines: [],
   },
   {
-    name: "slideflow",
-    href: "https://slideflow1.vercel.app/",
-    description: "presentation intelligence",
+    name: "apiH",
+    href: "https://github.com/gurul/apiH",
+    description: "computer use workflow contracts",
     lines: [],
   },
   {
-    name: "h company api",
-    href: "https://github.com/gurul/apiH",
-    description: "computer use workflow contracts",
+    name: "slideflow",
+    href: "https://slideflow1.vercel.app/",
+    description: "presentation intelligence",
     lines: [],
   },
   {
