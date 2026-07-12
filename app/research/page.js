@@ -9,7 +9,7 @@ export const metadata = buildPageMetadata({
 
 const research = [
   {
-    name: "ploss",
+    name: "plos",
     href: "https://doi.org/10.1371/journal.pdig.0000486",
     description: "open data in clinical ai",
     lines: [],
