@@ -24,12 +24,6 @@ const projects = [
     lines: [],
   },
   {
-    name: "api H",
-    href: "https://github.com/gurul/apiH",
-    description: "computer use workflow contracts",
-    lines: [],
-  },
-  {
     name: "shapers ai",
     href: "https://shapersai.com/",
     description: "smb consulting",

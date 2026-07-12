@@ -9,6 +9,12 @@ export const metadata = buildPageMetadata({
 
 const research = [
   {
+    name: "api H",
+    href: "https://github.com/gurul/apiH",
+    description: "computer use workflow contracts",
+    lines: [],
+  },
+  {
     name: "diversity and inclusion",
     href: "https://doi.org/10.1371/journal.pdig.0000486",
     description: "plos research paper",
