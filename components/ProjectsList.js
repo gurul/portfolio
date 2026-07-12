@@ -12,12 +12,6 @@ const projects = [
     lines: [],
   },
   {
-    name: "api H",
-    href: "https://github.com/gurul/apiH",
-    description: "computer use workflow contracts",
-    lines: [],
-  },
-  {
     name: "slideflow",
     href: "https://slideflow1.vercel.app/",
     description: "presentation intelligence",
@@ -27,6 +21,12 @@ const projects = [
     name: "harborline",
     href: "https://canva.link/id3dqdobbop5jvn",
     description: "sentient labs hackathon",
+    lines: [],
+  },
+  {
+    name: "api H",
+    href: "https://github.com/gurul/apiH",
+    description: "computer use workflow contracts",
     lines: [],
   },
   {
