@@ -12,7 +12,7 @@ const projects = [
     lines: [],
   },
   {
-    name: "apiH",
+    name: "api H",
     href: "https://github.com/gurul/apiH",
     description: "computer use workflow contracts",
     lines: [],
