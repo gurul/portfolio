@@ -18,6 +18,12 @@ const projects = [
     lines: [],
   },
   {
+    name: "h company api",
+    href: "https://github.com/gurul/apiH",
+    description: "computer use workflow contracts",
+    lines: [],
+  },
+  {
     name: "harborline",
     href: "https://canva.link/id3dqdobbop5jvn",
     description: "sentient labs hackathon",
