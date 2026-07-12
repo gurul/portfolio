@@ -11,7 +11,7 @@ const research = [
   {
     name: "diversity and inclusion",
     href: "https://doi.org/10.1371/journal.pdig.0000486",
-    description: "plos research paper",
+    description: "open data and author diversity in clinical ai",
     lines: [],
   },
   {
@@ -23,7 +23,7 @@ const research = [
   {
     name: "terrain generation",
     href: "https://midi-transport-0b7.notion.site/Terrain-Generation-378c6d84df52800abd61ff9a23175b77?source=copy_link",
-    description: "deep learning class",
+    description: "deep learning terrain generator",
     lines: [],
   },
 ];
