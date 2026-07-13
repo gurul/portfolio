@@ -6,6 +6,12 @@ const projects = [
     lines: [],
   },
   {
+    name: "gurul/handyman",
+    href: "https://github.com/gurul/handyman",
+    description: "self-generating product tours",
+    lines: [],
+  },
+  {
     name: "heylily",
     href: "https://heylily.vercel.app/",
     description: "real-time call safety",
@@ -20,7 +26,7 @@ const projects = [
   {
     name: "harborline",
     href: "https://canva.link/id3dqdobbop5jvn",
-    description: "sentient labs hackathon",
+    description: "disaster response",
     lines: [],
   },
   {
