@@ -6,7 +6,7 @@ const projects = [
     lines: [],
   },
   {
-    name: "gurul/handyman",
+    name: "handyman",
     href: "https://github.com/gurul/handyman",
     description: "self-generating product tours",
     lines: [],
