@@ -27,7 +27,7 @@ const research = [
     lines: [],
   },
   {
-    name: "claude-debrief",
+    name: "debrief",
     href: "https://github.com/gurul/claude-debrief",
     description: "human-gated memory for coding agents",
     lines: [],
