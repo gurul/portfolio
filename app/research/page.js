@@ -26,6 +26,12 @@ const research = [
     description: "computer use workflow contracts",
     lines: [],
   },
+  {
+    name: "claude-debrief",
+    href: "https://github.com/gurul/claude-debrief",
+    description: "human-gated memory for coding agents",
+    lines: [],
+  },
 ];
 
 export default function ResearchPage() {
