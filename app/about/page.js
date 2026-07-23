@@ -45,7 +45,10 @@ export default async function AboutPage() {
         >
           @gurul
         </a>
-        <span className="inline-nowrap">, and my thoughts on substack </span>
+      </p>
+
+      <p>
+        <span className="inline-nowrap">and my thoughts on substack </span>
         <a
           className="commit-history-link"
           href="https://substack.com/@gurulingamallu"
