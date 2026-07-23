@@ -24,12 +24,6 @@ const projects = [
     lines: [],
   },
   {
-    name: "harborline",
-    href: "https://canva.link/id3dqdobbop5jvn",
-    description: "disaster response",
-    lines: [],
-  },
-  {
     name: "shapers ai",
     href: "https://shapersai.com/",
     description: "smb consulting",
@@ -45,6 +39,12 @@ const projects = [
     name: "cseed",
     href: "https://cseed.co",
     description: "student innovation",
+    lines: [],
+  },
+  {
+    name: "harborline",
+    href: "https://canva.link/id3dqdobbop5jvn",
+    description: "disaster response",
     lines: [],
   },
 ];
