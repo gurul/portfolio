@@ -43,6 +43,9 @@ export default function RootLayout({ children }) {
         <div className="crosshair" aria-hidden="true">
           <div className="crosshair__line crosshair__line--v" />
           <div className="crosshair__line crosshair__line--h" />
+          <div className="crosshair__sun">
+            <div className="crosshair__sun-glyph" />
+          </div>
         </div>
         <SiteNav />
         {children}
