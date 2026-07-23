@@ -47,6 +47,18 @@ export default async function AboutPage() {
         </a>
       </p>
 
+      <p>
+        <span className="inline-nowrap">and my thoughts on substack </span>
+        <a
+          className="commit-history-link"
+          href="https://substack.com/@gurulingamallu"
+          target="_blank"
+          rel="noreferrer"
+        >
+          @gurulingamallu
+        </a>
+      </p>
+
       <section className="commit-history" aria-label="GitHub commit history">
         <div className="commit-history-viewport">
           <img
