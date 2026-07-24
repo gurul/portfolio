@@ -32,9 +32,9 @@ export default async function AboutPage() {
       </p>
       <p>
         I love reading, writing, designing, dancing, working out, playing
-        sports, making music and spending quality time with friends and family.
+        sports, making music and spending quality time with loved ones.
       </p>
-      <p>
+      <p className="davinci-note">
         <a
           className="name-link"
           href="https://en.wikipedia.org/wiki/Leonardo_da_Vinci"
