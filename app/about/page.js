@@ -46,7 +46,7 @@ export default async function AboutPage() {
         is my role model — the original{" "}
         <a
           className="name-link"
-          href="https://www.britannica.com/topic/Renaissance-man"
+          href="https://www.studentsofhistory.com/what-is-a-renaissance-man?srsltid=AfmBOoqp3BEKdw8gJWkRdU4-Q-Vm2hmjxKhM0o4dltRK-EAJcw4iiUnr"
           target="_blank"
           rel="noreferrer"
         >
