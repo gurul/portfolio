@@ -1,5 +1,6 @@
 import { JetBrains_Mono } from "next/font/google";
 import GifAsciiPlayer from "../components/GifAsciiPlayer";
+import IntroGate from "../components/IntroGate";
 import RouteMode from "../components/RouteMode";
 import SiteNav from "../components/SiteNav";
 import { getMetadataBase, SITE_DESCRIPTION, SITE_NAME } from "../lib/site";
@@ -39,7 +40,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={jetBrainsMono.className}>
+        <noscript>
+          <style>{`.site-nav, .page-shell { opacity: 1 !important; }`}</style>
+        </noscript>
         <RouteMode />
+        <IntroGate />
         <div className="crosshair" aria-hidden="true">
           <div className="crosshair__line crosshair__line--v" />
           <div className="crosshair__line crosshair__line--h" />

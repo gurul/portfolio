@@ -413,9 +413,48 @@ a {
   }
 }
 
+/* The whole intro waits for the page to be ready: every animation holds
+   paused at its first keyframe (blank) until IntroGate puts .intro-ready
+   on <html>, so the choreography plays identically on every load instead
+   of racing the stylesheet, fonts and image downloads. Pausing also holds
+   each animation's delay, so the relative timings stay intact. */
+html:not(.intro-ready) .crosshair__line--v,
+html:not(.intro-ready) .crosshair__line--h,
+html:not(.intro-ready) .crosshair::before,
+html:not(.intro-ready) .crosshair::after,
+html:not(.intro-ready) .crosshair__sun {
+  animation-play-state: paused;
+}
+
+/* The meteor heads have no hidden first keyframe of their own — keep them
+   invisible until the sequence starts. */
+html:not(.intro-ready) .crosshair::before,
+html:not(.intro-ready) .crosshair::after {
+  opacity: 0;
+}
+
+/* The copy and nav join the same choreography: blank page first, then the
+   text settles in while the meteors draw the lines. */
+.site-nav,
+.page-shell {
+  opacity: 0;
+  transition: opacity 800ms ease 200ms;
+}
+
+html.intro-ready .site-nav,
+html.intro-ready .page-shell {
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .crosshair {
     display: none;
+  }
+
+  .site-nav,
+  .page-shell {
+    opacity: 1;
+    transition: none;
   }
 }
 

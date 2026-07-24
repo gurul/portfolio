@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { whenIntroReady } from "../lib/introReady";
 
 const ASCII_CHARS = " .'`^,:;Il!i~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
 const FRAME_COUNT = 43;
@@ -201,6 +202,9 @@ export default function GifAsciiPlayer() {
       await Promise.all([
         ...images.map((image) => image.decode().catch(() => {})),
         document.fonts?.load(asciiFont).catch(() => {}),
+        // Hold the reveal until the shared intro gate opens, so the horse
+        // never appears before the blank-page choreography has started.
+        whenIntroReady(),
       ]);
       if (!active) return;
 
