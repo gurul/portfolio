@@ -43,7 +43,16 @@ export default async function AboutPage() {
         >
           Leonardo da Vinci
         </a>{" "}
-        is my role model — the original Renaissance man. I want to live the
+        is my role model — the original{" "}
+        <a
+          className="name-link"
+          href="https://www.britannica.com/topic/Renaissance-man"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Renaissance man
+        </a>
+        . I want to live the
         same way: endlessly curious, learning and making across every
         discipline I can reach.
       </p>
