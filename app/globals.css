@@ -488,17 +488,6 @@ html.intro-ready .page-shell {
 .inline-nowrap {
   white-space: nowrap;
 }
-
-/* Pinned to the bottom-left, bottom edge level with the horse's floor */
-.copy-column .davinci-note {
-  position: fixed;
-  left: calc(var(--crosshair-x) + var(--crosshair-copy-gap-x));
-  bottom: var(--horse-bottom-offset);
-  margin: 0;
-  max-width: 24rem;
-  z-index: 2;
-}
-
 .name-link {
   color: var(--accent);
 }
@@ -756,14 +745,6 @@ html.intro-ready .page-shell {
     line-height: 1.4;
     margin-bottom: 0.65rem;
   }
-
-  /* Not enough room at the bottom on small screens — back into the flow */
-  .copy-column .davinci-note {
-    position: static;
-    max-width: none;
-    margin: 0 0 0.65rem;
-  }
-
   .route-about .intro-grid {
     margin-top: calc(
       var(--crosshair-y) + var(--crosshair-copy-gap-y) + 2.4rem
