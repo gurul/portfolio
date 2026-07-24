@@ -34,6 +34,19 @@ export default async function AboutPage() {
         I love reading, writing, designing, dancing, working out, playing
         sports, making music and spending quality time with friends and family.
       </p>
+      <p>
+        <a
+          className="name-link"
+          href="https://en.wikipedia.org/wiki/Leonardo_da_Vinci"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Leonardo da Vinci
+        </a>{" "}
+        is my role model — the original Renaissance man. I want to live the
+        same way: endlessly curious, learning and making across every
+        discipline I can reach.
+      </p>
 
       <p>
         <span className="inline-nowrap">you can find my work on github </span>
