@@ -35,6 +35,7 @@ export default async function AboutPage() {
         sports, making music and spending quality time with loved ones.
       </p>
       <p>
+        I'm heavily inspired by{" "}
         <a
           className="name-link"
           href="https://en.wikipedia.org/wiki/Leonardo_da_Vinci"
@@ -42,8 +43,8 @@ export default async function AboutPage() {
           rel="noreferrer"
         >
           Leonardo da Vinci
-        </a>{" "}
-        is my role model — the original{" "}
+        </a>
+        , the original{" "}
         <a
           className="name-link"
           href="https://www.studentsofhistory.com/what-is-a-renaissance-man?srsltid=AfmBOoqp3BEKdw8gJWkRdU4-Q-Vm2hmjxKhM0o4dltRK-EAJcw4iiUnr"
