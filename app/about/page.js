@@ -69,6 +69,7 @@ export default async function AboutPage() {
           >
             github
           </a>
+          .
         </span>
       </p>
 
@@ -83,6 +84,7 @@ export default async function AboutPage() {
           >
             substack
           </a>
+          .
         </span>
       </p>
 
