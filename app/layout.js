@@ -55,6 +55,15 @@ export default function RootLayout({ children }) {
         <SiteNav />
         {children}
         <GifAsciiPlayer />
+        <div className="rotate-gate">
+          <p className="rotate-gate__message">
+            <span className="rotate-gate__glyph" aria-hidden="true">
+              ⟳
+            </span>
+            please flip your phone back to portrait — this site is built
+            upright.
+          </p>
+        </div>
       </body>
     </html>
   );

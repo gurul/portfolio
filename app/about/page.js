@@ -58,27 +58,31 @@ export default async function AboutPage() {
       </p>
 
       <p>
-        <span className="inline-nowrap">you can find my work on github </span>
-        <a
-          className="commit-history-link"
-          href="https://github.com/gurul"
-          target="_blank"
-          rel="noreferrer"
-        >
-          @gurul
-        </a>
+        <span className="inline-nowrap">
+          you can find my work on{" "}
+          <a
+            className="commit-history-link"
+            href="https://github.com/gurul"
+            target="_blank"
+            rel="noreferrer"
+          >
+            github
+          </a>
+        </span>
       </p>
 
       <p>
-        <span className="inline-nowrap">and my thoughts on substack </span>
-        <a
-          className="commit-history-link"
-          href="https://substack.com/@gurulingamallu"
-          target="_blank"
-          rel="noreferrer"
-        >
-          @gurulingamallu
-        </a>
+        <span className="inline-nowrap">
+          and my thoughts on{" "}
+          <a
+            className="commit-history-link"
+            href="https://substack.com/@gurulingamallu"
+            target="_blank"
+            rel="noreferrer"
+          >
+            substack
+          </a>
+        </span>
       </p>
 
       <section className="commit-history" aria-label="GitHub commit history">
