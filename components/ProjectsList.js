@@ -18,12 +18,6 @@ const projects = [
     lines: [],
   },
   {
-    name: "slideflow",
-    href: "https://slideflow1.vercel.app/",
-    description: "presentation intelligence",
-    lines: [],
-  },
-  {
     name: "shapers ai",
     href: "https://shapersai.com/",
     description: "smb consulting",
@@ -39,6 +33,12 @@ const projects = [
     name: "cseed",
     href: "https://cseed.co",
     description: "student innovation",
+    lines: [],
+  },
+  {
+    name: "slideflow",
+    href: "https://slideflow1.vercel.app/",
+    description: "presentation intelligence",
     lines: [],
   },
   {
