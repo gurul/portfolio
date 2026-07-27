@@ -83,6 +83,7 @@ export default async function AboutPage() {
           >
             substack
           </a>
+          .
         </span>
       </p>
 
