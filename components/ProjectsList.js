@@ -12,15 +12,15 @@ const projects = [
     lines: [],
   },
   {
-    name: "heylily",
-    href: "https://heylily.vercel.app/",
-    description: "real-time call safety",
-    lines: [],
-  },
-  {
     name: "shapers ai",
     href: "https://shapersai.com/",
     description: "smb consulting",
+    lines: [],
+  },
+  {
+    name: "heylily",
+    href: "https://heylily.vercel.app/",
+    description: "real-time call safety",
     lines: [],
   },
   {
