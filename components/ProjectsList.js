@@ -2,7 +2,7 @@ const projects = [
   {
     name: "storeybox",
     href: "https://storeybox.club",
-    description: "physical storytelling booth",
+    description: "memory infrastructure",
     lines: [],
   },
   {
