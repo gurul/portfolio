@@ -69,6 +69,15 @@ export default async function AboutPage() {
           >
             github
           </a>
+          ,{" "}
+          <a
+            className="commit-history-link"
+            href="https://orcid.org/0009-0004-5574-4696"
+            target="_blank"
+            rel="noreferrer"
+          >
+            orcid
+          </a>
         </span>
       </p>
 
