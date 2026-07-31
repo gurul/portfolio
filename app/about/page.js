@@ -60,7 +60,7 @@ export default async function AboutPage() {
 
       <p>
         <span className="inline-nowrap">
-          you can find my work on{" "}
+          you can find my code on{" "}
           <a
             className="commit-history-link"
             href="https://github.com/gurul"
@@ -69,7 +69,10 @@ export default async function AboutPage() {
           >
             github
           </a>
-          ,{" "}
+          ,
+        </span>{" "}
+        <span className="inline-nowrap">
+          my research on{" "}
           <a
             className="commit-history-link"
             href="https://orcid.org/0009-0004-5574-4696"
@@ -78,6 +81,7 @@ export default async function AboutPage() {
           >
             orcid
           </a>
+          ,
         </span>
       </p>
 
