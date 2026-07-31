@@ -542,7 +542,7 @@ html.intro-ready .page-shell {
   display: inline;
   color: var(--accent);
   text-decoration: underline;
-  font-size: clamp(0.91rem, 0.78rem + 0.29vw, 1.24rem);
+  font-size: inherit;
   line-height: inherit;
 }
 
