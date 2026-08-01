@@ -105,7 +105,7 @@ export default async function AboutPage() {
           <img
             className="commit-history-image"
             src="https://ghchart.rshah.org/gurul"
-            alt="GitHub contribution chart for gurul, cropped to recent months"
+            alt="GitHub contribution chart for gurul, cropped to the last six months"
           />
         </div>
 

@@ -636,11 +636,14 @@ html.intro-ready .page-shell {
   color: var(--accent);
 }
 
+/* The chart SVG is a full year (53 weeks, 12px pitch, cells from x=27 of
+   663px). Sizing the image to 211% of the viewport and pinning the right
+   edge (-52.6% = -(1 - 100/211)) crops it to the most recent 26 weeks. */
 .commit-history-viewport {
   flex: 0 0 12.96rem;
   position: relative;
   overflow: hidden;
-  height: 8.1rem;
+  height: 6.2rem;
 }
 
 .commit-history-viewport::before {
@@ -649,7 +652,7 @@ html.intro-ready .page-shell {
   top: 0;
   left: 0;
   right: 0;
-  height: 0.92rem;
+  height: 0.56rem;
   background: var(--bg);
   z-index: 1;
   pointer-events: none;
@@ -657,10 +660,10 @@ html.intro-ready .page-shell {
 
 .commit-history-image {
   display: block;
-  width: 306%;
+  width: 211%;
   max-width: none;
   height: auto;
-  transform: translateX(-67.3%) translateY(-0.18rem);
+  transform: translateX(-52.6%) translateY(-0.18rem);
   transform-origin: left center;
   opacity: 1;
 }
@@ -810,16 +813,16 @@ html.intro-ready .page-shell {
   .commit-history-viewport {
     flex: none;
     width: 100%;
-    height: 6.35rem;
+    height: 4.5rem;
   }
 
   .commit-history-viewport::before {
-    height: 0.72rem;
+    height: 0.5rem;
   }
 
   .commit-history-image {
-    width: 306%;
-    transform: translateX(-67.3%) translateY(-0.18rem);
+    width: 211%;
+    transform: translateX(-52.6%) translateY(-0.18rem);
   }
 
   .gif-ascii-block {
