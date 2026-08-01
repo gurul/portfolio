@@ -202,9 +202,6 @@ export default function GifAsciiPlayer() {
       await Promise.all([
         ...images.map((image) => image.decode().catch(() => {})),
         document.fonts?.load(asciiFont).catch(() => {}),
-        // Hold the reveal until the shared intro gate opens, so the horse
-        // never appears before the blank-page choreography has started.
-        whenIntroReady(),
       ]);
       if (!active) return;
 
@@ -216,12 +213,31 @@ export default function GifAsciiPlayer() {
       );
       gridHeightRef.current = gridHeight;
 
-      framesRef.current = images.map((image) =>
-        image.naturalWidth > 0
-          ? computeFrameCells(image, offscreenContext, gridHeight)
-          : null,
-      );
+      // Process frames in small batches with a rAF yield between them. A
+      // single synchronous pass over all 43 frames blocks the main thread
+      // long enough that the crosshair meteors (which animate top/left on
+      // the main thread) skip their opening frames and appear to start
+      // mid-screen instead of from the corner.
+      const frames = [];
+      for (let index = 0; index < images.length; index += 1) {
+        const image = images[index];
+        frames.push(
+          image.naturalWidth > 0
+            ? computeFrameCells(image, offscreenContext, gridHeight)
+            : null,
+        );
+        if ((index + 1) % 3 === 0) {
+          await new Promise((resolve) => requestAnimationFrame(resolve));
+          if (!active) return;
+        }
+      }
 
+      // Hold the reveal until the shared intro gate opens, so the horse
+      // never appears before the blank-page choreography has started.
+      await whenIntroReady();
+      if (!active) return;
+
+      framesRef.current = frames;
       sizeCanvas();
       setIsReady(true);
     };
