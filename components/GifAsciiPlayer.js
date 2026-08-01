@@ -78,7 +78,7 @@ function cellColor(brightness, activated) {
 
 export default function GifAsciiPlayer() {
   const pathname = usePathname();
-  const showsHorse = pathname === "/" || pathname === "/about" || pathname === "/projects" || pathname === "/research";
+  const showsHorse = pathname === "/" || pathname === "/about" || pathname === "/projects" || pathname === "/communities";
   const blockRef = useRef(null);
   const canvasRef = useRef(null);
   const frameRef = useRef(null);
