@@ -12,12 +12,6 @@ const projects = [
     lines: [],
   },
   {
-    name: "heylily",
-    href: "https://heylily.vercel.app/",
-    description: "real-time call safety",
-    lines: [],
-  },
-  {
     name: "diversity",
     href: "https://doi.org/10.1371/journal.pdig.0000486",
     description: "open data in clinical ai",
@@ -33,6 +27,12 @@ const projects = [
     name: "harborline",
     href: "https://github.com/gurul/harborline",
     description: "disaster response",
+    lines: [],
+  },
+  {
+    name: "heylily",
+    href: "https://heylily.vercel.app/",
+    description: "real-time call safety",
     lines: [],
   },
   {
