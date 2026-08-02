@@ -30,6 +30,12 @@ const projects = [
     lines: [],
   },
   {
+    name: "harborline",
+    href: "https://github.com/gurul/harborline",
+    description: "disaster response",
+    lines: [],
+  },
+  {
     name: "cse493",
     href: "https://midi-transport-0b7.notion.site/Terrain-Generation-378c6d84df52800abd61ff9a23175b77?source=copy_link",
     description: "deep learning terrain generator",
@@ -45,12 +51,6 @@ const projects = [
     name: "slideflow",
     href: "https://slideflow1.vercel.app/",
     description: "presentation intelligence",
-    lines: [],
-  },
-  {
-    name: "harborline",
-    href: "https://canva.link/id3dqdobbop5jvn",
-    description: "disaster response",
     lines: [],
   },
 ];
