@@ -87,7 +87,7 @@ export default async function AboutPage() {
 
       <p>
         <span className="inline-nowrap">
-          and my thoughts on{" "}
+          my thoughts on{" "}
           <a
             className="commit-history-link"
             href="https://substack.com/@gurulingamallu"
@@ -95,6 +95,18 @@ export default async function AboutPage() {
             rel="noreferrer"
           >
             substack
+          </a>
+          ,
+        </span>{" "}
+        <span className="inline-nowrap">
+          and my career on{" "}
+          <a
+            className="commit-history-link"
+            href="https://www.linkedin.com/in/gurul"
+            target="_blank"
+            rel="noreferrer"
+          >
+            linkedin
           </a>
           .
         </span>
