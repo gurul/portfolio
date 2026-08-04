@@ -1,11 +1,5 @@
 const projects = [
   {
-    name: "claude pet",
-    href: "https://github.com/gurul/claude-pet",
-    description: "esp32 desk pet for claude code",
-    lines: [],
-  },
-  {
     name: "storeybox",
     href: "https://storeybox.club",
     description: "memory infrastructure",
@@ -57,6 +51,12 @@ const projects = [
     name: "slideflow",
     href: "https://slideflow1.vercel.app/",
     description: "presentation intelligence",
+    lines: [],
+  },
+  {
+    name: "claude pet",
+    href: "https://github.com/gurul/claude-pet",
+    description: "esp32 desk pet for claude code",
     lines: [],
   },
 ];
