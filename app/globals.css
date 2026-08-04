@@ -158,6 +158,19 @@ a {
   display: none;
 }
 
+/* A gentle side-to-side drift that mimes the gesture it's teaching. */
+@keyframes swipe-hint-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 0.72;
+  }
+  50% {
+    transform: translateX(0.35rem);
+    opacity: 1;
+  }
+}
+
 .crosshair {
   position: absolute;
   inset: 0;
@@ -792,12 +805,35 @@ html.intro-ready .page-shell {
 
   .site-nav--swipe {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .swipe-nav__row {
+    display: flex;
     flex-wrap: nowrap;
     align-items: baseline;
     gap: 0.55rem;
     font-size: 0.8rem;
     line-height: 1.3;
     white-space: nowrap;
+  }
+
+  .swipe-nav__hint {
+    margin: 0;
+    font-size: 0.68rem;
+    line-height: 1.3;
+    font-style: italic;
+    color: var(--muted);
+    text-transform: lowercase;
+    animation: swipe-hint-nudge 2.4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .swipe-nav__hint {
+      animation: none;
+    }
   }
 
   .swipe-nav__side {

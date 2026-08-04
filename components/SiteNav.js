@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const items = [
   { href: "/about", label: "about" },
@@ -14,14 +14,26 @@ const items = [
 
 const SWIPE_MIN_X = 56;
 const SWIPE_MAX_SLOPE = 1.6;
+const SWIPE_HINT_KEY = "swipe-hint-done";
 
 export default function SiteNav() {
   const pathname = usePathname();
   const router = useRouter();
+  const [showHint, setShowHint] = useState(false);
 
   const index = items.findIndex((item) => item.href === pathname);
   const prev = index === -1 ? null : items[(index + items.length - 1) % items.length];
   const next = index === -1 ? null : items[(index + 1) % items.length];
+
+  // The hint appears after mount (not during SSR) so hydration stays clean,
+  // and only until the visitor has swiped once, ever.
+  useEffect(() => {
+    try {
+      if (!window.localStorage.getItem(SWIPE_HINT_KEY)) setShowHint(true);
+    } catch {
+      setShowHint(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (!prev || !next) return;
@@ -51,6 +63,10 @@ export default function SiteNav() {
       const dy = touch.clientY - startY;
       if (Math.abs(dx) < SWIPE_MIN_X) return;
       if (Math.abs(dx) < Math.abs(dy) * SWIPE_MAX_SLOPE) return;
+      try {
+        window.localStorage.setItem(SWIPE_HINT_KEY, "1");
+      } catch {}
+      setShowHint(false);
       router.push(dx < 0 ? next.href : prev.href);
     };
 
@@ -97,27 +113,32 @@ export default function SiteNav() {
           className="site-nav site-nav--flow site-nav--swipe"
           aria-label="Primary"
         >
-          <Link href={prev.href} className="swipe-nav__side">
-            <span className="swipe-nav__chevron" aria-hidden="true">
-              ‹
-            </span>{" "}
-            {prev.label}
-          </Link>
-          <span className="site-nav__separator" aria-hidden="true">
-            /
-          </span>
-          <span className="swipe-nav__current" aria-current="page">
-            {items[index].label}
-          </span>
-          <span className="site-nav__separator" aria-hidden="true">
-            /
-          </span>
-          <Link href={next.href} className="swipe-nav__side">
-            {next.label}{" "}
-            <span className="swipe-nav__chevron" aria-hidden="true">
-              ›
+          <div className="swipe-nav__row">
+            <Link href={prev.href} className="swipe-nav__side">
+              <span className="swipe-nav__chevron" aria-hidden="true">
+                ‹
+              </span>{" "}
+              {prev.label}
+            </Link>
+            <span className="site-nav__separator" aria-hidden="true">
+              /
             </span>
-          </Link>
+            <span className="swipe-nav__current" aria-current="page">
+              {items[index].label}
+            </span>
+            <span className="site-nav__separator" aria-hidden="true">
+              /
+            </span>
+            <Link href={next.href} className="swipe-nav__side">
+              {next.label}{" "}
+              <span className="swipe-nav__chevron" aria-hidden="true">
+                ›
+              </span>
+            </Link>
+          </div>
+          {showHint ? (
+            <p className="swipe-nav__hint">swipe anywhere to flip pages</p>
+          ) : null}
         </nav>
       ) : null}
     </>
