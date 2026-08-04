@@ -7,7 +7,12 @@ const routes = [
     priority: 1,
   },
   {
-    path: "/projects",
+    path: "/software",
+    changeFrequency: "monthly",
+    priority: 0.9,
+  },
+  {
+    path: "/hardware",
     changeFrequency: "monthly",
     priority: 0.9,
   },

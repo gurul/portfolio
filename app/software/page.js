@@ -1,3 +1,12 @@
+import PageScaffold from "../../components/PageScaffold";
+import { buildPageMetadata } from "../../lib/metadata";
+
+export const metadata = buildPageMetadata({
+  path: "/software",
+  title: "Software",
+  description: "Software projects and experiments built by Gurucharan Lingamallu.",
+});
+
 const software = [
   {
     name: "storeybox",
@@ -55,51 +64,26 @@ const software = [
   },
 ];
 
-const hardware = [
-  {
-    name: "claude pet",
-    href: "https://github.com/gurul/claude-pet",
-    description: "esp32 desk pet for claude code",
-    lines: [],
-  },
-];
-
-function WorkList({ items, label }) {
+export default function SoftwarePage() {
   return (
-    <div className="projects-page-list" aria-label={label}>
-      {items.map((project) => (
-        <article key={project.name} className="projects-page-item">
-          <p className="projects-page-title">
-            <a href={project.href} target="_blank" rel="noreferrer">
-              {project.name}
-            </a>{" "}
-            — {project.description}
-          </p>
-          {project.lines.map((line) => (
-            <p key={line} className="projects-page-line">
-              {line}
+    <PageScaffold>
+      <div className="projects-page-list" aria-label="Software">
+        {software.map((item) => (
+          <article key={item.name} className="projects-page-item">
+            <p className="projects-page-title">
+              <a href={item.href} target="_blank" rel="noreferrer">
+                {item.name}
+              </a>{" "}
+              — {item.description}
             </p>
-          ))}
-        </article>
-      ))}
-    </div>
-  );
-}
-
-function WorkSection({ heading, items }) {
-  return (
-    <section className="projects-page-section">
-      <h2 className="projects-page-heading">{heading}</h2>
-      <WorkList items={items} label={heading} />
-    </section>
-  );
-}
-
-export default function ProjectsList() {
-  return (
-    <>
-      <WorkSection heading="software" items={software} />
-      <WorkSection heading="hardware" items={hardware} />
-    </>
+            {item.lines.map((line) => (
+              <p key={line} className="projects-page-line">
+                {line}
+              </p>
+            ))}
+          </article>
+        ))}
+      </div>
+    </PageScaffold>
   );
 }
