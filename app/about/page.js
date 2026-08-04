@@ -82,10 +82,7 @@ export default async function AboutPage() {
             orcid
           </a>
           ,
-        </span>
-      </p>
-
-      <p>
+        </span>{" "}
         <span className="inline-nowrap">
           my thoughts on{" "}
           <a
