@@ -1,4 +1,4 @@
-const projects = [
+const software = [
   {
     name: "storeybox",
     href: "https://storeybox.club",
@@ -53,6 +53,9 @@ const projects = [
     description: "presentation intelligence",
     lines: [],
   },
+];
+
+const hardware = [
   {
     name: "claude pet",
     href: "https://github.com/gurul/claude-pet",
@@ -83,8 +86,20 @@ function WorkList({ items, label }) {
   );
 }
 
+function WorkSection({ heading, items }) {
+  return (
+    <section className="projects-page-section">
+      <h2 className="projects-page-heading">{heading}</h2>
+      <WorkList items={items} label={heading} />
+    </section>
+  );
+}
+
 export default function ProjectsList() {
   return (
-    <WorkList items={projects} label="Projects" />
+    <>
+      <WorkSection heading="software" items={software} />
+      <WorkSection heading="hardware" items={hardware} />
+    </>
   );
 }
