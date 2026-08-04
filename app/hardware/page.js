@@ -9,6 +9,12 @@ export const metadata = buildPageMetadata({
 
 const hardware = [
   {
+    name: "storeybox",
+    href: "https://storeybox.club",
+    description: "physical memory infrastructure",
+    lines: [],
+  },
+  {
     name: "claude pet",
     href: "https://github.com/gurul/claude-pet",
     description: "esp32 desk pet for claude code",
