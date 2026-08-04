@@ -153,6 +153,11 @@ a {
   color: var(--muted);
 }
 
+/* The swipe strip only exists on touch layouts; desktop keeps the full nav. */
+.site-nav--swipe {
+  display: none;
+}
+
 .crosshair {
   position: absolute;
   inset: 0;
@@ -774,13 +779,42 @@ html.intro-ready .page-shell {
     max-width: calc(100vw - var(--crosshair-x) - var(--crosshair-copy-gap-x) - 1.15rem);
   }
 
-  .site-nav__item {
-    gap: 0.35rem;
-  }
-
   .site-nav__link {
     font-size: 0.8rem;
     line-height: 1.3;
+  }
+
+  /* One line of orientation: ghosted neighbors + chevrons say "swipe",
+     and the neighbors stay tappable. The full nav hands over to this. */
+  .site-nav--full {
+    display: none;
+  }
+
+  .site-nav--swipe {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    gap: 0.55rem;
+    font-size: 0.8rem;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  .swipe-nav__side {
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: lowercase;
+    font-size: inherit;
+  }
+
+  .swipe-nav__current {
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: lowercase;
+  }
+
+  .swipe-nav__chevron {
+    color: var(--muted);
   }
 
   .intro-grid {
