@@ -12,7 +12,7 @@ export default function RouteMode() {
     html.classList.add("route-flow");
     body.classList.add("route-flow");
     const isLockedRoute =
-      pathname === "/" || pathname === "/about" || pathname === "/software" || pathname === "/hardware" || pathname === "/communities";
+      pathname === "/" || pathname === "/about" || pathname === "/software" || pathname === "/hardware" || pathname === "/research" || pathname === "/communities";
     html.classList.toggle("route-locked", isLockedRoute);
     body.classList.toggle("route-locked", isLockedRoute);
 

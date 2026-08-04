@@ -7,6 +7,7 @@ const items = [
   { href: "/about", label: "about" },
   { href: "/software", label: "software" },
   { href: "/hardware", label: "hardware" },
+  { href: "/research", label: "research" },
   { href: "/communities", label: "communities" },
 ];
 
