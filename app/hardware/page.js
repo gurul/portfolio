@@ -9,6 +9,13 @@ export const metadata = buildPageMetadata({
 
 const hardware = [
   {
+    name: "hardware-logging",
+    href: "https://github.com/gurul/hardware-logging",
+    description:
+      "open-source structured serial logging so ai coding agents can debug firmware recursively",
+    lines: [],
+  },
+  {
     name: "storeybox",
     href: "https://storeybox.club",
     description: "physical memory infrastructure",
