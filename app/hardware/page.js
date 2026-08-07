@@ -11,7 +11,7 @@ const hardware = [
   {
     name: "hwlog",
     href: "https://github.com/gurul/hardware-logging",
-    description: "serial logging for ai agents debugging firmware",
+    description: "serial logging for debugging firmware",
     lines: [],
   },
   {
