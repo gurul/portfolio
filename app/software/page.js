@@ -21,9 +21,9 @@ const software = [
     lines: [],
   },
   {
-    name: "debrief",
-    href: "https://github.com/gurul/claude-debrief",
-    description: "human-gated memory for coding agents",
+    name: "heylily",
+    href: "https://heylily.vercel.app/",
+    description: "real-time call safety",
     lines: [],
   },
   {
@@ -33,9 +33,9 @@ const software = [
     lines: [],
   },
   {
-    name: "heylily",
-    href: "https://heylily.vercel.app/",
-    description: "real-time call safety",
+    name: "debrief",
+    href: "https://github.com/gurul/claude-debrief",
+    description: "human-gated memory for coding agents",
     lines: [],
   },
   {
