@@ -26,6 +26,12 @@ const hardware = [
     description: "esp32 desk pet for claude code",
     lines: [],
   },
+  {
+    name: "cameraboi",
+    href: "https://github.com/gurul/cameraboi",
+    description: "usb document camera eyes for claude code",
+    lines: [],
+  },
 ];
 
 export default function HardwarePage() {
