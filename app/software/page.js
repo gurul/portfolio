@@ -9,12 +9,6 @@ export const metadata = buildPageMetadata({
 
 const software = [
   {
-    name: "maker",
-    href: "https://maker.era.world",
-    description: "ai-powered hardware builder",
-    lines: [],
-  },
-  {
     name: "handyman",
     href: "https://github.com/gurul/handyman",
     description: "self-generating product tours",
