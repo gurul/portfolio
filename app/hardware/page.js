@@ -17,13 +17,13 @@ const hardware = [
   {
     name: "claude pet",
     href: "https://github.com/gurul/claude-pet",
-    description: "esp32 desk pet for claude code",
+    description: "esp32 desk pet",
     lines: [],
   },
   {
     name: "cameraboi",
     href: "https://github.com/gurul/cameraboi",
-    description: "usb document camera eyes for claude code",
+    description: "usb document camera eyes",
     lines: [],
   },
   {
