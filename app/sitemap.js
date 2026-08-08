@@ -17,12 +17,12 @@ const routes = [
     priority: 0.9,
   },
   {
-    path: "/research",
+    path: "/communities",
     changeFrequency: "monthly",
     priority: 0.9,
   },
   {
-    path: "/communities",
+    path: "/research",
     changeFrequency: "monthly",
     priority: 0.9,
   },

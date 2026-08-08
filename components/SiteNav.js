@@ -8,8 +8,8 @@ const items = [
   { href: "/about", label: "about" },
   { href: "/software", label: "software" },
   { href: "/hardware", label: "hardware" },
-  { href: "/research", label: "research" },
   { href: "/communities", label: "communities" },
+  { href: "/research", label: "research" },
 ];
 
 const SWIPE_MIN_X = 56;
