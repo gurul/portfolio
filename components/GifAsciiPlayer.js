@@ -11,6 +11,8 @@ const BACKGROUND_THRESHOLD = 18;
 const CONTRAST = 1.45;
 const DEFAULT_BG = "#001918";
 const STORAGE_KEY = "horse-theme-active";
+// Click (or a fresh visit) cycles teal -> red -> black & white.
+const THEMES = ["default", "horse", "mono"];
 const GRID_WIDTH = 132;
 const CELL_WIDTH = 8;
 const CELL_HEIGHT = 14;
@@ -61,9 +63,15 @@ function computeFrameCells(image, offscreenContext, gridHeight) {
   return { cells, sparkles };
 }
 
-function cellColor(brightness, activated) {
+function cellColor(brightness, theme) {
   const intensity = brightness / 255;
   const alpha = Math.min(1, 0.34 + intensity * 0.9);
+  if (theme === "mono") {
+    // Dark ink on the paper background: brighter source cells get darker.
+    const ink = Math.round(38 - intensity * 36);
+    return { red: ink, green: ink, blue: ink, alpha };
+  }
+  const activated = theme === "horse";
   const red = activated
     ? Math.round(240 + intensity * 15)
     : Math.round(228 + intensity * 27);
@@ -86,46 +94,54 @@ export default function GifAsciiPlayer() {
   const frameIndexRef = useRef(0);
   const lastTimeRef = useRef(0);
   const gridHeightRef = useRef(0);
-  const activatedRef = useRef(false);
+  const themeRef = useRef("default");
   const needsRedrawRef = useRef(true);
   const reducedMotionRef = useRef(false);
   const [showScrollCue, setShowScrollCue] = useState(false);
-  const [isActivated, setIsActivated] = useState(false);
+  const [theme, setTheme] = useState("default");
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     try {
-      const storedTheme = window.localStorage.getItem(STORAGE_KEY);
-      const nextTheme = storedTheme == null ? false : storedTheme !== "true";
-      setIsActivated(nextTheme);
-      window.localStorage.setItem(STORAGE_KEY, String(nextTheme));
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      // Legacy boolean values from the two-theme era.
+      const current =
+        stored === "true" ? "horse" : stored === "false" ? "default" : stored;
+      // A fresh visit advances the cycle; a first visit starts on default.
+      const nextTheme =
+        current == null
+          ? "default"
+          : THEMES[(THEMES.indexOf(current) + 1) % THEMES.length];
+      setTheme(nextTheme);
+      window.localStorage.setItem(STORAGE_KEY, nextTheme);
     } catch {}
   }, []);
 
   useEffect(() => {
     try {
-      window.localStorage.setItem(STORAGE_KEY, String(isActivated));
+      window.localStorage.setItem(STORAGE_KEY, theme);
     } catch {}
-  }, [isActivated]);
+  }, [theme]);
 
   useEffect(() => {
     const html = document.documentElement;
     const body = document.body;
-    const active = isActivated;
 
-    html.classList.toggle("horse-theme-active", active);
-    body.classList.toggle("horse-theme-active", active);
+    html.classList.toggle("horse-theme-active", theme === "horse");
+    body.classList.toggle("horse-theme-active", theme === "horse");
+    html.classList.toggle("mono-theme-active", theme === "mono");
+    body.classList.toggle("mono-theme-active", theme === "mono");
 
     return () => {
-      html.classList.remove("horse-theme-active");
-      body.classList.remove("horse-theme-active");
+      html.classList.remove("horse-theme-active", "mono-theme-active");
+      body.classList.remove("horse-theme-active", "mono-theme-active");
     };
-  }, [isActivated]);
+  }, [theme]);
 
   useEffect(() => {
-    activatedRef.current = isActivated;
+    themeRef.current = theme;
     needsRedrawRef.current = true;
-  }, [isActivated]);
+  }, [theme]);
 
   useEffect(() => {
     if (!showsHorse) return undefined;
@@ -168,12 +184,14 @@ export default function GifAsciiPlayer() {
       context.font = asciiFont;
       context.textBaseline = "top";
 
-      const activated = activatedRef.current;
+      const theme = themeRef.current;
+      // Sparkles push toward the accent: lighter on dark themes, darker on mono.
+      const sparkleShift = theme === "mono" ? -18 : 18;
       let currentBrightness = -1;
 
       for (const [x, y, charIndex, brightness] of frame.cells) {
         if (brightness !== currentBrightness) {
-          const { red, green, blue, alpha } = cellColor(brightness, activated);
+          const { red, green, blue, alpha } = cellColor(brightness, theme);
           context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
           currentBrightness = brightness;
         }
@@ -181,8 +199,8 @@ export default function GifAsciiPlayer() {
       }
 
       for (const [x, y, charIndex, brightness] of frame.sparkles) {
-        const { red, green, blue, alpha } = cellColor(brightness, activated);
-        context.fillStyle = `rgba(${Math.min(255, red + 18)}, ${Math.min(255, green + 18)}, ${Math.min(255, blue + 18)}, ${alpha * 0.18})`;
+        const { red, green, blue, alpha } = cellColor(brightness, theme);
+        context.fillStyle = `rgba(${clamp(red + sparkleShift, 0, 255)}, ${clamp(green + sparkleShift, 0, 255)}, ${clamp(blue + sparkleShift, 0, 255)}, ${alpha * 0.18})`;
         context.fillText(ASCII_CHARS[charIndex], x * CELL_WIDTH + 0.5, y * CELL_HEIGHT);
       }
     };
@@ -361,7 +379,11 @@ export default function GifAsciiPlayer() {
       ref={blockRef}
       className="gif-ascii-block"
       aria-label="ASCII animation experiment"
-      onClick={() => setIsActivated((current) => !current)}
+      onClick={() =>
+        setTheme(
+          (current) => THEMES[(THEMES.indexOf(current) + 1) % THEMES.length],
+        )
+      }
     >
       {showScrollCue ? (
         <span className="gif-ascii-scroll-cue">scroll to continue</span>
