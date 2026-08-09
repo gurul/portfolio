@@ -5,6 +5,8 @@
   --accent: rgba(255, 255, 255, 0.92);
   --rule: rgba(255, 255, 255, 0.08);
   --crosshair: rgba(255, 255, 255, 0.32);
+  /* Dots along the crosshair lines — the theme's secondary color */
+  --crosshair-dot: 255, 255, 255;
   /* Sun that sits on the crosshair intersection */
   --sun-core: 255, 255, 255;
   --sun-glow: 255, 255, 255;
@@ -77,6 +79,7 @@ body.horse-theme-active {
   --muted: rgba(232, 217, 197, 0.78);
   --accent: #fdfcf0;
   --crosshair: rgba(253, 252, 240, 0.34);
+  --crosshair-dot: 232, 217, 197;
   --sun-core: 253, 252, 240;
   --sun-glow: 253, 252, 240;
   --sun-deep: 253, 252, 240;
@@ -90,9 +93,44 @@ body.mono-theme-active {
   --accent: rgba(0, 0, 0, 0.92);
   --rule: rgba(0, 0, 0, 0.1);
   --crosshair: rgba(0, 0, 0, 0.34);
+  --crosshair-dot: 10, 10, 10;
   --sun-core: 10, 10, 10;
   --sun-glow: 10, 10, 10;
   --sun-deep: 10, 10, 10;
+}
+
+html.night-theme-active,
+body.night-theme-active {
+  --bg: #000000;
+  --text: rgba(255, 255, 255, 0.62);
+  --muted: rgba(255, 255, 255, 0.5);
+  --accent: rgba(255, 255, 255, 0.95);
+}
+
+html.purple-theme-active,
+body.purple-theme-active {
+  --bg: #3a2266;
+  --text: #e3dcf2;
+  --muted: rgba(227, 220, 242, 0.78);
+  --accent: #f7f4ff;
+  --crosshair: rgba(247, 244, 255, 0.34);
+  --crosshair-dot: 227, 220, 242;
+  --sun-core: 247, 244, 255;
+  --sun-glow: 247, 244, 255;
+  --sun-deep: 247, 244, 255;
+}
+
+html.sage-theme-active,
+body.sage-theme-active {
+  --bg: #55684c;
+  --text: #eef2e4;
+  --muted: rgba(238, 242, 228, 0.78);
+  --accent: #fbfdf4;
+  --crosshair: rgba(251, 253, 244, 0.34);
+  --crosshair-dot: 238, 242, 228;
+  --sun-core: 251, 253, 244;
+  --sun-glow: 251, 253, 244;
+  --sun-deep: 251, 253, 244;
 }
 
 a {
@@ -206,9 +244,9 @@ a {
   transform: translateX(-4px);
   background-image: radial-gradient(
     circle 2.6px at center,
-    rgba(255, 255, 255, 0.82) 0%,
-    rgba(255, 255, 255, 0.34) 38%,
-    rgba(255, 255, 255, 0) 78%
+    rgba(var(--crosshair-dot), 0.82) 0%,
+    rgba(var(--crosshair-dot), 0.34) 38%,
+    rgba(var(--crosshair-dot), 0) 78%
   );
   background-size: 8px 6px;
   background-repeat: repeat-y;
@@ -227,9 +265,9 @@ a {
   transform: translateY(-4px);
   background-image: radial-gradient(
     circle 2.6px at center,
-    rgba(255, 255, 255, 0.82) 0%,
-    rgba(255, 255, 255, 0.34) 38%,
-    rgba(255, 255, 255, 0) 78%
+    rgba(var(--crosshair-dot), 0.82) 0%,
+    rgba(var(--crosshair-dot), 0.34) 38%,
+    rgba(var(--crosshair-dot), 0) 78%
   );
   background-size: 6px 8px;
   background-repeat: repeat-x;
@@ -271,9 +309,9 @@ a {
   /* Soft glowing core — a radial falloff, not a hard-edged dot. */
   background: radial-gradient(
     circle,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 255, 255, 0.55) 35%,
-    rgba(255, 255, 255, 0) 75%
+    rgba(var(--crosshair-dot), 0.95) 0%,
+    rgba(var(--crosshair-dot), 0.55) 35%,
+    rgba(var(--crosshair-dot), 0) 75%
   );
 }
 
@@ -281,12 +319,12 @@ a {
   left: calc(var(--crosshair-x) - 1.5px);
   /* Head halo + a tail of progressively softer, dimmer glows above it. */
   box-shadow:
-    0 0 4px 1px rgba(255, 255, 255, 0.55),
-    0 0 12px 3px rgba(255, 255, 255, 0.3),
-    0 0 24px 6px rgba(255, 255, 255, 0.14),
-    0 -8px 10px 1px rgba(255, 255, 255, 0.18),
-    0 -18px 16px 2px rgba(255, 255, 255, 0.1),
-    0 -32px 22px 3px rgba(255, 255, 255, 0.05);
+    0 0 4px 1px rgba(var(--crosshair-dot), 0.55),
+    0 0 12px 3px rgba(var(--crosshair-dot), 0.3),
+    0 0 24px 6px rgba(var(--crosshair-dot), 0.14),
+    0 -8px 10px 1px rgba(var(--crosshair-dot), 0.18),
+    0 -18px 16px 2px rgba(var(--crosshair-dot), 0.1),
+    0 -32px 22px 3px rgba(var(--crosshair-dot), 0.05);
   animation:
     crosshair-meteor-v 1375ms cubic-bezier(0.22, 1, 0.36, 1) both,
     crosshair-meteor-settle 350ms ease-out 1375ms forwards;
@@ -295,12 +333,12 @@ a {
 .crosshair::after {
   top: calc(var(--crosshair-y) - 1.5px);
   box-shadow:
-    0 0 4px 1px rgba(255, 255, 255, 0.55),
-    0 0 12px 3px rgba(255, 255, 255, 0.3),
-    0 0 24px 6px rgba(255, 255, 255, 0.14),
-    -8px 0 10px 1px rgba(255, 255, 255, 0.18),
-    -18px 0 16px 2px rgba(255, 255, 255, 0.1),
-    -32px 0 22px 3px rgba(255, 255, 255, 0.05);
+    0 0 4px 1px rgba(var(--crosshair-dot), 0.55),
+    0 0 12px 3px rgba(var(--crosshair-dot), 0.3),
+    0 0 24px 6px rgba(var(--crosshair-dot), 0.14),
+    -8px 0 10px 1px rgba(var(--crosshair-dot), 0.18),
+    -18px 0 16px 2px rgba(var(--crosshair-dot), 0.1),
+    -32px 0 22px 3px rgba(var(--crosshair-dot), 0.05);
   animation:
     crosshair-meteor-h 1375ms cubic-bezier(0.22, 1, 0.36, 1) both,
     crosshair-meteor-settle 350ms ease-out 1375ms forwards;
@@ -435,11 +473,11 @@ a {
     filter: brightness(1);
   }
   22% {
-    filter: brightness(2.4) drop-shadow(0 0 3px rgba(255, 255, 255, 0.5))
-      drop-shadow(0 0 9px rgba(255, 255, 255, 0.28));
+    filter: brightness(2.4) drop-shadow(0 0 3px rgba(var(--crosshair-dot), 0.5))
+      drop-shadow(0 0 9px rgba(var(--crosshair-dot), 0.28));
   }
   55% {
-    filter: brightness(1.5) drop-shadow(0 0 4px rgba(255, 255, 255, 0.16));
+    filter: brightness(1.5) drop-shadow(0 0 4px rgba(var(--crosshair-dot), 0.16));
   }
   100% {
     filter: brightness(1);

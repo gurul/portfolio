@@ -11,8 +11,13 @@ const BACKGROUND_THRESHOLD = 18;
 const CONTRAST = 1.45;
 const DEFAULT_BG = "#001918";
 const STORAGE_KEY = "horse-theme-active";
-// Click (or a fresh visit) cycles teal -> red -> black & white.
-const THEMES = ["default", "horse", "mono"];
+// Click (or a fresh visit) cycles teal -> red -> black & white -> black ->
+// royal purple -> sage green. Every non-default theme gets a
+// `<name>-theme-active` class on <html>/<body>.
+const THEMES = ["default", "horse", "mono", "night", "purple", "sage"];
+const THEME_CLASSES = THEMES.filter((name) => name !== "default").map(
+  (name) => `${name}-theme-active`,
+);
 const GRID_WIDTH = 132;
 const CELL_WIDTH = 8;
 const CELL_HEIGHT = 14;
@@ -124,17 +129,19 @@ export default function GifAsciiPlayer() {
   }, [theme]);
 
   useEffect(() => {
-    const html = document.documentElement;
-    const body = document.body;
+    const roots = [document.documentElement, document.body];
 
-    html.classList.toggle("horse-theme-active", theme === "horse");
-    body.classList.toggle("horse-theme-active", theme === "horse");
-    html.classList.toggle("mono-theme-active", theme === "mono");
-    body.classList.toggle("mono-theme-active", theme === "mono");
+    for (const root of roots) {
+      root.classList.remove(...THEME_CLASSES);
+      if (theme !== "default") {
+        root.classList.add(`${theme}-theme-active`);
+      }
+    }
 
     return () => {
-      html.classList.remove("horse-theme-active", "mono-theme-active");
-      body.classList.remove("horse-theme-active", "mono-theme-active");
+      for (const root of roots) {
+        root.classList.remove(...THEME_CLASSES);
+      }
     };
   }, [theme]);
 
