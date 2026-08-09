@@ -109,7 +109,7 @@ body.night-theme-active {
 
 html.purple-theme-active,
 body.purple-theme-active {
-  --bg: #3a2266;
+  --bg: #2a0e52;
   --text: #e3dcf2;
   --muted: rgba(227, 220, 242, 0.78);
   --accent: #f7f4ff;
@@ -122,7 +122,7 @@ body.purple-theme-active {
 
 html.sage-theme-active,
 body.sage-theme-active {
-  --bg: #55684c;
+  --bg: #2c3a25;
   --text: #eef2e4;
   --muted: rgba(238, 242, 228, 0.78);
   --accent: #fbfdf4;
