@@ -11,10 +11,10 @@ const BACKGROUND_THRESHOLD = 18;
 const CONTRAST = 1.45;
 const DEFAULT_BG = "#001918";
 const STORAGE_KEY = "horse-theme-active";
-// Click (or a fresh visit) cycles teal -> red -> black & white -> black ->
-// royal purple -> sage green. Every non-default theme gets a
-// `<name>-theme-active` class on <html>/<body>.
-const THEMES = ["default", "horse", "mono", "night", "purple", "sage"];
+// Click (or a fresh visit) cycles teal -> red -> black -> royal purple ->
+// sage green. Every non-default theme gets a `<name>-theme-active` class
+// on <html>/<body>.
+const THEMES = ["default", "horse", "night", "purple", "sage"];
 const THEME_CLASSES = THEMES.filter((name) => name !== "default").map(
   (name) => `${name}-theme-active`,
 );
@@ -71,11 +71,6 @@ function computeFrameCells(image, offscreenContext, gridHeight) {
 function cellColor(brightness, theme) {
   const intensity = brightness / 255;
   const alpha = Math.min(1, 0.34 + intensity * 0.9);
-  if (theme === "mono") {
-    // Dark ink on the paper background: brighter source cells get darker.
-    const ink = Math.round(38 - intensity * 36);
-    return { red: ink, green: ink, blue: ink, alpha };
-  }
   const activated = theme === "horse";
   const red = activated
     ? Math.round(240 + intensity * 15)
@@ -192,8 +187,8 @@ export default function GifAsciiPlayer() {
       context.textBaseline = "top";
 
       const theme = themeRef.current;
-      // Sparkles push toward the accent: lighter on dark themes, darker on mono.
-      const sparkleShift = theme === "mono" ? -18 : 18;
+      // Sparkles push a step brighter than their base cell.
+      const sparkleShift = 18;
       let currentBrightness = -1;
 
       for (const [x, y, charIndex, brightness] of frame.cells) {
