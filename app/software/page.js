@@ -33,6 +33,12 @@ const software = [
     lines: [],
   },
   {
+    name: "highway1",
+    href: "https://github.com/gurul/highway1",
+    description: "research toward intrinsically creative ai",
+    lines: [],
+  },
+  {
     name: "cse493",
     href: "https://midi-transport-0b7.notion.site/Terrain-Generation-378c6d84df52800abd61ff9a23175b77?source=copy_link",
     description: "deep learning terrain generator",
