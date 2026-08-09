@@ -11,7 +11,7 @@ const research = [
   {
     name: "highway1",
     href: "https://github.com/gurul/highway1",
-    description: "research toward intrinsically creative ai",
+    description: "intrinsically creative ai",
     lines: [],
   },
   {
