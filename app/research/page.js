@@ -9,6 +9,12 @@ export const metadata = buildPageMetadata({
 
 const research = [
   {
+    name: "highway1",
+    href: "https://github.com/gurul/highway1",
+    description: "research toward intrinsically creative ai",
+    lines: [],
+  },
+  {
     name: "diversity",
     href: "https://doi.org/10.1371/journal.pdig.0000486",
     description: "open data in clinical ai",

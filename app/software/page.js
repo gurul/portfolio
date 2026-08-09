@@ -9,12 +9,6 @@ export const metadata = buildPageMetadata({
 
 const software = [
   {
-    name: "highway1",
-    href: "https://github.com/gurul/highway1",
-    description: "research toward intrinsically creative ai",
-    lines: [],
-  },
-  {
     name: "handyman",
     href: "https://github.com/gurul/handyman",
     description: "self-generating product tours",
