@@ -551,6 +551,7 @@ html.intro-ready .page-shell {
 
 .horse-theme-active .name-link,
 .horse-theme-active .commit-history-link,
+.horse-theme-active .currently-reading__label,
 .horse-theme-active .site-nav__link,
 .horse-theme-active .site-nav__link.is-active,
 .horse-theme-active .projects-page-title a,
@@ -596,11 +597,53 @@ html.intro-ready .page-shell {
 }
 
 .copy-column .currently-reading {
+  position: relative;
+  z-index: 1;
   margin: 1.4rem 0 0;
   font-size: clamp(0.72rem, 0.66rem + 0.11vw, 0.8rem);
   line-height: 1.35;
   font-style: italic;
-  opacity: 0.75;
+  color: var(--text);
+}
+
+.currently-reading__button {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.currently-reading__lines {
+  display: block;
+}
+
+/* Phosphor decode sweep: the freshest characters glow bright and cool back
+   to body text; the noise window and the old tail sit dimmed behind it. */
+.currently-reading__glow {
+  color: var(--accent);
+  text-shadow: 0 0 4px var(--accent), 0 0 12px var(--accent);
+}
+
+.currently-reading__noise {
+  color: var(--muted);
+}
+
+.currently-reading__old {
+  color: var(--muted);
+  opacity: 0.45;
+}
+
+.currently-reading__label {
+  color: var(--accent);
+  text-decoration: underline;
 }
 
 .commit-history-link {
@@ -973,5 +1016,17 @@ html.intro-ready .page-shell {
 
   .gif-ascii-scroll-cue {
     display: none;
+  }
+
+  /* Keep the narratives line clear of the fixed ascii art in the bottom-right
+     corner: reserve the art's width (plus its 0.85rem inset) as padding. */
+  .copy-column .currently-reading {
+    padding-right: calc(
+      clamp(
+        calc(5.25rem * var(--horse-scale)),
+        calc(24vw * var(--horse-scale)),
+        calc(9rem * var(--horse-scale))
+      ) + 0.4rem
+    );
   }
 }

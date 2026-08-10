@@ -1,6 +1,15 @@
+import ExperiencingNarratives from "../../components/ExperiencingNarratives";
 import PageScaffold from "../../components/PageScaffold";
 import { getYearContributionCount } from "../../lib/github";
 import { buildPageMetadata } from "../../lib/metadata";
+
+// Newest first; shown after the static "narratives experienced:" label.
+const NARRATIVES = [
+  { title: "becoming nobody", author: "dass" },
+  { title: "the odyssey", author: "nolan" },
+  { title: "machines of loving grace", author: "amodei" },
+  { title: "the deep learning revolution", author: "sejnowski" },
+];
 
 export const revalidate = 3600;
 export const metadata = buildPageMetadata({
@@ -126,7 +135,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <p className="currently-reading">currently studying: becoming nobody — ram dass</p>
+      <ExperiencingNarratives entries={NARRATIVES} />
     </PageScaffold>
   );
 }
