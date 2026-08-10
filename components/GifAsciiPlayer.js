@@ -11,8 +11,8 @@ const BACKGROUND_THRESHOLD = 18;
 const CONTRAST = 1.45;
 const DEFAULT_BG = "#001918";
 const STORAGE_KEY = "horse-theme-active";
-// Click (or a fresh visit) cycles teal -> red -> black -> royal purple ->
-// sage green. Every non-default theme gets a `<name>-theme-active` class
+// Click (or a fresh visit) cycles teal -> red -> black -> deep purple ->
+// forest green. Every non-default theme gets a `<name>-theme-active` class
 // on <html>/<body>.
 const THEMES = ["default", "horse", "night", "purple", "sage"];
 const THEME_CLASSES = THEMES.filter((name) => name !== "default").map(
