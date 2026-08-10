@@ -1,4 +1,5 @@
 import { JetBrains_Mono } from "next/font/google";
+import DecodeIntro from "../components/DecodeIntro";
 import GifAsciiPlayer from "../components/GifAsciiPlayer";
 import IntroGate from "../components/IntroGate";
 import RouteMode from "../components/RouteMode";
@@ -53,6 +54,8 @@ export default function RootLayout({ children }) {
           </div>
         </div>
         <SiteNav />
+        {/* The nav persists across navigations, so it decodes once per load. */}
+        <DecodeIntro selector=".site-nav" once="site-nav" />
         {children}
         <GifAsciiPlayer />
         <div className="rotate-gate">

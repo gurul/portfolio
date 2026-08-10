@@ -638,6 +638,17 @@ html.intro-ready .page-shell {
   display: block;
 }
 
+/* Page-wide entrance decode: same phosphor language as the narratives line,
+   applied by lib/textDecode.js to every text node it sweeps. */
+.decode-glow {
+  color: var(--accent);
+  text-shadow: 0 0 4px var(--accent), 0 0 12px var(--accent);
+}
+
+.decode-noise {
+  color: var(--muted);
+}
+
 /* Phosphor decode sweep: the freshest characters glow bright and cool back
    to body text; the noise window and the old tail sit dimmed behind it. */
 .currently-reading__glow {
@@ -702,6 +713,12 @@ html.intro-ready .page-shell {
 
 .gif-ascii-canvas.is-ready {
   opacity: 1;
+}
+
+/* When the decode sweep drives the reveal, the fade would dim the first
+   half of the sweep — the noise band is the entrance, so snap to visible. */
+.gif-ascii-canvas.is-instant {
+  transition: none;
 }
 
 .gif-ascii-scroll-cue {

@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { whenIntroReady } from "../lib/introReady";
+import { WATERFALL_DONE_EVENT } from "../lib/textDecode";
 
 const ASCII_CHARS = " .'`^,:;Il!i~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
 const FRAME_COUNT = 43;
@@ -21,6 +22,16 @@ const THEME_CLASSES = THEMES.filter((name) => name !== "default").map(
 const GRID_WIDTH = 132;
 const CELL_WIDTH = 8;
 const CELL_HEIGHT = 14;
+// Entrance decode: a dim noise band sweeps the grid left to right once,
+// after the text waterfall finishes — the horse is the waterfall's last drop.
+const DECODE_DELAY_MS = 150;
+const DECODE_MS = 1200;
+const DECODE_BAND = 18;
+// Noise glyphs re-roll on this clock instead of every frame, so the band
+// shimmers instead of strobing.
+const DECODE_TICK_MS = 90;
+// If the waterfall never reports in, reveal anyway this long after the gate.
+const DECODE_FALLBACK_MS = 9000;
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -97,9 +108,13 @@ export default function GifAsciiPlayer() {
   const themeRef = useRef("default");
   const needsRedrawRef = useRef(true);
   const reducedMotionRef = useRef(false);
+  const decodeRef = useRef({ started: 0, eased: 1, tick: 0 });
   const [showScrollCue, setShowScrollCue] = useState(false);
   const [theme, setTheme] = useState("default");
   const [isReady, setIsReady] = useState(false);
+  // When the decode sweep drives the reveal, the CSS opacity fade would run
+  // on top of it and mud the first half of the sweep — snap instead.
+  const [instantReveal, setInstantReveal] = useState(false);
 
   useEffect(() => {
     try {
@@ -170,6 +185,22 @@ export default function GifAsciiPlayer() {
     };
     motionQuery.addEventListener("change", onMotionChange);
 
+    // The horse is the waterfall's last drop: hold its reveal until the text
+    // decode reports done (or a safety timeout). Listen from the start so a
+    // fast waterfall can't finish before slow frame downloads subscribe.
+    let waterfallTimer = 0;
+    let onWaterfallDone = null;
+    const waterfallDone = new Promise((resolve) => {
+      onWaterfallDone = () => {
+        window.clearTimeout(waterfallTimer);
+        resolve();
+      };
+      window.addEventListener(WATERFALL_DONE_EVENT, onWaterfallDone, {
+        once: true,
+      });
+      waterfallTimer = window.setTimeout(onWaterfallDone, DECODE_FALLBACK_MS);
+    });
+
     const drawFrame = (frame) => {
       if (!frame) return;
 
@@ -187,11 +218,32 @@ export default function GifAsciiPlayer() {
       context.textBaseline = "top";
 
       const theme = themeRef.current;
+      // Entrance sweep head in grid columns; Infinity once settled.
+      const decode = decodeRef.current;
+      const headX =
+        decode.eased >= 1 ? Infinity : decode.eased * (GRID_WIDTH + DECODE_BAND);
       // Sparkles push a step brighter than their base cell.
       const sparkleShift = 18;
       let currentBrightness = -1;
 
       for (const [x, y, charIndex, brightness] of frame.cells) {
+        if (x >= headX) continue;
+        if (x >= headX - DECODE_BAND) {
+          // Noise band: dim shimmer that brightens toward the settled edge,
+          // glyphs re-rolled on the tick clock rather than every frame.
+          const { red, green, blue, alpha } = cellColor(brightness, theme);
+          const settle = (headX - x) / DECODE_BAND;
+          context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${
+            alpha * (0.2 + 0.6 * settle)
+          })`;
+          currentBrightness = -1;
+          const glyph =
+            ASCII_CHARS[
+              (x * 31 + y * 17 + decode.tick * 7) % ASCII_CHARS.length
+            ];
+          context.fillText(glyph, x * CELL_WIDTH, y * CELL_HEIGHT);
+          continue;
+        }
         if (brightness !== currentBrightness) {
           const { red, green, blue, alpha } = cellColor(brightness, theme);
           context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
@@ -201,6 +253,7 @@ export default function GifAsciiPlayer() {
       }
 
       for (const [x, y, charIndex, brightness] of frame.sparkles) {
+        if (x >= headX - DECODE_BAND) continue;
         const { red, green, blue, alpha } = cellColor(brightness, theme);
         context.fillStyle = `rgba(${clamp(red + sparkleShift, 0, 255)}, ${clamp(green + sparkleShift, 0, 255)}, ${clamp(blue + sparkleShift, 0, 255)}, ${alpha * 0.18})`;
         context.fillText(ASCII_CHARS[charIndex], x * CELL_WIDTH + 0.5, y * CELL_HEIGHT);
@@ -259,6 +312,21 @@ export default function GifAsciiPlayer() {
 
       framesRef.current = frames;
       sizeCanvas();
+
+      if (reducedMotionRef.current) {
+        setIsReady(true);
+        return;
+      }
+
+      await waterfallDone;
+      if (!active) return;
+
+      decodeRef.current = {
+        started: performance.now() + DECODE_DELAY_MS,
+        eased: 0,
+        tick: 0,
+      };
+      setInstantReveal(true);
       setIsReady(true);
     };
 
@@ -295,6 +363,14 @@ export default function GifAsciiPlayer() {
         lastTimeRef.current = time;
       }
 
+      const decode = decodeRef.current;
+      if (decode.eased < 1) {
+        const t = clamp((time - decode.started) / DECODE_MS, 0, 1);
+        decode.eased = t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
+        decode.tick = (time / DECODE_TICK_MS) | 0;
+        needsRedrawRef.current = true;
+      }
+
       const elapsed = time - lastTimeRef.current;
       if (elapsed >= FRAME_DURATION && !reducedMotionRef.current) {
         const steps = Math.floor(elapsed / FRAME_DURATION);
@@ -319,6 +395,10 @@ export default function GifAsciiPlayer() {
     return () => {
       active = false;
       motionQuery.removeEventListener("change", onMotionChange);
+      window.clearTimeout(waterfallTimer);
+      if (onWaterfallDone) {
+        window.removeEventListener(WATERFALL_DONE_EVENT, onWaterfallDone);
+      }
       resizeObserver.disconnect();
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current);
@@ -392,7 +472,9 @@ export default function GifAsciiPlayer() {
       ) : null}
       <canvas
         ref={canvasRef}
-        className={`gif-ascii-canvas${isReady ? " is-ready" : ""}`}
+        className={`gif-ascii-canvas${isReady ? " is-ready" : ""}${
+          instantReveal ? " is-instant" : ""
+        }`}
       />
     </section>
   );
