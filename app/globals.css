@@ -595,6 +595,14 @@ html.intro-ready .page-shell {
   padding: 0 0 1.6rem;
 }
 
+.copy-column .currently-reading {
+  margin: 1.4rem 0 0;
+  font-size: clamp(0.72rem, 0.66rem + 0.11vw, 0.8rem);
+  line-height: 1.35;
+  font-style: italic;
+  opacity: 0.75;
+}
+
 .commit-history-link {
   display: inline;
   color: var(--accent);
