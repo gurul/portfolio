@@ -126,7 +126,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <p className="currently-reading">currently: becoming nobody — ram dass</p>
+      <p className="currently-reading">currently studying: becoming nobody — ram dass</p>
     </PageScaffold>
   );
 }
