@@ -119,6 +119,19 @@ body.sage-theme-active {
   --sun-deep: 251, 253, 244;
 }
 
+html.navy-theme-active,
+body.navy-theme-active {
+  --bg: #040c2e;
+  --text: #dee5f7;
+  --muted: rgba(222, 229, 247, 0.78);
+  --accent: #f4f7ff;
+  --crosshair: rgba(244, 247, 255, 0.34);
+  --crosshair-dot: 222, 229, 247;
+  --sun-core: 244, 247, 255;
+  --sun-glow: 244, 247, 255;
+  --sun-deep: 244, 247, 255;
+}
+
 a {
   color: inherit;
   text-underline-offset: 0.18em;

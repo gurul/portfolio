@@ -12,9 +12,9 @@ const CONTRAST = 1.45;
 const DEFAULT_BG = "#001918";
 const STORAGE_KEY = "horse-theme-active";
 // Click (or a fresh visit) cycles teal -> red -> black -> deep purple ->
-// forest green. Every non-default theme gets a `<name>-theme-active` class
-// on <html>/<body>.
-const THEMES = ["default", "horse", "night", "purple", "sage"];
+// forest green -> deep navy. Every non-default theme gets a
+// `<name>-theme-active` class on <html>/<body>.
+const THEMES = ["default", "horse", "night", "purple", "sage", "navy"];
 const THEME_CLASSES = THEMES.filter((name) => name !== "default").map(
   (name) => `${name}-theme-active`,
 );
