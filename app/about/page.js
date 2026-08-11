@@ -5,6 +5,13 @@ import { buildPageMetadata } from "../../lib/metadata";
 
 // Newest first; shown after the static "narratives experienced:" label.
 const NARRATIVES = [
+  { title: "oppenheimer", author: "nolan" },
+  { title: "interstellar", author: "nolan" },
+  { title: "the white tiger", author: "adiga" },
+  { title: "life of pi", author: "martel" },
+  { title: "lord of the flies", author: "golding" },
+  { title: "1917", author: "mendes" },
+  { title: "the bhagavad gita", author: "vyasa" },
   { title: "becoming nobody", author: "dass" },
   { title: "the odyssey", author: "nolan" },
   { title: "machines of loving grace", author: "amodei" },
