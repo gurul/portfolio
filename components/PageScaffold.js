@@ -17,6 +17,7 @@ export default function PageScaffold({ children, scrollable = false }) {
       <DecodeIntro
         selector=".page-shell"
         exclude=".currently-reading"
+        reveal=".commit-history-viewport"
         doneEvent={PAGE_DECODE_DONE_EVENT}
         finalEvent={WATERFALL_DONE_EVENT}
         finalUnless=".currently-reading"

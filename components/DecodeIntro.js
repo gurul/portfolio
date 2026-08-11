@@ -16,6 +16,7 @@ const doneKeys = new Set();
 export default function DecodeIntro({
   selector,
   exclude,
+  reveal,
   once,
   doneEvent,
   finalEvent,
@@ -30,6 +31,7 @@ export default function DecodeIntro({
     if (!roots.length) return undefined;
     return decodeSweep(roots, {
       exclude,
+      reveal,
       onDone: () => {
         if (once) doneKeys.add(once);
         if (doneEvent) window.dispatchEvent(new Event(doneEvent));
@@ -43,7 +45,7 @@ export default function DecodeIntro({
         }
       },
     });
-  }, [selector, exclude, once, doneEvent, finalEvent, finalUnless]);
+  }, [selector, exclude, reveal, once, doneEvent, finalEvent, finalUnless]);
 
   return null;
 }
