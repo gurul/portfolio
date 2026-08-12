@@ -24,20 +24,21 @@
   --horse-min-width: 8rem;
   --horse-bottom-offset: 2rem;
   --horse-copy-gap: 1.75rem;
-  /* The frames' visible glyphs span grid columns 23–155 of 176: the canvas
-     carries 20 blank columns on the right and 23 on the left. Width fits so
-     the visible body (133/176 of the canvas) clears the copy column by
-     --horse-copy-gap, given the face-aligned offset below — the max keeps
-     the familiar wide-screen size. */
+  /* Sizing keeps the original oversized formula (edge gap 2.2rem, scale
+     overshoot) — deliberately larger than the space beside the copy, with
+     overlap at condensed widths accepted as the trade. */
+  --horse-edge-gap: 2.2rem;
   --horse-width: clamp(
     calc(var(--horse-min-width) * var(--horse-scale)),
     calc(
       (
         100vw
-        - 2 * (var(--crosshair-x) + var(--crosshair-copy-gap-x))
+        - var(--crosshair-x)
+        - var(--crosshair-copy-gap-x)
         - var(--copy-column-max-width)
+        - var(--horse-edge-gap)
         - var(--horse-copy-gap)
-      ) * 176 / 133
+      ) * var(--horse-scale)
     ),
     calc(var(--horse-max-width) * var(--horse-scale))
   );
@@ -849,6 +850,7 @@ html.intro-ready .page-shell {
     --crosshair-y: 2.75rem;
     --crosshair-copy-gap-x: 4.25rem;
     --crosshair-copy-gap-y: 3.75rem;
+    --horse-edge-gap: 1.25rem;
     --horse-bottom-offset: 1.25rem;
     --horse-copy-gap: 1.25rem;
   }
