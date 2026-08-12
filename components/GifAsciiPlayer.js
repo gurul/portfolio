@@ -7,7 +7,7 @@ import { WATERFALL_DONE_EVENT } from "../lib/textDecode";
 
 const ASCII_CHARS = " .'`^,:;Il!i~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
 const FRAME_COUNT = 12;
-const FRAME_DURATION = 70;
+const FRAME_DURATION = 78;
 const BACKGROUND_THRESHOLD = 17;
 const CONTRAST = 2.1;
 // Spot-forward extraction: each cell supersamples the source and pools toward
