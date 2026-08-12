@@ -22,11 +22,32 @@
   --horse-scale: 1.56;
   --horse-max-width: 50.4rem;
   --horse-min-width: 8rem;
-  /* The cheetah's gap to its nearest (right) edge mirrors the copy's gap
-     to the left wall — same variables, so they can't drift apart. */
-  --horse-right-offset: calc(var(--crosshair-x) + var(--crosshair-copy-gap-x));
   --horse-bottom-offset: 2rem;
   --horse-copy-gap: 1.75rem;
+  /* The frames' visible glyphs span grid columns 23–155 of 176: the canvas
+     carries 20 blank columns on the right and 23 on the left. Width fits so
+     the visible body (133/176 of the canvas) clears the copy column by
+     --horse-copy-gap, given the face-aligned offset below — the max keeps
+     the familiar wide-screen size. */
+  --horse-width: clamp(
+    calc(var(--horse-min-width) * var(--horse-scale)),
+    calc(
+      (
+        100vw
+        - 2 * (var(--crosshair-x) + var(--crosshair-copy-gap-x))
+        - var(--copy-column-max-width)
+        - var(--horse-copy-gap)
+      ) * 176 / 133
+    ),
+    calc(var(--horse-max-width) * var(--horse-scale))
+  );
+  /* The cheetah face's right edge (not the canvas rectangle's) sits as far
+     from the right wall as the copy sits from the left wall: wall gap minus
+     the canvas's blank right strip. */
+  --horse-right-offset: calc(
+    var(--crosshair-x) + var(--crosshair-copy-gap-x) - var(--horse-width) * 20 /
+      176
+  );
 }
 
 * {
@@ -672,21 +693,7 @@ html.intro-ready .page-shell {
   right: var(--horse-right-offset);
   bottom: var(--horse-bottom-offset);
   margin: 0;
-  width: clamp(
-    calc(var(--horse-min-width) * var(--horse-scale)),
-    calc(
-      (
-        100vw
-        - var(--crosshair-x)
-        - var(--crosshair-copy-gap-x)
-        - var(--copy-column-max-width)
-        - var(--horse-right-offset)
-        - var(--horse-copy-gap)
-      ) * var(--horse-scale)
-    ),
-    calc(var(--horse-max-width) * var(--horse-scale))
-  );
-  max-width: calc(100vw - var(--horse-right-offset));
+  width: var(--horse-width);
   z-index: 0;
   cursor: pointer;
 }
