@@ -36,6 +36,10 @@ const CELL_HEIGHT = 14;
 const DECODE_DELAY_MS = 150;
 const DECODE_MS = 1200;
 const DECODE_BAND = 18;
+// Freshly-settled columns behind the noise band flare in the accent color
+// with a soft halo — the same phosphor trail the text decode uses.
+const DECODE_GLOW = 10;
+const DECODE_GLOW_BLUR = 7;
 // Noise glyphs re-roll on this clock instead of every frame, so the band
 // shimmers instead of strobing.
 const DECODE_TICK_MS = 90;
@@ -265,10 +269,11 @@ export default function GifAsciiPlayer() {
       const cssWidth = GRID_WIDTH * CELL_WIDTH;
       const cssHeight = gridHeight * CELL_HEIGHT;
 
+      const rootStyles = getComputedStyle(document.documentElement);
       const themeBackground =
-        getComputedStyle(document.documentElement)
-          .getPropertyValue("--bg")
-          .trim() || DEFAULT_BG;
+        rootStyles.getPropertyValue("--bg").trim() || DEFAULT_BG;
+      const themeAccent =
+        rootStyles.getPropertyValue("--accent").trim() || "#ffffff";
       context.fillStyle = themeBackground;
       context.fillRect(0, 0, cssWidth, cssHeight);
       context.font = asciiFont;
@@ -277,8 +282,12 @@ export default function GifAsciiPlayer() {
       const theme = themeRef.current;
       // Entrance sweep head in grid columns; Infinity once settled.
       const decode = decodeRef.current;
+      // Overshoot by the glow trail so the final columns pass through the
+      // flare instead of snapping straight to settled.
       const headX =
-        decode.eased >= 1 ? Infinity : decode.eased * (GRID_WIDTH + DECODE_BAND);
+        decode.eased >= 1
+          ? Infinity
+          : decode.eased * (GRID_WIDTH + DECODE_BAND + DECODE_GLOW);
 
       // Ghost underlay, clipped to the settled side of the decode sweep so it
       // arrives with the glyphs rather than ahead of them.
@@ -304,6 +313,9 @@ export default function GifAsciiPlayer() {
       // Sparkles push a step brighter than their base cell.
       const sparkleShift = 18;
       let currentBrightness = -1;
+      // Glow-band cells are collected and drawn in one pass afterwards so the
+      // shadow state is set once instead of per glyph.
+      const glowCells = [];
 
       for (const [x, y, charIndex, brightness] of frame.cells) {
         if (x >= headX) continue;
@@ -323,6 +335,11 @@ export default function GifAsciiPlayer() {
           context.fillText(glyph, x * CELL_WIDTH, y * CELL_HEIGHT);
           continue;
         }
+        if (x >= headX - DECODE_BAND - DECODE_GLOW) {
+          const { alpha } = cellColor(brightness, theme);
+          glowCells.push([x, y, charIndex, alpha]);
+          continue;
+        }
         if (brightness !== currentBrightness) {
           const { red, green, blue, alpha } = cellColor(brightness, theme);
           context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
@@ -336,6 +353,18 @@ export default function GifAsciiPlayer() {
         const { red, green, blue, alpha } = cellColor(brightness, theme);
         context.fillStyle = `rgba(${clamp(red + sparkleShift, 0, 255)}, ${clamp(green + sparkleShift, 0, 255)}, ${clamp(blue + sparkleShift, 0, 255)}, ${alpha * 0.18})`;
         context.fillText(ASCII_CHARS[charIndex], x * CELL_WIDTH + 0.5, y * CELL_HEIGHT);
+      }
+
+      if (glowCells.length > 0) {
+        context.save();
+        context.fillStyle = themeAccent;
+        context.shadowColor = themeAccent;
+        context.shadowBlur = DECODE_GLOW_BLUR;
+        for (const [x, y, charIndex, alpha] of glowCells) {
+          context.globalAlpha = alpha;
+          context.fillText(ASCII_CHARS[charIndex], x * CELL_WIDTH, y * CELL_HEIGHT);
+        }
+        context.restore();
       }
     };
 
