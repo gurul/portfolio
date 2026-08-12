@@ -19,6 +19,10 @@ const BG_CULL = 238;
 // Faint b/w copy of the frame screen-blended under the glyphs so the
 // silhouette reads even where the glyph field is sparse.
 const GHOST_OPACITY = 0.14;
+// Phosphor persistence: the previous frame's glyphs linger at this fraction of
+// their alpha, so fast poses (the tail whip crosses a third of its arc in one
+// 83ms step) read as a motion-blurred sweep instead of a 12fps snap.
+const TRAIL_OPACITY = 0.35;
 const DEFAULT_BG = "#001918";
 const STORAGE_KEY = "horse-theme-active";
 // Click (or a fresh visit) cycles teal -> dark maroon -> black ->
@@ -71,6 +75,9 @@ function computeFrameCells(image, offscreenContext, gridHeight) {
 
   const cells = [];
   const sparkles = [];
+  // Occupied grid positions, so the trail pass can skip cells the live frame
+  // draws anyway instead of overstriking them.
+  const keys = new Set();
 
   for (let y = 0; y < gridHeight; y += 1) {
     for (let x = 0; x < GRID_WIDTH; x += 1) {
@@ -102,6 +109,7 @@ function computeFrameCells(image, offscreenContext, gridHeight) {
       const charIndex =
         ASCII_CHARS.length - 1 - Math.floor((brightness / 255) * (ASCII_CHARS.length - 1));
       cells.push([x, y, charIndex, Math.round(brightness)]);
+      keys.add(y * GRID_WIDTH + x);
 
       if (x % 16 === 0 && y % 10 === 0 && brightness > 118) {
         sparkles.push([x, y, charIndex, Math.round(brightness)]);
@@ -110,7 +118,7 @@ function computeFrameCells(image, offscreenContext, gridHeight) {
   }
 
   cells.sort((first, second) => first[3] - second[3]);
-  return { cells, sparkles };
+  return { cells, sparkles, keys };
 }
 
 // Inverted grayscale copy of a frame (bright subject on black) used as the
@@ -307,6 +315,35 @@ export default function GifAsciiPlayer() {
           context.globalCompositeOperation = "screen";
           context.drawImage(ghost, 0, 0, cssWidth, cssHeight);
           context.restore();
+        }
+      }
+
+      // Phosphor trail: the previous frame's glyphs at reduced alpha, only in
+      // cells the current frame leaves empty and only in the settled zone of
+      // the decode sweep. Skipped under reduced motion, where the frame index
+      // never advances and the trail would sit as a permanent double exposure.
+      const prevFrame =
+        framesRef.current[
+          (frameIndexRef.current + FRAME_COUNT - 1) % FRAME_COUNT
+        ];
+      if (
+        prevFrame &&
+        prevFrame !== frame &&
+        TRAIL_OPACITY > 0 &&
+        !reducedMotionRef.current
+      ) {
+        let trailBrightness = -1;
+        for (const [x, y, charIndex, brightness] of prevFrame.cells) {
+          if (x >= headX - DECODE_BAND) continue;
+          if (frame.keys.has(y * GRID_WIDTH + x)) continue;
+          if (brightness !== trailBrightness) {
+            const { red, green, blue, alpha } = cellColor(brightness, theme);
+            context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${
+              alpha * TRAIL_OPACITY
+            })`;
+            trailBrightness = brightness;
+          }
+          context.fillText(ASCII_CHARS[charIndex], x * CELL_WIDTH, y * CELL_HEIGHT);
         }
       }
 
