@@ -6,10 +6,19 @@ import { whenIntroReady } from "../lib/introReady";
 import { WATERFALL_DONE_EVENT } from "../lib/textDecode";
 
 const ASCII_CHARS = " .'`^,:;Il!i~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
-const FRAME_COUNT = 43;
-const FRAME_DURATION = 1000 / 25;
-const BACKGROUND_THRESHOLD = 18;
-const CONTRAST = 1.45;
+const FRAME_COUNT = 12;
+const FRAME_DURATION = 70;
+const BACKGROUND_THRESHOLD = 17;
+const CONTRAST = 2.1;
+// Spot-forward extraction: each cell supersamples the source and pools toward
+// its darkest pixel, so the cheetah's markings and thin limbs survive the
+// downsample instead of averaging into the pale body.
+const SUPERSAMPLE = 4;
+const DETAIL = 1;
+const BG_CULL = 238;
+// Faint b/w copy of the frame screen-blended under the glyphs so the
+// silhouette reads even where the glyph field is sparse.
+const GHOST_OPACITY = 0.14;
 const DEFAULT_BG = "#001918";
 const STORAGE_KEY = "horse-theme-active";
 // Click (or a fresh visit) cycles teal -> red -> black -> deep purple ->
@@ -19,11 +28,11 @@ const THEMES = ["default", "horse", "night", "purple", "sage", "navy"];
 const THEME_CLASSES = THEMES.filter((name) => name !== "default").map(
   (name) => `${name}-theme-active`,
 );
-const GRID_WIDTH = 132;
+const GRID_WIDTH = 176;
 const CELL_WIDTH = 8;
 const CELL_HEIGHT = 14;
 // Entrance decode: a dim noise band sweeps the grid left to right once,
-// after the text waterfall finishes — the horse is the waterfall's last drop.
+// after the text waterfall finishes — the cheetah is the waterfall's last drop.
 const DECODE_DELAY_MS = 150;
 const DECODE_MS = 1200;
 const DECODE_BAND = 18;
@@ -43,26 +52,47 @@ function luminance(r, g, b) {
 
 // Convert one frame image into a brightness-sorted list of [x, y, charIndex,
 // brightness] quads so the draw loop can batch fillStyle changes. Sparkle
-// cells (the sparse highlight overlay) are kept in their own list.
+// cells (the sparse highlight overlay) are kept in their own list. Each cell
+// is supersampled and pooled toward its darkest source pixel (DETAIL) so the
+// markings drive the glyph density; near-white cells are background.
 function computeFrameCells(image, offscreenContext, gridHeight) {
   const offscreen = offscreenContext.canvas;
-  offscreen.width = GRID_WIDTH;
-  offscreen.height = gridHeight;
-  offscreenContext.clearRect(0, 0, GRID_WIDTH, gridHeight);
-  offscreenContext.drawImage(image, 0, 0, GRID_WIDTH, gridHeight);
-  const { data } = offscreenContext.getImageData(0, 0, GRID_WIDTH, gridHeight);
+  const sampleWidth = GRID_WIDTH * SUPERSAMPLE;
+  const sampleHeight = gridHeight * SUPERSAMPLE;
+  offscreen.width = sampleWidth;
+  offscreen.height = sampleHeight;
+  offscreenContext.clearRect(0, 0, sampleWidth, sampleHeight);
+  offscreenContext.drawImage(image, 0, 0, sampleWidth, sampleHeight);
+  const { data } = offscreenContext.getImageData(0, 0, sampleWidth, sampleHeight);
 
   const cells = [];
   const sparkles = [];
 
   for (let y = 0; y < gridHeight; y += 1) {
     for (let x = 0; x < GRID_WIDTH; x += 1) {
-      const index = (y * GRID_WIDTH + x) * 4;
-      const a = data[index + 3];
-      if (a < 30) continue;
+      let sum = 0;
+      let darkest = 255;
+      let opaque = 0;
+      for (let oy = 0; oy < SUPERSAMPLE; oy += 1) {
+        const rowBase = ((y * SUPERSAMPLE + oy) * sampleWidth + x * SUPERSAMPLE) * 4;
+        for (let ox = 0; ox < SUPERSAMPLE; ox += 1) {
+          const index = rowBase + ox * 4;
+          let value = 255; // transparent samples read as background
+          if (data[index + 3] >= 30) {
+            opaque += 1;
+            value = luminance(data[index], data[index + 1], data[index + 2]);
+          }
+          sum += value;
+          if (value < darkest) darkest = value;
+        }
+      }
+      if (opaque === 0) continue;
 
-      const baseBrightness = luminance(data[index], data[index + 1], data[index + 2]);
-      const brightness = clamp((baseBrightness - 128) * CONTRAST + 128, 0, 255);
+      const mean = sum / (SUPERSAMPLE * SUPERSAMPLE);
+      if (mean > BG_CULL) continue;
+
+      const pooled = mean * (1 - DETAIL) + darkest * DETAIL;
+      const brightness = clamp((pooled - 128) * CONTRAST + 128, 0, 255);
       if (brightness < BACKGROUND_THRESHOLD) continue;
 
       const charIndex =
@@ -77,6 +107,32 @@ function computeFrameCells(image, offscreenContext, gridHeight) {
 
   cells.sort((first, second) => first[3] - second[3]);
   return { cells, sparkles };
+}
+
+// Inverted grayscale copy of a frame (bright subject on black) used as the
+// screen-blended ghost underlay. Precomputed so drawFrame stays cheap and we
+// avoid canvas filter support differences.
+function buildGhost(image) {
+  const canvas = document.createElement("canvas");
+  canvas.width = image.naturalWidth;
+  canvas.height = image.naturalHeight;
+  const context = canvas.getContext("2d");
+  if (!context) return null;
+  context.drawImage(image, 0, 0);
+  const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+  const { data } = imageData;
+  for (let i = 0; i < data.length; i += 4) {
+    const inverted =
+      data[i + 3] < 30
+        ? 0
+        : 255 - luminance(data[i], data[i + 1], data[i + 2]);
+    data[i] = inverted;
+    data[i + 1] = inverted;
+    data[i + 2] = inverted;
+    data[i + 3] = 255;
+  }
+  context.putImageData(imageData, 0, 0);
+  return canvas;
 }
 
 function cellColor(brightness, theme) {
@@ -102,6 +158,7 @@ export default function GifAsciiPlayer() {
   const canvasRef = useRef(null);
   const frameRef = useRef(null);
   const framesRef = useRef([]);
+  const ghostsRef = useRef([]);
   const frameIndexRef = useRef(0);
   const lastTimeRef = useRef(0);
   const gridHeightRef = useRef(0);
@@ -185,7 +242,7 @@ export default function GifAsciiPlayer() {
     };
     motionQuery.addEventListener("change", onMotionChange);
 
-    // The horse is the waterfall's last drop: hold its reveal until the text
+    // The cheetah is the waterfall's last drop: hold its reveal until the text
     // decode reports done (or a safety timeout). Listen from the start so a
     // fast waterfall can't finish before slow frame downloads subscribe.
     let waterfallTimer = 0;
@@ -222,6 +279,28 @@ export default function GifAsciiPlayer() {
       const decode = decodeRef.current;
       const headX =
         decode.eased >= 1 ? Infinity : decode.eased * (GRID_WIDTH + DECODE_BAND);
+
+      // Ghost underlay, clipped to the settled side of the decode sweep so it
+      // arrives with the glyphs rather than ahead of them.
+      const ghost =
+        ghostsRef.current[frameIndexRef.current] ?? ghostsRef.current.find(Boolean);
+      if (ghost && GHOST_OPACITY > 0) {
+        const settled =
+          decode.eased >= 1
+            ? cssWidth
+            : clamp((headX - DECODE_BAND) * CELL_WIDTH, 0, cssWidth);
+        if (settled > 0) {
+          context.save();
+          context.beginPath();
+          context.rect(0, 0, settled, cssHeight);
+          context.clip();
+          context.globalAlpha = GHOST_OPACITY;
+          context.globalCompositeOperation = "screen";
+          context.drawImage(ghost, 0, 0, cssWidth, cssHeight);
+          context.restore();
+        }
+      }
+
       // Sparkles push a step brighter than their base cell.
       const sparkleShift = 18;
       let currentBrightness = -1;
@@ -263,7 +342,7 @@ export default function GifAsciiPlayer() {
     const loadFrames = async () => {
       const images = Array.from({ length: FRAME_COUNT }, (_, index) => {
         const image = new Image();
-        image.src = `/glitch-horse-frames/frame_${String(index + 1).padStart(3, "0")}.png`;
+        image.src = `/cheetah-frames/frame_${String(index + 1).padStart(3, "0")}.png`;
         return image;
       });
 
@@ -287,30 +366,30 @@ export default function GifAsciiPlayer() {
       gridHeightRef.current = gridHeight;
 
       // Process frames in small batches with a rAF yield between them. A
-      // single synchronous pass over all 43 frames blocks the main thread
+      // single synchronous pass over every frame blocks the main thread
       // long enough that the crosshair meteors (which animate top/left on
       // the main thread) skip their opening frames and appear to start
       // mid-screen instead of from the corner.
       const frames = [];
+      const ghosts = [];
       for (let index = 0; index < images.length; index += 1) {
         const image = images[index];
-        frames.push(
-          image.naturalWidth > 0
-            ? computeFrameCells(image, offscreenContext, gridHeight)
-            : null,
-        );
+        const usable = image.naturalWidth > 0;
+        frames.push(usable ? computeFrameCells(image, offscreenContext, gridHeight) : null);
+        ghosts.push(usable ? buildGhost(image) : null);
         if ((index + 1) % 3 === 0) {
           await new Promise((resolve) => requestAnimationFrame(resolve));
           if (!active) return;
         }
       }
 
-      // Hold the reveal until the shared intro gate opens, so the horse
+      // Hold the reveal until the shared intro gate opens, so the cheetah
       // never appears before the blank-page choreography has started.
       await whenIntroReady();
       if (!active) return;
 
       framesRef.current = frames;
+      ghostsRef.current = ghosts;
       sizeCanvas();
 
       if (reducedMotionRef.current) {
@@ -405,6 +484,7 @@ export default function GifAsciiPlayer() {
       }
       lastTimeRef.current = 0;
       framesRef.current = [];
+      ghostsRef.current = [];
       setIsReady(false);
     };
   }, [showsHorse]);
