@@ -22,7 +22,9 @@
   --horse-scale: 1.56;
   --horse-max-width: 50.4rem;
   --horse-min-width: 8rem;
-  --horse-right-offset: 2.2rem;
+  /* The cheetah's gap to its nearest (right) edge mirrors the copy's gap
+     to the left wall — same variables, so they can't drift apart. */
+  --horse-right-offset: calc(var(--crosshair-x) + var(--crosshair-copy-gap-x));
   --horse-bottom-offset: 2rem;
   --horse-copy-gap: 1.75rem;
 }
@@ -840,7 +842,6 @@ html.intro-ready .page-shell {
     --crosshair-y: 2.75rem;
     --crosshair-copy-gap-x: 4.25rem;
     --crosshair-copy-gap-y: 3.75rem;
-    --horse-right-offset: 1.25rem;
     --horse-bottom-offset: 1.25rem;
     --horse-copy-gap: 1.25rem;
   }

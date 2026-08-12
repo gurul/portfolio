@@ -25,6 +25,11 @@ const ENTRANCE_FALLBACK_MS = 6000;
 const GLOW_TRAIL = 6;
 const NOISE_WINDOW = 7;
 
+// Module state lives one browser visit (survives client-side navigations,
+// resets on full load), so the entrance decode plays only on the first
+// visit to this page per session — matching the page sweep's caching.
+let entrancePlayed = false;
+
 function variableText(entry) {
   return `${entry.title} — ${entry.author}`;
 }
@@ -175,6 +180,15 @@ export default function ExperiencingNarratives({ entries }) {
   // so the decode replays each time this page opens.
   useClientLayoutEffect(() => {
     const machine = machineRef.current;
+    if (entrancePlayed) {
+      // Already decoded this visit: keep the settled line and close the
+      // waterfall immediately for anything still listening.
+      const doneTimer = window.setTimeout(
+        () => window.dispatchEvent(new Event(WATERFALL_DONE_EVENT)),
+        0
+      );
+      return () => window.clearTimeout(doneTimer);
+    }
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       return undefined;
     }
@@ -189,6 +203,7 @@ export default function ExperiencingNarratives({ entries }) {
       const chars = splitGraphemes(fullText(entries[machine.idx]));
       runSweep([], chars, 0, chars.length * PER_CHAR_MS, () => {
         // This line is the last text in the waterfall — hand off to the horse.
+        entrancePlayed = true;
         window.dispatchEvent(new Event(WATERFALL_DONE_EVENT));
       });
     };

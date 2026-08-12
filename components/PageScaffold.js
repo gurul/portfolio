@@ -11,13 +11,16 @@ export default function PageScaffold({ children, scrollable = false }) {
         <div className="intro-spacer" aria-hidden="true" />
         <div className="copy-column">{children}</div>
       </section>
-      {/* Remounts with the page, so the copy decodes on every navigation.
-          The narratives line listens for the done event and takes the last
-          step of the waterfall itself. */}
+      {/* Each page's copy decodes on its first visit this session and shows
+          instantly on revisits; a full reload clears the slate. The
+          narratives line listens for the done event and takes the last step
+          of the waterfall itself. */}
       <DecodeIntro
         selector=".page-shell"
         exclude=".currently-reading"
         reveal=".commit-history-viewport"
+        once="page"
+        perPath
         doneEvent={PAGE_DECODE_DONE_EVENT}
         finalEvent={WATERFALL_DONE_EVENT}
         finalUnless=".currently-reading"
