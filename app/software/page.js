@@ -47,7 +47,7 @@ const software = [
   {
     name: "slideflow",
     href: "https://slideflow1.vercel.app/",
-    description: "presentation intelligence",
+    description: "simple presentation helper",
     lines: [],
   },
 ];
