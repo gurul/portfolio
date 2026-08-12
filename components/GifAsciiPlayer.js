@@ -21,10 +21,10 @@ const BG_CULL = 238;
 const GHOST_OPACITY = 0.14;
 const DEFAULT_BG = "#001918";
 const STORAGE_KEY = "horse-theme-active";
-// Click (or a fresh visit) cycles teal -> red -> black -> deep purple ->
-// forest green -> deep navy. Every non-default theme gets a
+// Click (or a fresh visit) cycles teal -> dark maroon -> black ->
+// deep purple -> deep navy. Every non-default theme gets a
 // `<name>-theme-active` class on <html>/<body>.
-const THEMES = ["default", "horse", "night", "purple", "sage", "navy"];
+const THEMES = ["default", "horse", "night", "purple", "navy"];
 const THEME_CLASSES = THEMES.filter((name) => name !== "default").map(
   (name) => `${name}-theme-active`,
 );
