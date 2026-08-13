@@ -25,6 +25,7 @@ export default function DecodeIntro({
   perPath,
   doneEvent,
   finalEvent,
+  finalLeadEvent,
   finalUnless,
 }) {
   useClientLayoutEffect(() => {
@@ -33,12 +34,21 @@ export default function DecodeIntro({
         ? `${once}:${window.location.pathname}`
         : once
       : null;
+    // True when no later element (the narratives line) claims the final step
+    // of the waterfall — this sweep is then the one that closes it.
+    const isFinalSweep = () =>
+      !finalUnless || !document.querySelector(finalUnless);
     const dispatchDone = () => {
       if (doneEvent) window.dispatchEvent(new Event(doneEvent));
-      // If no later element (the narratives line) claims the final step
-      // of the waterfall, this sweep was it.
-      if (finalEvent && (!finalUnless || !document.querySelector(finalUnless))) {
+      if (finalEvent && isFinalSweep()) {
         window.dispatchEvent(new Event(finalEvent));
+      }
+    };
+    // Only the closing sweep gets to announce the lead — otherwise the
+    // narratives line still has its own sweep left to run.
+    const dispatchLead = () => {
+      if (finalLeadEvent && isFinalSweep()) {
+        window.dispatchEvent(new Event(finalLeadEvent));
       }
     };
     if (key && doneKeys.has(key)) {
@@ -56,12 +66,23 @@ export default function DecodeIntro({
     return decodeSweep(roots, {
       exclude,
       reveal,
+      onLead: dispatchLead,
       onDone: () => {
         if (key) doneKeys.add(key);
         dispatchDone();
       },
     });
-  }, [selector, exclude, reveal, once, perPath, doneEvent, finalEvent, finalUnless]);
+  }, [
+    selector,
+    exclude,
+    reveal,
+    once,
+    perPath,
+    doneEvent,
+    finalEvent,
+    finalLeadEvent,
+    finalUnless,
+  ]);
 
   return null;
 }

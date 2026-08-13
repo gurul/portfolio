@@ -3,7 +3,11 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { whenIntroReady } from "../lib/introReady";
-import { WATERFALL_DONE_EVENT } from "../lib/textDecode";
+import {
+  WATERFALL_DONE_EVENT,
+  WATERFALL_LEAD_EVENT,
+  WATERFALL_LEAD_MS,
+} from "../lib/textDecode";
 
 const ASCII_CHARS = " .'`^,:;Il!i~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
 const FRAME_COUNT = 12;
@@ -36,9 +40,12 @@ const GRID_WIDTH = 176;
 const CELL_WIDTH = 8;
 const CELL_HEIGHT = 14;
 // Entrance decode: a dim noise band sweeps the grid left to right once,
-// after the text waterfall finishes — the cheetah is the waterfall's last drop.
-const DECODE_DELAY_MS = 150;
+// timed off the waterfall's lead signal so the cheetah settles on the same
+// beat as the last character of text rather than trailing it.
 const DECODE_MS = 1200;
+// Beat between the lead signal and the sweep. Derived so the whole entrance
+// (beat + sweep) spans exactly the lead the waterfall gives us.
+const DECODE_DELAY_MS = Math.max(0, WATERFALL_LEAD_MS - DECODE_MS);
 const DECODE_BAND = 18;
 // Freshly-settled columns behind the noise band flare in the accent color
 // with a soft halo — the same phosphor trail the text decode uses.
@@ -254,20 +261,26 @@ export default function GifAsciiPlayer() {
     };
     motionQuery.addEventListener("change", onMotionChange);
 
-    // The cheetah is the waterfall's last drop: hold its reveal until the text
-    // decode reports done (or a safety timeout). Listen from the start so a
-    // fast waterfall can't finish before slow frame downloads subscribe.
+    // The cheetah lands with the waterfall's last drop: hold its reveal until
+    // the text decode signals it is a horse-entrance away from finishing. The
+    // done event is the backstop for the paths that never lead (a cached sweep
+    // reporting in instantly, reduced motion), as is the safety timeout.
+    // Listen from the start so a fast waterfall can't get there before slow
+    // frame downloads subscribe.
     let waterfallTimer = 0;
-    let onWaterfallDone = null;
-    const waterfallDone = new Promise((resolve) => {
-      onWaterfallDone = () => {
+    let onWaterfallCue = null;
+    const waterfallCue = new Promise((resolve) => {
+      onWaterfallCue = () => {
         window.clearTimeout(waterfallTimer);
         resolve();
       };
-      window.addEventListener(WATERFALL_DONE_EVENT, onWaterfallDone, {
+      window.addEventListener(WATERFALL_LEAD_EVENT, onWaterfallCue, {
         once: true,
       });
-      waterfallTimer = window.setTimeout(onWaterfallDone, DECODE_FALLBACK_MS);
+      window.addEventListener(WATERFALL_DONE_EVENT, onWaterfallCue, {
+        once: true,
+      });
+      waterfallTimer = window.setTimeout(onWaterfallCue, DECODE_FALLBACK_MS);
     });
 
     const drawFrame = (frame) => {
@@ -463,7 +476,7 @@ export default function GifAsciiPlayer() {
         return;
       }
 
-      await waterfallDone;
+      await waterfallCue;
       if (!active) return;
 
       decodeRef.current = {
@@ -541,8 +554,9 @@ export default function GifAsciiPlayer() {
       active = false;
       motionQuery.removeEventListener("change", onMotionChange);
       window.clearTimeout(waterfallTimer);
-      if (onWaterfallDone) {
-        window.removeEventListener(WATERFALL_DONE_EVENT, onWaterfallDone);
+      if (onWaterfallCue) {
+        window.removeEventListener(WATERFALL_LEAD_EVENT, onWaterfallCue);
+        window.removeEventListener(WATERFALL_DONE_EVENT, onWaterfallCue);
       }
       resizeObserver.disconnect();
       if (frameRef.current) {

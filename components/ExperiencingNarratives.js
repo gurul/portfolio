@@ -7,6 +7,8 @@ import {
   PAGE_DECODE_DONE_EVENT,
   PER_CHAR_MS,
   WATERFALL_DONE_EVENT,
+  WATERFALL_LEAD_EVENT,
+  WATERFALL_LEAD_MS,
   splitGraphemes,
 } from "../lib/textDecode";
 
@@ -195,14 +197,22 @@ export default function ExperiencingNarratives({ entries }) {
     let cancelled = false;
     let started = false;
     let timer = 0;
+    let leadTimer = 0;
     setSegments({ settled: "", glow: "", noise: "", old: "" });
     const begin = () => {
       if (cancelled || started) return;
       started = true;
       window.clearTimeout(timer);
       const chars = splitGraphemes(fullText(entries[machine.idx]));
-      runSweep([], chars, 0, chars.length * PER_CHAR_MS, () => {
-        // This line is the last text in the waterfall — hand off to the horse.
+      const duration = chars.length * PER_CHAR_MS;
+      // This line is the last text in the waterfall, so it owns the handoff to
+      // the horse: the lead a whole horse-entrance before this sweep lands, the
+      // done event as the final character settles.
+      leadTimer = window.setTimeout(
+        () => window.dispatchEvent(new Event(WATERFALL_LEAD_EVENT)),
+        Math.max(0, duration - WATERFALL_LEAD_MS)
+      );
+      runSweep([], chars, 0, duration, () => {
         entrancePlayed = true;
         window.dispatchEvent(new Event(WATERFALL_DONE_EVENT));
       });
@@ -216,6 +226,7 @@ export default function ExperiencingNarratives({ entries }) {
       cancelled = true;
       machine.busy = false;
       window.clearTimeout(timer);
+      window.clearTimeout(leadTimer);
       window.removeEventListener(PAGE_DECODE_DONE_EVENT, begin);
       cancelAnimationFrame(machine.raf);
     };

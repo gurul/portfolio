@@ -2,6 +2,7 @@ import DecodeIntro from "./DecodeIntro";
 import {
   PAGE_DECODE_DONE_EVENT,
   WATERFALL_DONE_EVENT,
+  WATERFALL_LEAD_EVENT,
 } from "../lib/textDecode";
 
 export default function PageScaffold({ children, scrollable = false }) {
@@ -23,6 +24,7 @@ export default function PageScaffold({ children, scrollable = false }) {
         perPath
         doneEvent={PAGE_DECODE_DONE_EVENT}
         finalEvent={WATERFALL_DONE_EVENT}
+        finalLeadEvent={WATERFALL_LEAD_EVENT}
         finalUnless=".currently-reading"
       />
     </main>
