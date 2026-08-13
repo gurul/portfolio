@@ -9,7 +9,7 @@ export const metadata = buildPageMetadata({
 
 const hardware = [
   {
-    name: "leap input",
+    name: "leap",
     href: "https://github.com/joerup/leap-input",
     description: "motion hand tracking as macos input",
     lines: [],
