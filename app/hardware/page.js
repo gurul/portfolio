@@ -11,7 +11,7 @@ const hardware = [
   {
     name: "leap input",
     href: "https://github.com/joerup/leap-input",
-    description: "leap motion hand tracking as macos input",
+    description: "motion hand tracking as macos input",
     lines: [],
   },
   {
