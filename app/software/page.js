@@ -11,7 +11,7 @@ const software = [
   {
     name: "storeybox",
     href: "https://storeybox.club",
-    description: "physical memory infrastructure",
+    description: "multimodal memory infrastructure",
     lines: [],
   },
   {
