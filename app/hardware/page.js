@@ -32,12 +32,6 @@ const hardware = [
     description: "usb document camera eyes",
     lines: [],
   },
-  {
-    name: "storeybox",
-    href: "https://storeybox.club",
-    description: "physical memory infrastructure",
-    lines: [],
-  },
 ];
 
 export default function HardwarePage() {

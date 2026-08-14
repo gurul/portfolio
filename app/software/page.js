@@ -9,6 +9,12 @@ export const metadata = buildPageMetadata({
 
 const software = [
   {
+    name: "storeybox",
+    href: "https://storeybox.club",
+    description: "physical memory infrastructure",
+    lines: [],
+  },
+  {
     name: "handyman",
     href: "https://github.com/gurul/handyman",
     description: "self-generating product tours",
@@ -30,18 +36,6 @@ const software = [
     name: "debrief",
     href: "https://github.com/gurul/claude-debrief",
     description: "human-gated memory for coding agents",
-    lines: [],
-  },
-  {
-    name: "cse493",
-    href: "https://midi-transport-0b7.notion.site/Terrain-Generation-378c6d84df52800abd61ff9a23175b77?source=copy_link",
-    description: "deep learning terrain generator",
-    lines: [],
-  },
-  {
-    name: "api H",
-    href: "https://github.com/gurul/apiH",
-    description: "computer use workflow contracts",
     lines: [],
   },
   {
