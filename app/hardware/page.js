@@ -15,12 +15,6 @@ const hardware = [
     lines: [],
   },
   {
-    name: "hwlog",
-    href: "https://github.com/gurul/hardware-logging",
-    description: "serial logging for debugging firmware",
-    lines: [],
-  },
-  {
     name: "agent pet",
     href: "https://github.com/gurul/claude-pet",
     description: "esp32 desk pet",
@@ -32,6 +26,12 @@ const hardware = [
     description: "usb document camera eyes",
     lines: [],
   },
+  {
+    name: "hwlog",
+    href: "https://github.com/gurul/hardware-logging",
+    description: "serial logging for debugging firmware",
+    lines: [],
+  }
 ];
 
 export default function HardwarePage() {
