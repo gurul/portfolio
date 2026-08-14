@@ -33,7 +33,7 @@ const NOISE_WINDOW = 7;
 let entrancePlayed = false;
 
 function variableText(entry) {
-  return `${entry.title} — ${entry.author}`;
+  return entry.title;
 }
 
 function fullText(entry) {
