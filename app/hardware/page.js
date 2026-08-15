@@ -17,7 +17,7 @@ const hardware = [
   {
     name: "agent pet",
     href: "https://github.com/gurul/claude-pet",
-    description: "esp32 desk pet",
+    description: "esp32 desk buddy",
     lines: [],
   },
   {
