@@ -9,17 +9,17 @@ export const metadata = buildPageMetadata({
 
 const research = [
   {
-    name: "highway(1)",
-    href: "https://github.com/gurul/highway1",
-    description: "intrinsically creative ai",
-    lines: [],
-  },
-  {
     name: "diversity",
     href: "https://doi.org/10.1371/journal.pdig.0000486",
     description: "open data in clinical ai",
     lines: [],
   },
+  {
+    name: "highway(1)",
+    href: "https://github.com/gurul/highway1",
+    description: "intrinsically creative ai",
+    lines: [],
+  }
 ];
 
 export default function ResearchPage() {
