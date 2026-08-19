@@ -11,7 +11,7 @@ const hardware = [
   {
     name: "gencad",
     href: "https://github.com/gurul/gencad",
-    description: "parametric cad from a prompt — freecad + mcp",
+    description: "parametric cad from a prompt",
     lines: [],
   },
   {
