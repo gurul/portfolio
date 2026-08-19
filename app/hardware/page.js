@@ -9,21 +9,9 @@ export const metadata = buildPageMetadata({
 
 const hardware = [
   {
-    name: "gencad",
-    href: "https://github.com/gurul/gencad",
-    description: "parametric cad from a prompt",
-    lines: [],
-  },
-  {
     name: "leap",
     href: "https://github.com/gurul/Leap",
     description: "motion hand tracking as macos input",
-    lines: [],
-  },
-  {
-    name: "agent pet",
-    href: "https://github.com/gurul/claude-pet",
-    description: "esp32 desk buddy",
     lines: [],
   },
   {
@@ -36,6 +24,18 @@ const hardware = [
     name: "hwlog",
     href: "https://github.com/gurul/hardware-logging",
     description: "serial logging for debugging firmware",
+    lines: [],
+  },
+  {
+    name: "gencad",
+    href: "https://github.com/gurul/gencad",
+    description: "parametric cad from a prompt",
+    lines: [],
+  },
+  {
+    name: "agent pet",
+    href: "https://github.com/gurul/claude-pet",
+    description: "esp32 desk buddy",
     lines: [],
   }
 ];
