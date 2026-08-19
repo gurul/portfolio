@@ -9,6 +9,12 @@ export const metadata = buildPageMetadata({
 
 const hardware = [
   {
+    name: "gencad",
+    href: "https://github.com/gurul/gencad",
+    description: "parametric cad from a prompt — freecad + mcp",
+    lines: [],
+  },
+  {
     name: "leap",
     href: "https://github.com/gurul/Leap",
     description: "motion hand tracking as macos input",
