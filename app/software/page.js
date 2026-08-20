@@ -27,6 +27,12 @@ const software = [
     lines: [],
   },
   {
+    name: "leap",
+    href: "https://github.com/gurul/Leap",
+    description: "motion hand tracking as macos input",
+    lines: [],
+  },
+  {
     name: "harborline",
     href: "https://github.com/gurul/harborline",
     description: "disaster response",

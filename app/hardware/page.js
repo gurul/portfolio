@@ -9,12 +9,6 @@ export const metadata = buildPageMetadata({
 
 const hardware = [
   {
-    name: "leap",
-    href: "https://github.com/gurul/Leap",
-    description: "motion hand tracking as macos input",
-    lines: [],
-  },
-  {
     name: "cameraboi",
     href: "https://github.com/gurul/cameraboi",
     description: "usb document camera eyes",
