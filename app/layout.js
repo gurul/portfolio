@@ -1,4 +1,5 @@
 import { JetBrains_Mono } from "next/font/google";
+import CrosshairHelix from "../components/CrosshairHelix";
 import DecodeIntro from "../components/DecodeIntro";
 import GifAsciiPlayer from "../components/GifAsciiPlayer";
 import IntroGate from "../components/IntroGate";
@@ -47,8 +48,10 @@ export default function RootLayout({ children }) {
         <RouteMode />
         <IntroGate />
         <div className="crosshair" aria-hidden="true">
-          <div className="crosshair__line crosshair__line--v" />
-          <div className="crosshair__line crosshair__line--h" />
+          {/* Both rails are DNA double helices; the meteors that draw them and
+              the sun at the intersection are still CSS. */}
+          <CrosshairHelix orientation="vertical" />
+          <CrosshairHelix orientation="horizontal" />
           <div className="crosshair__sun">
             <div className="crosshair__sun-glyph" />
           </div>

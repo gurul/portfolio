@@ -5,8 +5,11 @@
   --accent: rgba(255, 255, 255, 0.92);
   --rule: rgba(255, 255, 255, 0.08);
   --crosshair: rgba(255, 255, 255, 0.32);
-  /* Dots along the crosshair lines — the theme's secondary color */
+  /* Points of the helix rails — the theme's secondary color. Read by CSS for
+     the meteor heads and by CrosshairHelix for the point cloud itself. */
   --crosshair-dot: 255, 255, 255;
+  /* Thickness of each helix rail's canvas, across the line. */
+  --crosshair-rail: 18px;
   /* Sun that sits on the crosshair intersection */
   --sun-core: 255, 255, 255;
   --sun-glow: 255, 255, 255;
@@ -244,24 +247,17 @@ a {
   position: absolute;
 }
 
-/* Each dot is a radial glow — bright core fading softly to transparent,
-   the same falloff as the meteor head — tiled along the line. */
+/* Each rail is a WebGL point-cloud DNA double helix (CrosshairHelix), centred
+   on the crosshair axis. The rail is wider than the coil so the cursor swell
+   has somewhere to go without clipping; the canvas is transparent, so the extra
+   width costs nothing. The draw-in and flash below are unchanged — the helix is
+   revealed by the same meteors on the same curve the dots were. */
 .crosshair__line--v {
   top: 0;
   left: var(--crosshair-x);
-  width: 8px;
+  width: var(--crosshair-rail, 18px);
   height: 100%;
-  transform: translateX(-4px);
-  background-image: radial-gradient(
-    circle 2.6px at center,
-    rgba(var(--crosshair-dot), 0.82) 0%,
-    rgba(var(--crosshair-dot), 0.34) 38%,
-    rgba(var(--crosshair-dot), 0) 78%
-  );
-  background-size: 8px 6px;
-  background-repeat: repeat-y;
-  /* Phase the dots so one sits exactly on the crosshair intersection. */
-  background-position: center calc(var(--crosshair-y) - 3px);
+  transform: translateX(-50%);
   animation:
     crosshair-draw-v 1375ms cubic-bezier(0.22, 1, 0.36, 1) both,
     crosshair-flash 1300ms ease-out 1375ms both;
@@ -271,21 +267,17 @@ a {
   top: var(--crosshair-y);
   left: 0;
   width: 100%;
-  height: 8px;
-  transform: translateY(-4px);
-  background-image: radial-gradient(
-    circle 2.6px at center,
-    rgba(var(--crosshair-dot), 0.82) 0%,
-    rgba(var(--crosshair-dot), 0.34) 38%,
-    rgba(var(--crosshair-dot), 0) 78%
-  );
-  background-size: 6px 8px;
-  background-repeat: repeat-x;
-  /* Phase the dots so one sits exactly on the crosshair intersection. */
-  background-position: calc(var(--crosshair-x) - 3px) center;
+  height: var(--crosshair-rail, 18px);
+  transform: translateY(-50%);
   animation:
     crosshair-draw-h 1375ms cubic-bezier(0.22, 1, 0.36, 1) both,
     crosshair-flash 1300ms ease-out 1375ms both;
+}
+
+.crosshair__helix {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 @keyframes crosshair-draw-v {
@@ -388,9 +380,9 @@ a {
   position: absolute;
   top: var(--crosshair-y);
   left: var(--crosshair-x);
-  width: 1.95rem;
-  height: 1.95rem;
-  margin: -0.975rem 0 0 -0.975rem;
+  width: 2.42rem;
+  height: 2.42rem;
+  margin: -1.21rem 0 0 -1.21rem;
   animation:
     crosshair-sun-ignite 1000ms cubic-bezier(0.22, 1, 0.36, 1) 1375ms both,
     crosshair-sun-breathe 5200ms ease-in-out 2375ms infinite;
@@ -403,9 +395,9 @@ a {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 14px;
-  height: 14px;
-  margin: -7px 0 0 -7px;
+  width: 17.4px;
+  height: 17.4px;
+  margin: -8.7px 0 0 -8.7px;
   border-radius: 50%;
   background: radial-gradient(
     circle,
@@ -415,10 +407,10 @@ a {
     rgba(var(--sun-glow), 0) 100%
   );
   box-shadow:
-    0 0 8px 2px rgba(var(--sun-core), 0.37),
-    0 0 20px 6px rgba(var(--sun-glow), 0.24),
-    0 0 44px 14px rgba(var(--sun-glow), 0.12),
-    0 0 90px 30px rgba(var(--sun-glow), 0.05);
+    0 0 10px 2.5px rgba(var(--sun-core), 0.37),
+    0 0 25px 7.4px rgba(var(--sun-glow), 0.24),
+    0 0 55px 17.4px rgba(var(--sun-glow), 0.12),
+    0 0 112px 37px rgba(var(--sun-glow), 0.05);
 }
 
 /* The favicon sun, drawn as a mask so it takes the theme's colors.
@@ -435,10 +427,10 @@ a {
   );
   -webkit-mask: url("/sun-glyph.png") center / contain no-repeat;
   mask: url("/sun-glyph.png") center / contain no-repeat;
-  filter: drop-shadow(0 0 4px rgba(var(--sun-core), 0.37))
-    drop-shadow(0 0 10px rgba(var(--sun-glow), 0.25))
-    drop-shadow(0 0 22px rgba(var(--sun-glow), 0.13))
-    drop-shadow(0 0 46px rgba(var(--sun-glow), 0.06));
+  filter: drop-shadow(0 0 5px rgba(var(--sun-core), 0.37))
+    drop-shadow(0 0 12.4px rgba(var(--sun-glow), 0.25))
+    drop-shadow(0 0 27.3px rgba(var(--sun-glow), 0.13))
+    drop-shadow(0 0 57px rgba(var(--sun-glow), 0.06));
   animation: crosshair-sun-spin 32s linear infinite;
 }
 
