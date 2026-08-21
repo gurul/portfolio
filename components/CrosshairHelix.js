@@ -61,10 +61,17 @@ const SPAN_OVERSHOOT = 1.5;
  *  of the visible half-length, so it begins just past the viewport edge. */
 const END_FADE_START = 0.72;
 
-/** Radians per second of the idle rotation about the rail's own axis. */
-const SPIN_RATE = 0.34;
+/** Radians per second of the idle rotation about the rail's own axis. A turn
+ *  every ~6s: the coil slides one pitch along its own axis in that time, which
+ *  is what a rotating helix looks like from the side. Slower than this and the
+ *  motion stops registering at a 42px pitch — the rail just reads as static. */
+const SPIN_RATE = 1.05;
 /** Travelling radius wobble, 0 leaves the geometry with no time dependence. */
 const PULSE = 0.35;
+/** Wavelength of that wobble in CSS px, measured along the axis. Fixed in px,
+ *  not as a share of the span, so the two rails breathe at the same on-screen
+ *  rate however long each one happens to be. */
+const PULSE_WAVE_PX = 780;
 
 /** Cursor swell, in CSS px: how far the influence reaches and how hard it
  *  pushes dead centre. The push is small enough to stay inside the rail. */
@@ -95,6 +102,7 @@ uniform float uTube;
 uniform float uDot;
 uniform float uSpin;
 uniform float uPulse;
+uniform float uPulseWave;
 uniform float uVertical;
 uniform float uScale;      // device pixel ratio
 uniform vec3  uColor;
@@ -115,15 +123,19 @@ void main() {
     float rungT = aInfo.z;
     float seed  = aInfo.w;
 
-    // Every uTime term is multiplied by pulseAmt, so Pulse 0 is genuinely static.
-    float pulseAmt = clamp(uPulse, 0.0, 1.0);
-    float breathe  = 1.0 + pulseAmt * 0.22 * sin(uTime * 1.6 - u * 18.0);
-
     // The axis is world X. Phase is a function of position along it, so the
     // strands stay one continuous helix and uSpin turns the whole coil about
     // that axis rather than swinging an end into frame.
     float axis  = (u - 0.5) * uSpan;
     float phase = (axis / uPitch) * TAU + uSpin;
+
+    // Every uTime term is multiplied by pulseAmt, so Pulse 0 is genuinely
+    // static. The wobble travels along the axis in *pixels*, not in normalised
+    // u — keyed to u it would stretch with the rail, so the long horizontal
+    // rail and the short vertical one would breathe at visibly different rates.
+    float pulseAmt = clamp(uPulse, 0.0, 1.0);
+    float breathe  = 1.0 + pulseAmt * 0.22 * sin(uTime * 1.6 - (axis / uPulseWave) * TAU);
+
     float rad   = uRadius * breathe;
 
     vec3 basePos;
@@ -291,6 +303,7 @@ export default function CrosshairHelix({ orientation = "horizontal" }) {
     const uDot = u("uDot");
     const uSpin = u("uSpin");
     const uPulse = u("uPulse");
+    const uPulseWave = u("uPulseWave");
     const uVertical = u("uVertical");
     const uScale = u("uScale");
     const uColor = u("uColor");
@@ -454,6 +467,7 @@ export default function CrosshairHelix({ orientation = "horizontal" }) {
       gl.uniform1f(uDot, DOT_PX);
       gl.uniform1f(uSpin, spin);
       gl.uniform1f(uPulse, PULSE);
+      gl.uniform1f(uPulseWave, PULSE_WAVE_PX * dpr);
       gl.uniform1f(uVertical, verticalRef.current ? 1 : 0);
       gl.uniform1f(uScale, dpr);
       gl.uniform3f(uColor, color[0], color[1], color[2]);
