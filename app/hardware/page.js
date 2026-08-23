@@ -9,12 +9,6 @@ export const metadata = buildPageMetadata({
 
 const hardware = [
   {
-    name: "sim2real",
-    href: "https://github.com/gurul/so101-sim2real",
-    description: "training on isaac sim",
-    lines: [],
-  },
-  {
     name: "cameraboi",
     href: "https://github.com/gurul/cameraboi",
     description: "usb document camera eyes",
@@ -36,6 +30,12 @@ const hardware = [
     name: "agent pet",
     href: "https://github.com/gurul/claude-pet",
     description: "esp32 desk buddy",
+    lines: [],
+  },
+  {
+    name: "sim2real",
+    href: "https://github.com/gurul/so101-sim2real",
+    description: "training on isaac sim",
     lines: [],
   }
 ];
