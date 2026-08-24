@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { prepare, layout } from "@chenglou/pretext";
 import { WATERFALL_DONE_EVENT, splitGraphemes } from "../lib/textDecode";
 
 // The name, and what it means — the same phosphor flip as the narratives
@@ -19,11 +18,6 @@ const NOISE_WINDOW = 7;
 // that sweep owns this paragraph's text nodes while it runs. If the waterfall
 // never reports in, the lock lifts on its own this long after mount.
 const READY_FALLBACK_MS = 12000;
-
-// The whole sentence, used only to reserve the tallest wrap up front.
-function sentence(variant) {
-  return `My name is ${variant}, or Guru (గురు) for short.`;
-}
 
 function renderName(segments) {
   return (
@@ -43,11 +37,9 @@ function renderName(segments) {
 }
 
 export default function NameFlip() {
-  const paragraphRef = useRef(null);
   const machineRef = useRef({ idx: 0, busy: false, raf: 0 });
   const [activeIdx, setActiveIdx] = useState(0);
   const [ready, setReady] = useState(false);
-  const [minHeight, setMinHeight] = useState(0);
   const [segments, setSegments] = useState(() => ({
     settled: NAME,
     glow: "",
@@ -55,49 +47,9 @@ export default function NameFlip() {
     old: "",
   }));
 
-  // Pretext measures the sentence with each variant in place at the current
-  // width, so the paragraph reserves the taller wrap and the flip never
-  // shoves the rest of the page around.
-  useEffect(() => {
-    const el = paragraphRef.current;
-    if (!el) return undefined;
-    let cancelled = false;
-
-    const measure = () => {
-      const width = Math.floor(el.clientWidth);
-      if (width <= 0) return;
-      const style = getComputedStyle(el);
-      const font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
-      const letterSpacing = parseFloat(style.letterSpacing) || 0;
-      const lineHeight =
-        parseFloat(style.lineHeight) || parseFloat(style.fontSize) * 1.35;
-      let max = 0;
-      for (const variant of VARIANTS) {
-        // The copy column renders lowercase, so measure what is painted.
-        const prepared = prepare(sentence(variant).toLowerCase(), font, {
-          letterSpacing,
-        });
-        const { height } = layout(prepared, width, lineHeight);
-        if (height > max) max = height;
-      }
-      if (!cancelled) {
-        setMinHeight((prev) => (prev === max ? prev : max));
-      }
-    };
-
-    measure();
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => {
-        if (!cancelled) measure();
-      });
-    }
-    const observer = new ResizeObserver(() => measure());
-    observer.observe(el);
-    return () => {
-      cancelled = true;
-      observer.disconnect();
-    };
-  }, []);
+  // No height is reserved for the longer variant: the paragraph grows with
+  // the sweep and the copy below rides along, so there is never idle space
+  // sitting under the name.
 
   // The page waterfall replaces this paragraph's text nodes while it sweeps;
   // a React re-render in the middle of that would paint into detached nodes.
@@ -173,20 +125,30 @@ export default function NameFlip() {
     runSweep(oldChars, newChars, SWEEP_MS);
   };
 
+  // The span carries button semantics, so it has to answer the keys a button
+  // would.
+  const handleKeyDown = (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    flip();
+  };
+
   return (
-    <p
-      ref={paragraphRef}
-      style={minHeight ? { minHeight: `${minHeight}px` } : undefined}
-    >
+    <p>
       My name is{" "}
-      <button
-        type="button"
+      {/* A span, not a button: Chrome never breaks a button's text across
+          lines, so a real button would drop the whole name onto its own
+          line instead of flowing with the sentence. */}
+      <span
         className="name-flip"
+        role="button"
+        tabIndex={0}
         onClick={flip}
+        onKeyDown={handleKeyDown}
         aria-label={`${VARIANTS[activeIdx]} — tap to flip between my name and what it means`}
       >
         <span aria-hidden="true">{renderName(segments)}</span>
-      </button>
+      </span>
       ,{" "}
       <span className="inline-nowrap">
         or{" "}

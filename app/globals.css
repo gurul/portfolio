@@ -565,19 +565,11 @@ html.intro-ready .page-shell {
   color: var(--accent);
 }
 
-/* The name itself flips to its meaning on click — a button that has to read
-   as running text, so it keeps the paragraph's type and wraps inline. */
+/* The name itself flips to its meaning on click. It reads as running text,
+   so it wraps mid-phrase like any other words in the sentence. */
 .name-flip {
   display: inline;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
   color: var(--accent);
-  font: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
-  text-align: left;
   text-decoration: underline;
   cursor: pointer;
 }
