@@ -1,4 +1,5 @@
 import ExperiencingNarratives from "../../components/ExperiencingNarratives";
+import NameFlip from "../../components/NameFlip";
 import PageScaffold from "../../components/PageScaffold";
 import { getYearContributionCount } from "../../lib/github";
 import { buildPageMetadata } from "../../lib/metadata";
@@ -50,18 +51,7 @@ export default async function AboutPage() {
 
   return (
     <PageScaffold>
-      <p>
-        My name is{" "}
-        <a
-          className="name-link"
-          href="https://www.instagram.com/gurulingamallu/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Sri Surya Gurucharan Lingamallu
-        </a>
-        , <span className="inline-nowrap">or Guru (గురు) for short.</span>
-      </p>
+      <NameFlip />
       <p>
         I build at the intersection of AI, memory, and human experience while
         studying Computer Science at the University of Washington.

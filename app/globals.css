@@ -565,6 +565,28 @@ html.intro-ready .page-shell {
   color: var(--accent);
 }
 
+/* The name itself flips to its meaning on click — a button that has to read
+   as running text, so it keeps the paragraph's type and wraps inline. */
+.name-flip {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.name-flip__old {
+  color: var(--muted);
+  opacity: 0.45;
+}
+
+.horse-theme-active .name-flip,
 .horse-theme-active .name-link,
 .horse-theme-active .commit-history-link,
 .horse-theme-active .currently-reading__label,
