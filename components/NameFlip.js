@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { WATERFALL_DONE_EVENT, splitGraphemes } from "../lib/textDecode";
+import {
+  WATERFALL_DONE_EVENT,
+  isWaterfallSettled,
+  splitGraphemes,
+} from "../lib/textDecode";
 
 // The name, and what it means — the same phosphor flip as the narratives
 // line, applied to the first thing the page says.
@@ -54,8 +58,15 @@ export default function NameFlip() {
   // The page waterfall replaces this paragraph's text nodes while it sweeps;
   // a React re-render in the middle of that would paint into detached nodes.
   // Reduced motion skips the waterfall entirely, so the flip is live at once.
+  // Returning to this page re-mounts the component but does not re-run the
+  // sweep (it is cached for the visit), and the done event is dispatched from
+  // a layout effect — before this one subscribes. So the settled state is read
+  // first: only a sweep that is actually still running gets waited on.
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (
+      isWaterfallSettled() ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
       setReady(true);
       return undefined;
     }
