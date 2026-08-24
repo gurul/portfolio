@@ -578,6 +578,7 @@ html.intro-ready .page-shell {
   letter-spacing: inherit;
   text-transform: inherit;
   text-align: left;
+  text-decoration: underline;
   cursor: pointer;
 }
 
