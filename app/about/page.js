@@ -58,7 +58,7 @@ export default async function AboutPage() {
           target="_blank"
           rel="noreferrer"
         >
-          Gurucharan Lingamallu
+          Sri Surya Gurucharan Lingamallu
         </a>
         , <span className="inline-nowrap">or Guru (గురు) for short.</span>
       </p>
