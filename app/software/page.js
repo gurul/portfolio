@@ -35,7 +35,7 @@ const software = [
   {
     name: "harborline",
     href: "https://github.com/gurul/harborline",
-    description: "disaster response",
+    description: "natural disaster response",
     lines: [],
   },
   {
