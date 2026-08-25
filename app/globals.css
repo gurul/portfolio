@@ -565,21 +565,6 @@ html.intro-ready .page-shell {
   color: var(--accent);
 }
 
-/* The name itself flips to its meaning on click. It reads as running text,
-   so it wraps mid-phrase like any other words in the sentence. */
-.name-flip {
-  display: inline;
-  color: var(--accent);
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.name-flip__old {
-  color: var(--muted);
-  opacity: 0.45;
-}
-
-.horse-theme-active .name-flip,
 .horse-theme-active .name-link,
 .horse-theme-active .commit-history-link,
 .horse-theme-active .currently-reading__label,
