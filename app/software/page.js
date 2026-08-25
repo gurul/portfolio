@@ -41,7 +41,7 @@ const software = [
   {
     name: "atlas",
     href: "https://github.com/gurul/atlas",
-    description: "an interactive map of your engineering org",
+    description: "interactive map of your engineering org",
     lines: [],
   },
   {
