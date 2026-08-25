@@ -10,7 +10,7 @@ export const metadata = buildPageMetadata({
 const software = [
   {
     name: "storeybox",
-    href: "https://storeybox.org",
+    href: "https://storeybox.co",
     description: "multimodal memory infrastructure",
     lines: [],
   },
