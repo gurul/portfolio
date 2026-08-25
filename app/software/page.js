@@ -39,6 +39,12 @@ const software = [
     lines: [],
   },
   {
+    name: "atlas",
+    href: "https://github.com/gurul/atlas",
+    description: "an interactive map of your engineering org",
+    lines: [],
+  },
+  {
     name: "debrief",
     href: "https://github.com/gurul/claude-debrief",
     description: "human-gated memory for coding agents",
