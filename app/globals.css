@@ -759,7 +759,9 @@ html.intro-ready .page-shell {
   display: block;
   width: 100%;
   height: auto;
-  background: var(--bg);
+  /* Transparent so the starfield reads through between the glyphs; the
+     player clears instead of filling --bg for the same reason. */
+  background: transparent;
   opacity: 0;
   transition: opacity 0.6s ease;
 }
