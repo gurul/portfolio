@@ -107,7 +107,7 @@ fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
   // alpha holds): the canvas composites over the page on its own, dark
   // pixels fully transparent — no blend mode, no stacking-context traps.
   let irradiance = resolve_cascade0(pixel);
-  let edge = 1.0 - smoothstep(0.16, 0.44, distance(uv, vec2f(0.5)));
+  let edge = 1.0 - smoothstep(0.13, 0.38, distance(uv, vec2f(0.5)));
   let glow = linear_to_srgb(tonemap_aces(
     irradiance * present.lighting.x * edge * present.display.x,
   ));
