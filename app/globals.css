@@ -151,6 +151,35 @@ a {
   text-underline-offset: 0.18em;
 }
 
+/* Starfield background (StarfieldBackground): a fixed WebGPU canvas behind
+   every layer. z-index 0 (never negative: a negative z-index paints between
+   the html and body backgrounds, so body's opaque --bg would cover it) and
+   first-in-DOM keeps it above the page background but below the z-0 ascii
+   art, the z-1 shell, and everything else. The surface composites
+   premultiplied, so everywhere that isn't a star stays the theme's --bg.
+   Joins the intro choreography late and slowly. Without WebGPU the canvas
+   never draws and the flat --bg stands alone. */
+.star-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2000ms ease 900ms;
+}
+
+html.intro-ready .star-bg {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star-bg {
+    display: none;
+  }
+}
+
 .page-shell {
   position: relative;
   z-index: 1;
@@ -438,6 +467,41 @@ a {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Radiance-cascades sun light (CrosshairSun): a WebGPU canvas centered on
+   the intersection, much larger than the glyph so the light has room to
+   spill. The shader outputs premultiplied alpha — transparent where there is
+   no light — so it composites over the page without any blend mode (a
+   mix-blend-mode would be isolated by the .crosshair stacking context and
+   turn the canvas into a black square). The glyph always stays — the canvas
+   is its power, not its replacement. Once the field's first scene compiles
+   (`--live`) the canvas fades in and begins its power-up, and the static CSS
+   corona bows out so the charging light replaces it. Without WebGPU the
+   class never lands and the CSS sun stays whole. */
+.crosshair__sun-radiance {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9rem;
+  height: 9rem;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+
+.crosshair__sun--live .crosshair__sun-radiance {
+  opacity: 1;
+}
+
+/* The static corona hands over to the live light on the same beat. */
+.crosshair__sun::before {
+  transition: opacity 1400ms ease;
+}
+
+.crosshair__sun--live::before {
+  opacity: 0;
 }
 
 @keyframes crosshair-sun-ignite {

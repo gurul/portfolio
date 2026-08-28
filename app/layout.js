@@ -1,6 +1,8 @@
 import { JetBrains_Mono } from "next/font/google";
 import CrosshairHelix from "../components/CrosshairHelix";
+import CrosshairSun from "../components/CrosshairSun";
 import DecodeIntro from "../components/DecodeIntro";
+import StarfieldBackground from "../components/StarfieldBackground";
 import GifAsciiPlayer from "../components/GifAsciiPlayer";
 import IntroGate from "../components/IntroGate";
 import RouteMode from "../components/RouteMode";
@@ -47,14 +49,14 @@ export default function RootLayout({ children }) {
         </noscript>
         <RouteMode />
         <IntroGate />
+        <StarfieldBackground />
         <div className="crosshair" aria-hidden="true">
-          {/* Both rails are DNA double helices; the meteors that draw them and
-              the sun at the intersection are still CSS. */}
+          {/* Both rails are DNA double helices drawn by the CSS meteors; the
+              sun ignites as CSS, then hands over to the radiance-cascades
+              field once it has compiled. */}
           <CrosshairHelix orientation="vertical" />
           <CrosshairHelix orientation="horizontal" />
-          <div className="crosshair__sun">
-            <div className="crosshair__sun-glyph" />
-          </div>
+          <CrosshairSun />
         </div>
         <SiteNav />
         {/* The nav persists across navigations, so it decodes once per load. */}
