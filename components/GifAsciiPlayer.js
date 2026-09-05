@@ -27,7 +27,6 @@ const GHOST_OPACITY = 0.14;
 // their alpha, so fast poses (the tail whip crosses a third of its arc in one
 // 83ms step) read as a motion-blurred sweep instead of a 12fps snap.
 const TRAIL_OPACITY = 0.35;
-const DEFAULT_BG = "#001918";
 const STORAGE_KEY = "horse-theme-active";
 // Click (or a fresh visit) cycles teal -> dark maroon -> black ->
 // deep purple -> deep navy. Every non-default theme gets a
@@ -148,7 +147,9 @@ function buildGhost(image) {
     data[i] = inverted;
     data[i + 1] = inverted;
     data[i + 2] = inverted;
-    data[i + 3] = 255;
+    // Alpha follows brightness: the black surround is fully transparent, so
+    // the ghost never lays a rectangular veil over the starfield beneath.
+    data[i + 3] = inverted;
   }
   context.putImageData(imageData, 0, 0);
   return canvas;
@@ -291,12 +292,11 @@ export default function GifAsciiPlayer() {
       const cssHeight = gridHeight * CELL_HEIGHT;
 
       const rootStyles = getComputedStyle(document.documentElement);
-      const themeBackground =
-        rootStyles.getPropertyValue("--bg").trim() || DEFAULT_BG;
       const themeAccent =
         rootStyles.getPropertyValue("--accent").trim() || "#ffffff";
-      context.fillStyle = themeBackground;
-      context.fillRect(0, 0, cssWidth, cssHeight);
+      // Transparent clear, not a --bg fill: the starfield lives beneath this
+      // canvas and must show through between the glyphs.
+      context.clearRect(0, 0, cssWidth, cssHeight);
       context.font = asciiFont;
       context.textBaseline = "top";
 
