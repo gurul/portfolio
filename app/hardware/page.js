@@ -9,6 +9,12 @@ export const metadata = buildPageMetadata({
 
 const hardware = [
   {
+    name: "buddy",
+    href: "https://github.com/gurul/buddy",
+    description: "personal robot desktop pet",
+    lines: [],
+  },
+  {
     name: "cameraboi",
     href: "https://github.com/gurul/cameraboi",
     description: "usb document camera eyes",
@@ -24,12 +30,6 @@ const hardware = [
     name: "gencad",
     href: "https://github.com/gurul/gencad",
     description: "parametric cad from a prompt",
-    lines: [],
-  },
-  {
-    name: "buddy",
-    href: "https://github.com/gurul/buddy",
-    description: "personal robot desktop pet",
     lines: [],
   },
   {
