@@ -11,7 +11,7 @@ const hardware = [
   {
     name: "buddy",
     href: "https://github.com/gurul/buddy",
-    description: "personal robot desktop pet",
+    description: "intelligent desktop companion",
     lines: [],
   },
   {
