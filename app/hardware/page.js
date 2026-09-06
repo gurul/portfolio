@@ -29,7 +29,7 @@ const hardware = [
   {
     name: "buddy",
     href: "https://github.com/gurul/buddy",
-    description: "desk robot for claude code",
+    description: "personal robot desktop pet",
     lines: [],
   },
   {
