@@ -9,12 +9,6 @@ export const metadata = buildPageMetadata({
 
 const hardware = [
   {
-    name: "buddy",
-    href: "https://github.com/gurul/buddy",
-    description: "intelligent desktop companion",
-    lines: [],
-  },
-  {
     name: "cameraboi",
     href: "https://github.com/gurul/cameraboi",
     description: "usb document camera eyes",
