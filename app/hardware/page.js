@@ -10,7 +10,7 @@ export const metadata = buildPageMetadata({
 const hardware = [
   {
     name: "buddy",
-    href: "https://github.com/gurul/buddyTinkerer",
+    href: "https://github.com/gurul/buddy",
     description: "intelligent desktop companion",
     lines: [],
   },
