@@ -6,6 +6,7 @@ import { buildPageMetadata } from "../../lib/metadata";
 // Newest first; shown after the static "narratives experienced:" label.
 const NARRATIVES = [
   { title: "small giants" },
+  { title: "peddi" },
   { title: "the joy of mathematics" },
   { title: "machines of loving grace" },
   { title: "oppenheimer" },
