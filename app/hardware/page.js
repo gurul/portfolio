@@ -32,6 +32,12 @@ const hardware = [
     description: "parametric cad from a prompt",
     lines: [],
   },
+  {
+    name: "musicKnob",
+    href: "https://github.com/gurul/esphome-media-player",
+    description: "wifi music controller",
+    lines: [],
+  },
 ];
 
 export default function HardwarePage() {
