@@ -34,7 +34,7 @@ const hardware = [
   },
   {
     name: "musicKnob",
-    href: "https://github.com/gurul/esphome-media-player",
+    href: "https://github.com/gurul/music-knob",
     description: "wifi music controller",
     lines: [],
   },
