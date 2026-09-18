@@ -32,12 +32,6 @@ const hardware = [
     description: "parametric cad from a prompt",
     lines: [],
   },
-  {
-    name: "spotKnob",
-    href: "https://github.com/gurul/spotify-knob",
-    description: "wifi music controller",
-    lines: [],
-  }
 ];
 
 export default function HardwarePage() {
