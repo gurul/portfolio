@@ -23,7 +23,7 @@ const communities = [
   {
     name: "youth tech assembly",
     href: "https://www.youthtechassembly.org/",
-    description: "youth voice on ai",
+    description: "global voice on ai",
     lines: [],
   },
   {
