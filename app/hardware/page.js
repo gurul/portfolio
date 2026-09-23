@@ -15,6 +15,12 @@ const hardware = [
     lines: [],
   },
   {
+    name: "pika",
+    href: "https://github.com/gurul/pika",
+    description: "autonomous car",
+    lines: [],
+  },
+  {
     name: "cameraboi",
     href: "https://github.com/gurul/cameraboi",
     description: "usb document camera eyes",
