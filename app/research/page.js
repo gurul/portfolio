@@ -15,12 +15,6 @@ const research = [
     lines: [],
   },
   {
-    name: "highway(1)",
-    href: "https://github.com/gurul/highway1",
-    description: "intrinsically creative ai",
-    lines: [],
-  },
-  {
     name: "sim2real",
     href: "https://github.com/gurul/so101-sim2real",
     description: "training on isaac sim",
