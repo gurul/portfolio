@@ -39,8 +39,8 @@ const hardware = [
     lines: [],
   },
   {
-    name: "musicKnob",
-    href: "https://github.com/gurul/music-knob",
+    name: "spotKnob",
+    href: "https://github.com/gurul/spotify-knob",
     description: "wifi music controller",
     lines: [],
   },
