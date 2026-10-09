@@ -2,12 +2,18 @@ import PageScaffold from "../../components/PageScaffold";
 import { buildPageMetadata } from "../../lib/metadata";
 
 export const metadata = buildPageMetadata({
-  path: "/software",
-  title: "Software",
-  description: "Software projects and experiments built by Gurucharan Lingamallu.",
+  path: "/projects",
+  title: "Projects",
+  description: "Projects built by Gurucharan Lingamallu.",
 });
 
-const software = [
+const projects = [
+  {
+    name: "buddy",
+    href: "https://github.com/gurul/buddy",
+    description: "embodied personal agent",
+    lines: [],
+  },
   {
     name: "storeybox",
     href: "https://storeybox.co",
@@ -50,13 +56,37 @@ const software = [
     description: "simple presentation helper",
     lines: [],
   },
+  {
+    name: "pika",
+    href: "https://github.com/gurul/pika",
+    description: "autonomous car",
+    lines: [],
+  },
+  {
+    name: "cameraboi",
+    href: "https://github.com/gurul/cameraboi",
+    description: "usb document camera eyes",
+    lines: [],
+  },
+  {
+    name: "hwlog",
+    href: "https://github.com/gurul/hardware-logging",
+    description: "serial logging for debugging firmware",
+    lines: [],
+  },
+  {
+    name: "gencad",
+    href: "https://github.com/gurul/gencad",
+    description: "parametric cad from a prompt",
+    lines: [],
+  },
 ];
 
-export default function SoftwarePage() {
+export default function ProjectsPage() {
   return (
     <PageScaffold>
-      <div className="projects-page-list" aria-label="Software">
-        {software.map((item) => (
+      <div className="projects-page-list" aria-label="Projects">
+        {projects.map((item) => (
           <article key={item.name} className="projects-page-item">
             <p className="projects-page-title">
               <a href={item.href} target="_blank" rel="noreferrer">
