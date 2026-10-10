@@ -9,8 +9,8 @@ export const metadata = buildPageMetadata({
 
 const projects = [
   {
-    name: "buddy",
-    href: "https://github.com/gurul/buddy",
+    name: "eve",
+    href: "https://github.com/gurul/eve",
     description: "embodied personal agent",
     lines: [],
   },
