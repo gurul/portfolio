@@ -99,6 +99,15 @@ body.route-locked {
   max-height: 100dvh;
 }
 
+/* FitViewport shrank the copy as far as it will go and it still runs past
+   the bottom: let this page scroll rather than cut it off. */
+html.route-locked.route-fit-overflow,
+body.route-locked.route-fit-overflow {
+  height: auto;
+  max-height: none;
+  overflow-y: auto;
+}
+
 html.horse-theme-active,
 body.horse-theme-active {
   --bg: #33090f;

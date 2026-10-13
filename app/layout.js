@@ -2,6 +2,7 @@ import { JetBrains_Mono } from "next/font/google";
 import CrosshairHelix from "../components/CrosshairHelix";
 import CrosshairSun from "../components/CrosshairSun";
 import DecodeIntro from "../components/DecodeIntro";
+import FitViewport from "../components/FitViewport";
 import StarfieldBackground from "../components/StarfieldBackground";
 import GifAsciiPlayer from "../components/GifAsciiPlayer";
 import IntroGate from "../components/IntroGate";
@@ -48,6 +49,7 @@ export default function RootLayout({ children }) {
           <style>{`.site-nav, .page-shell { opacity: 1 !important; }`}</style>
         </noscript>
         <RouteMode />
+        <FitViewport />
         <IntroGate />
         <StarfieldBackground />
         <div className="crosshair" aria-hidden="true">
