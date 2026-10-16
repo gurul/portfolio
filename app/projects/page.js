@@ -51,12 +51,6 @@ const projects = [
     lines: [],
   },
   {
-    name: "slideflow",
-    href: "https://slideflow1.vercel.app/",
-    description: "simple presentation helper",
-    lines: [],
-  },
-  {
     name: "pika",
     href: "https://github.com/gurul/pika",
     description: "autonomous car",
@@ -78,6 +72,12 @@ const projects = [
     name: "gencad",
     href: "https://github.com/gurul/gencad",
     description: "parametric cad from a prompt",
+    lines: [],
+  },
+  {
+    name: "slideflow",
+    href: "https://slideflow1.vercel.app/",
+    description: "simple presentation helper",
     lines: [],
   },
 ];
