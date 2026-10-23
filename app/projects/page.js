@@ -53,7 +53,7 @@ const projects = [
   {
     name: "cameraboi",
     href: "https://github.com/gurul/cameraboi",
-    description: "usb document camera eyes",
+    description: "any camera as a tool call",
     lines: [],
   },
   {
