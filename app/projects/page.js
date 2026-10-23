@@ -33,12 +33,6 @@ const projects = [
     lines: [],
   },
   {
-    name: "leap",
-    href: "https://github.com/gurul/Leap",
-    description: "motion hand tracking as macos input",
-    lines: [],
-  },
-  {
     name: "harborline",
     href: "https://github.com/gurul/harborline",
     description: "natural disaster response",
@@ -72,6 +66,12 @@ const projects = [
     name: "gencad",
     href: "https://github.com/gurul/gencad",
     description: "parametric cad from a prompt",
+    lines: [],
+  },
+  {
+    name: "leap",
+    href: "https://github.com/gurul/Leap",
+    description: "hand gestures as macos input",
     lines: [],
   },
   {
