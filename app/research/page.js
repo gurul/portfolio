@@ -14,12 +14,6 @@ const research = [
     description: "open data in clinical ai",
     lines: [],
   },
-  {
-    name: "sim2real",
-    href: "https://github.com/gurul/so101-sim2real",
-    description: "training on isaac sim",
-    lines: [],
-  }
 ];
 
 export default function ResearchPage() {
