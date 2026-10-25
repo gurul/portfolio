@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { whenIntroReady } from "../lib/introReady";
 
 /**
  * The crosshair rails, drawn as a point-cloud DNA double helix instead of the
@@ -25,7 +26,13 @@ import { useEffect, useRef } from "react";
  *
  * The GL context is built once in useEffect([]) and every live input — size,
  * theme colour, pointer — is read from a ref inside the rAF loop, so nothing
- * here can rebuild the context. loseContext() is never called.
+ * here can rebuild the context. loseContext() is never called; if the browser
+ * drops the context, the GL objects are rebuilt when it comes back.
+ *
+ * COST — per frame the loop uploads only time, spin and (when it moves) the
+ * cursor; everything else is uploaded when the size or theme changes. The loop
+ * sleeps, holding its last frame, until the intro starts (the rail is clipped
+ * to nothing before then) and whenever the rail is off screen.
  */
 
 /* ---------------------------------------------------------------- constants */
@@ -281,43 +288,89 @@ export default function CrosshairHelix({ orientation = "horizontal" }) {
     });
     if (!gl) return;
 
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.ONE, gl.ONE);
-
-    const program = gl.createProgram();
-    gl.attachShader(program, compile(gl, gl.VERTEX_SHADER, VERT));
-    gl.attachShader(program, compile(gl, gl.FRAGMENT_SHADER, FRAG));
-    gl.linkProgram(program);
-    gl.useProgram(program);
-
-    const u = (name) => gl.getUniformLocation(program, name);
-    const uRes = u("uRes");
-    const uFocal = u("uFocal");
-    const uDistance = u("uDistance");
-    const uTime = u("uTime");
-    const uRadius = u("uRadius");
-    const uSpan = u("uSpan");
-    const uEndFade = u("uEndFade");
-    const uPitch = u("uPitch");
-    const uTube = u("uTube");
-    const uDot = u("uDot");
-    const uSpin = u("uSpin");
-    const uPulse = u("uPulse");
-    const uPulseWave = u("uPulseWave");
-    const uVertical = u("uVertical");
-    const uScale = u("uScale");
-    const uColor = u("uColor");
-    const uCursor = u("uCursor");
-    const uHover = u("uHover");
-
-    const aInfoLoc = gl.getAttribLocation(program, "aInfo");
-    const aOffLoc = gl.getAttribLocation(program, "aOffset");
-    const infoBuffer = gl.createBuffer();
-    const offBuffer = gl.createBuffer();
+    /* GL state — rebuilt by setupGL() on first run and after a context
+       restore. Everything in here is invalid while the context is lost. */
+    let program = null;
+    let loc = null;
+    let infoBuffer = null;
+    let offBuffer = null;
+    let contextLost = false;
 
     let dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
     let spanPx = 0;
     let pointCount = 0;
+
+    /* Uniforms that only change with size, DPR, orientation or theme. They
+       are uploaded when one of those changes, not on every frame. */
+    let staticKey = "";
+    let colorDirty = true;
+    let color = FALLBACK_COLOR;
+    let lastCursorX = NaN;
+    let lastCursorY = NaN;
+    let lastHover = -1;
+
+    const setupGL = () => {
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE);
+
+      program = gl.createProgram();
+      const vs = compile(gl, gl.VERTEX_SHADER, VERT);
+      const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
+      gl.attachShader(program, vs);
+      gl.attachShader(program, fs);
+      gl.linkProgram(program);
+      gl.useProgram(program);
+      // Linked: the shader objects can go; the program keeps its own copy.
+      gl.deleteShader(vs);
+      gl.deleteShader(fs);
+
+      const u = (name) => gl.getUniformLocation(program, name);
+      loc = {
+        uRes: u("uRes"),
+        uFocal: u("uFocal"),
+        uDistance: u("uDistance"),
+        uTime: u("uTime"),
+        uRadius: u("uRadius"),
+        uSpan: u("uSpan"),
+        uEndFade: u("uEndFade"),
+        uPitch: u("uPitch"),
+        uTube: u("uTube"),
+        uDot: u("uDot"),
+        uSpin: u("uSpin"),
+        uPulse: u("uPulse"),
+        uPulseWave: u("uPulseWave"),
+        uVertical: u("uVertical"),
+        uScale: u("uScale"),
+        uColor: u("uColor"),
+        uCursor: u("uCursor"),
+        uHover: u("uHover"),
+        aInfo: gl.getAttribLocation(program, "aInfo"),
+        aOffset: gl.getAttribLocation(program, "aOffset"),
+      };
+
+      infoBuffer = gl.createBuffer();
+      offBuffer = gl.createBuffer();
+      // One program and two fixed buffers for the life of the context, so the
+      // attribute bindings are set once here rather than on every frame.
+      // bufferData() on a rebuild keeps them valid.
+      gl.enableVertexAttribArray(loc.aInfo);
+      gl.enableVertexAttribArray(loc.aOffset);
+      gl.bindBuffer(gl.ARRAY_BUFFER, infoBuffer);
+      gl.vertexAttribPointer(loc.aInfo, 4, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, offBuffer);
+      gl.vertexAttribPointer(loc.aOffset, 3, gl.FLOAT, false, 0, 0);
+      gl.clearColor(0, 0, 0, 0);
+
+      // A fresh context has no buffers and default uniforms: force a rebuild
+      // and a full upload on the next frame.
+      spanPx = 0;
+      pointCount = 0;
+      staticKey = "";
+      colorDirty = true;
+      lastCursorX = NaN;
+      lastCursorY = NaN;
+      lastHover = -1;
+    };
 
     /** Point count scales with the rail's length, so the dot spacing on screen
      *  is the same on a short page and a long one. */
@@ -384,8 +437,7 @@ export default function CrosshairHelix({ orientation = "horizontal" }) {
       gl.bufferData(gl.ARRAY_BUFFER, off, gl.STATIC_DRAW);
     };
 
-    gl.enableVertexAttribArray(aInfoLoc);
-    gl.enableVertexAttribArray(aOffLoc);
+    setupGL();
 
     // The rail's box, refreshed only when it actually resizes. Reading it on
     // every frame forced a layout per frame while the text decode was still
@@ -403,8 +455,20 @@ export default function CrosshairHelix({ orientation = "horizontal" }) {
     let rect = measure();
     const sizeObserver = new ResizeObserver(() => {
       rect = measure();
+      wake();
     });
     sizeObserver.observe(canvas);
+
+    // Scroll offset for the cursor maths, cached from the scroll event. Read
+    // in the frame loop it forced a synchronous layout whenever something
+    // earlier in the frame (the text decode) had dirtied the page.
+    let scrollX = window.scrollX;
+    let scrollY = window.scrollY;
+    const onScroll = () => {
+      scrollX = window.scrollX;
+      scrollY = window.scrollY;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     const syncSize = () => {
       if (rect.width < 1 || rect.height < 1) return false;
@@ -425,9 +489,38 @@ export default function CrosshairHelix({ orientation = "horizontal" }) {
       return true;
     };
 
-    let color = readRailColor();
+    /** Uploads the uniforms that hold still between resizes. */
+    const syncStatic = () => {
+      const vertical = verticalRef.current ? 1 : 0;
+      const key = `${canvas.width}x${canvas.height}@${dpr}|${spanPx}|${vertical}`;
+      if (key === staticKey) return;
+      staticKey = key;
+
+      const distance = 1400 * dpr;
+      gl.uniform2f(loc.uRes, canvas.width, canvas.height);
+      // focal === distance puts one world unit on one device pixel at z = 0.
+      gl.uniform1f(loc.uFocal, distance);
+      gl.uniform1f(loc.uDistance, distance);
+      gl.uniform1f(loc.uRadius, RADIUS_PX * dpr);
+      gl.uniform1f(loc.uSpan, spanPx);
+      gl.uniform1f(loc.uEndFade, END_FADE_START);
+      gl.uniform1f(loc.uPitch, PITCH_PX * dpr);
+      gl.uniform1f(loc.uTube, TUBE_PX * dpr);
+      gl.uniform1f(loc.uDot, DOT_PX);
+      gl.uniform1f(loc.uPulse, PULSE);
+      gl.uniform1f(loc.uPulseWave, PULSE_WAVE_PX * dpr);
+      gl.uniform1f(loc.uVertical, vertical);
+      gl.uniform1f(loc.uScale, dpr);
+      // The cursor is measured in device px, so a resize invalidates it too.
+      lastCursorX = NaN;
+    };
+
+    // Theme changes flip a class on <html>/<body>. Only mark the colour stale
+    // here; the loop reads it once on its next frame, so a burst of class
+    // changes costs one style read instead of one per mutation per rail.
     const themeObserver = new MutationObserver(() => {
-      color = readRailColor();
+      colorDirty = true;
+      wake();
     });
     themeObserver.observe(document.documentElement, {
       attributes: true,
@@ -450,11 +543,29 @@ export default function CrosshairHelix({ orientation = "horizontal" }) {
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     document.addEventListener("pointerleave", onPointerLeave);
 
+    /* When to run the loop. Before the intro starts, the rail is clipped to
+       nothing by its paused draw-in animation; off screen, nobody sees it. In
+       both cases the canvas keeps its last frame and the loop sleeps. */
+    let introStarted = document.documentElement.classList.contains("intro-ready");
+    let onScreen = true;
+    let hasDrawn = false;
+
     let raf = 0;
     let spin = 0;
     let lastT = null;
 
-    const loop = (t) => {
+    const shouldRun = () =>
+      !contextLost && onScreen && (introStarted || !hasDrawn);
+
+    function wake() {
+      if (raf || !shouldRun()) return;
+      lastT = null;
+      raf = requestAnimationFrame(loop);
+    }
+
+    function loop(t) {
+      raf = 0;
+      if (!shouldRun()) return;
       raf = requestAnimationFrame(loop);
 
       // Reduced motion hides .crosshair outright, which collapses the canvas to
@@ -465,55 +576,91 @@ export default function CrosshairHelix({ orientation = "horizontal" }) {
       lastT = t;
       spin += SPIN_RATE * dt;
 
-      const distance = 1400 * dpr;
+      syncStatic();
 
-      gl.bindBuffer(gl.ARRAY_BUFFER, infoBuffer);
-      gl.vertexAttribPointer(aInfoLoc, 4, gl.FLOAT, false, 0, 0);
-      gl.bindBuffer(gl.ARRAY_BUFFER, offBuffer);
-      gl.vertexAttribPointer(aOffLoc, 3, gl.FLOAT, false, 0, 0);
-
-      gl.uniform2f(uRes, canvas.width, canvas.height);
-      // focal === distance puts one world unit on one device pixel at z = 0.
-      gl.uniform1f(uFocal, distance);
-      gl.uniform1f(uDistance, distance);
-      gl.uniform1f(uTime, t / 1000);
-      gl.uniform1f(uRadius, RADIUS_PX * dpr);
-      gl.uniform1f(uSpan, spanPx);
-      gl.uniform1f(uEndFade, END_FADE_START);
-      gl.uniform1f(uPitch, PITCH_PX * dpr);
-      gl.uniform1f(uTube, TUBE_PX * dpr);
-      gl.uniform1f(uDot, DOT_PX);
-      gl.uniform1f(uSpin, spin);
-      gl.uniform1f(uPulse, PULSE);
-      gl.uniform1f(uPulseWave, PULSE_WAVE_PX * dpr);
-      gl.uniform1f(uVertical, verticalRef.current ? 1 : 0);
-      gl.uniform1f(uScale, dpr);
-      gl.uniform3f(uColor, color[0], color[1], color[2]);
-
-      if (pointer.seen) {
-        gl.uniform2f(
-          uCursor,
-          (pointer.x - (rect.left - window.scrollX)) * dpr - canvas.width / 2,
-          -((pointer.y - (rect.top - window.scrollY)) * dpr - canvas.height / 2),
-        );
-        gl.uniform1f(uHover, 1);
-      } else {
-        gl.uniform1f(uHover, 0);
+      if (colorDirty) {
+        colorDirty = false;
+        color = readRailColor();
+        gl.uniform3f(loc.uColor, color[0], color[1], color[2]);
       }
 
-      gl.clearColor(0, 0, 0, 0);
+      gl.uniform1f(loc.uTime, t / 1000);
+      gl.uniform1f(loc.uSpin, spin);
+
+      const hover = pointer.seen ? 1 : 0;
+      if (hover !== lastHover) {
+        lastHover = hover;
+        gl.uniform1f(loc.uHover, hover);
+      }
+      if (pointer.seen) {
+        const cx = (pointer.x - (rect.left - scrollX)) * dpr - canvas.width / 2;
+        const cy = -((pointer.y - (rect.top - scrollY)) * dpr - canvas.height / 2);
+        if (cx !== lastCursorX || cy !== lastCursorY) {
+          lastCursorX = cx;
+          lastCursorY = cy;
+          gl.uniform2f(loc.uCursor, cx, cy);
+        }
+      }
+
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.drawArrays(gl.POINTS, 0, pointCount);
+      hasDrawn = true;
+    }
+
+    const visibilityObserver = new IntersectionObserver((entries) => {
+      onScreen = entries[entries.length - 1].isIntersecting;
+      wake();
+    });
+    visibilityObserver.observe(canvas);
+
+    let disposed = false;
+    if (!introStarted) {
+      whenIntroReady().then(() => {
+        if (disposed) return;
+        introStarted = true;
+        wake();
+      });
+    }
+
+    // iOS drops WebGL contexts under memory pressure and when the tab is
+    // backgrounded. preventDefault() asks for the context back; on restore
+    // every GL object is gone, so rebuild them and redraw.
+    const onContextLost = (e) => {
+      e.preventDefault();
+      contextLost = true;
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
     };
-    raf = requestAnimationFrame(loop);
+    const onContextRestored = () => {
+      contextLost = false;
+      setupGL();
+      hasDrawn = false;
+      wake();
+    };
+    canvas.addEventListener("webglcontextlost", onContextLost);
+    canvas.addEventListener("webglcontextrestored", onContextRestored);
+
+    wake();
 
     return () => {
-      cancelAnimationFrame(raf);
+      disposed = true;
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
       sizeObserver.disconnect();
       themeObserver.disconnect();
+      visibilityObserver.disconnect();
+      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("pointermove", onPointerMove);
       document.removeEventListener("pointerleave", onPointerLeave);
+      canvas.removeEventListener("webglcontextlost", onContextLost);
+      canvas.removeEventListener("webglcontextrestored", onContextRestored);
+      // Free the GPU objects; the context itself goes with the canvas.
       // Never call gl.getExtension("WEBGL_lose_context")?.loseContext().
+      if (!contextLost) {
+        gl.deleteBuffer(infoBuffer);
+        gl.deleteBuffer(offBuffer);
+        gl.deleteProgram(program);
+      }
     };
   }, []);
 
