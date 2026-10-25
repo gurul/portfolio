@@ -27,11 +27,11 @@ const GHOST_OPACITY = 0.14;
 // their alpha, so fast poses (the tail whip crosses a third of its arc in one
 // 83ms step) read as a motion-blurred sweep instead of a 12fps snap.
 const TRAIL_OPACITY = 0.35;
-const STORAGE_KEY = "horse-theme-active";
+const STORAGE_KEY = "cheetah-theme-active";
 // Click (or a fresh visit) cycles teal -> dark maroon -> black ->
 // deep purple -> deep navy. Every non-default theme gets a
 // `<name>-theme-active` class on <html>/<body>.
-const THEMES = ["default", "horse", "night", "purple", "navy"];
+const THEMES = ["default", "cheetah", "night", "purple", "navy"];
 const THEME_CLASSES = THEMES.filter((name) => name !== "default").map(
   (name) => `${name}-theme-active`,
 );
@@ -158,7 +158,7 @@ function buildGhost(image) {
 function cellColor(brightness, theme) {
   const intensity = brightness / 255;
   const alpha = Math.min(1, 0.34 + intensity * 0.9);
-  const activated = theme === "horse";
+  const activated = theme === "cheetah";
   const red = activated
     ? Math.round(240 + intensity * 15)
     : Math.round(228 + intensity * 27);
@@ -173,8 +173,7 @@ function cellColor(brightness, theme) {
 
 export default function GifAsciiPlayer() {
   const pathname = usePathname();
-  const showsHorse = pathname === "/" || pathname === "/about" || pathname === "/projects" || pathname === "/research" || pathname === "/communities";
-  const blockRef = useRef(null);
+  const showsCheetah = pathname === "/" || pathname === "/about" || pathname === "/projects" || pathname === "/research" || pathname === "/communities";
   const canvasRef = useRef(null);
   const frameRef = useRef(null);
   const framesRef = useRef([]);
@@ -186,7 +185,6 @@ export default function GifAsciiPlayer() {
   const needsRedrawRef = useRef(true);
   const reducedMotionRef = useRef(false);
   const decodeRef = useRef({ started: 0, eased: 1, tick: 0 });
-  const [showScrollCue, setShowScrollCue] = useState(false);
   const [theme, setTheme] = useState("default");
   const [isReady, setIsReady] = useState(false);
   // When the decode sweep drives the reveal, the CSS opacity fade would run
@@ -198,7 +196,7 @@ export default function GifAsciiPlayer() {
       const stored = window.localStorage.getItem(STORAGE_KEY);
       // Legacy boolean values from the two-theme era.
       const current =
-        stored === "true" ? "horse" : stored === "false" ? "default" : stored;
+        stored === "true" ? "cheetah" : stored === "false" ? "default" : stored;
       // A fresh visit advances the cycle; a first visit starts on default.
       const nextTheme =
         current == null
@@ -238,7 +236,7 @@ export default function GifAsciiPlayer() {
   }, [theme]);
 
   useEffect(() => {
-    if (!showsHorse) return undefined;
+    if (!showsCheetah) return undefined;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -263,7 +261,7 @@ export default function GifAsciiPlayer() {
     motionQuery.addEventListener("change", onMotionChange);
 
     // The cheetah lands with the waterfall's last drop: hold its reveal until
-    // the text decode signals it is a horse-entrance away from finishing. The
+    // the text decode signals it is a cheetah-entrance away from finishing. The
     // done event is the backstop for the paths that never lead (a cached sweep
     // reporting in instantly, reduced motion), as is the safety timeout.
     // Listen from the start so a fast waterfall can't get there before slow
@@ -567,58 +565,14 @@ export default function GifAsciiPlayer() {
       ghostsRef.current = [];
       setIsReady(false);
     };
-  }, [showsHorse]);
+  }, [showsCheetah]);
 
-  useEffect(() => {
-    if (!showsHorse) {
-      setShowScrollCue(false);
-      return undefined;
-    }
-
-    setShowScrollCue(false);
-
-    const updateScrollCue = () => {
-      const isMobile = window.innerWidth <= 900;
-      const footerHeight =
-        blockRef.current?.getBoundingClientRect().height ?? 0;
-      const copyColumn = document.querySelector(".copy-column");
-      const lastContent = copyColumn?.lastElementChild;
-
-      if (!isMobile || !footerHeight || !lastContent) {
-        setShowScrollCue(false);
-        return;
-      }
-
-      const lastContentBottom = lastContent.getBoundingClientRect().bottom;
-      const footerTop = window.innerHeight - footerHeight;
-
-      setShowScrollCue(lastContentBottom > footerTop + 12);
-    };
-
-    const frameOne = window.requestAnimationFrame(() => {
-      updateScrollCue();
-      window.requestAnimationFrame(updateScrollCue);
-    });
-    const delayed = window.setTimeout(updateScrollCue, 180);
-
-    window.addEventListener("scroll", updateScrollCue, { passive: true });
-    window.addEventListener("resize", updateScrollCue);
-
-    return () => {
-      window.cancelAnimationFrame(frameOne);
-      window.clearTimeout(delayed);
-      window.removeEventListener("scroll", updateScrollCue);
-      window.removeEventListener("resize", updateScrollCue);
-    };
-  }, [showsHorse, pathname]);
-
-  if (!showsHorse) {
+  if (!showsCheetah) {
     return null;
   }
 
   return (
     <section
-      ref={blockRef}
       className="gif-ascii-block"
       aria-label="ASCII animation experiment"
       onClick={() =>
@@ -627,9 +581,6 @@ export default function GifAsciiPlayer() {
         )
       }
     >
-      {showScrollCue ? (
-        <span className="gif-ascii-scroll-cue">scroll to continue</span>
-      ) : null}
       <canvas
         ref={canvasRef}
         className={`gif-ascii-canvas${isReady ? " is-ready" : ""}${

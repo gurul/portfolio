@@ -21,35 +21,36 @@
   --crosshair-copy-gap-y: 4.5rem;
   --nav-body-gap: 2.4rem;
   --copy-column-max-width: 44rem;
-  --horse-clearance: 27rem;
-  --horse-scale: 1.404;
-  --horse-max-width: 50.4rem;
-  --horse-min-width: 8rem;
-  --horse-bottom-offset: 2rem;
-  --horse-copy-gap: 1.75rem;
+  --cheetah-clearance: 27rem;
+  --cheetah-scale: 1.404;
+  --cheetah-max-width: 50.4rem;
+  --cheetah-min-width: 8rem;
+  --cheetah-bottom-offset: 2rem;
+  --cheetah-copy-gap: 1.75rem;
   /* Sizing keeps the original oversized formula (edge gap 2.2rem, scale
-     overshoot) — deliberately larger than the space beside the copy, with
-     overlap at condensed widths accepted as the trade. */
-  --horse-edge-gap: 2.2rem;
-  --horse-width: clamp(
-    calc(var(--horse-min-width) * var(--horse-scale)),
+     overshoot) — larger than the space beside the copy. FitViewport keeps
+     the copy clear of it: it shrinks the copy, or docks the cheetah at the
+     end of a scrolling page, so the cheetah is never covered. */
+  --cheetah-edge-gap: 2.2rem;
+  --cheetah-width: clamp(
+    calc(var(--cheetah-min-width) * var(--cheetah-scale)),
     calc(
       (
         100vw
         - var(--crosshair-x)
         - var(--crosshair-copy-gap-x)
         - var(--copy-column-max-width)
-        - var(--horse-edge-gap)
-        - var(--horse-copy-gap)
-      ) * var(--horse-scale)
+        - var(--cheetah-edge-gap)
+        - var(--cheetah-copy-gap)
+      ) * var(--cheetah-scale)
     ),
-    calc(var(--horse-max-width) * var(--horse-scale))
+    calc(var(--cheetah-max-width) * var(--cheetah-scale))
   );
   /* The cheetah face's right edge (not the canvas rectangle's) sits as far
      from the right wall as the copy sits from the left wall: wall gap minus
      the canvas's blank right strip. */
-  --horse-right-offset: calc(
-    var(--crosshair-x) + var(--crosshair-copy-gap-x) - var(--horse-width) * 20 /
+  --cheetah-right-offset: calc(
+    var(--crosshair-x) + var(--crosshair-copy-gap-x) - var(--cheetah-width) * 20 /
       176
   );
 }
@@ -108,8 +109,8 @@ body.route-locked.route-fit-overflow {
   overflow-y: auto;
 }
 
-html.horse-theme-active,
-body.horse-theme-active {
+html.cheetah-theme-active,
+body.cheetah-theme-active {
   --bg: #33090f;
   --text: #e8d9c5;
   --muted: rgba(232, 217, 197, 0.78);
@@ -638,14 +639,14 @@ html.intro-ready .page-shell {
   color: var(--accent);
 }
 
-.horse-theme-active .name-link,
-.horse-theme-active .commit-history-link,
-.horse-theme-active .currently-reading__label,
-.horse-theme-active .site-nav__link,
-.horse-theme-active .site-nav__link.is-active,
-.horse-theme-active .projects-page-title a,
-.horse-theme-active .blog-title-link,
-.horse-theme-active .blog-post-title {
+.cheetah-theme-active .name-link,
+.cheetah-theme-active .commit-history-link,
+.cheetah-theme-active .currently-reading__label,
+.cheetah-theme-active .site-nav__link,
+.cheetah-theme-active .site-nav__link.is-active,
+.cheetah-theme-active .projects-page-title a,
+.cheetah-theme-active .blog-title-link,
+.cheetah-theme-active .blog-post-title {
   font-weight: 700;
 }
 
@@ -756,10 +757,10 @@ html.intro-ready .page-shell {
 
 .gif-ascii-block {
   position: fixed;
-  right: var(--horse-right-offset);
-  bottom: var(--horse-bottom-offset);
+  right: var(--cheetah-right-offset);
+  bottom: var(--cheetah-bottom-offset);
   margin: 0;
-  width: var(--horse-width);
+  width: var(--cheetah-width);
   z-index: 0;
   cursor: pointer;
 }
@@ -771,8 +772,22 @@ html.intro-ready .page-shell {
   /* Transparent so the starfield reads through between the glyphs; the
      player clears instead of filling --bg for the same reason. */
   background: transparent;
+  /* The ascii grid is 176 x 38 cells of 8 x 14px. Fixing the ratio up front
+     gives the box its final size before the frames load, so FitViewport
+     never has to re-fit the copy around it. */
+  aspect-ratio: 1408 / 532;
   opacity: 0;
   transition: opacity 0.6s ease;
+}
+
+/* A page that has to scroll docks the cheetah at its end, below a strip the
+   copy leaves free, instead of letting the copy scroll underneath it. */
+html.route-fit-overflow .gif-ascii-block {
+  position: absolute;
+}
+
+html.route-fit-overflow .page-shell {
+  padding-bottom: var(--cheetah-dock-space, 0px);
 }
 
 .gif-ascii-canvas.is-ready {
@@ -783,10 +798,6 @@ html.intro-ready .page-shell {
    half of the sweep — the noise band is the entrance, so snap to visible. */
 .gif-ascii-canvas.is-instant {
   transition: none;
-}
-
-.gif-ascii-scroll-cue {
-  display: none;
 }
 
 .gif-ascii-source {
@@ -874,7 +885,7 @@ html.intro-ready .page-shell {
   display: none;
 }
 
-/* phones held sideways: the fixed crosshair/horse layout has no room, so ask
+/* phones held sideways: the fixed crosshair/cheetah layout has no room, so ask
    for portrait instead of letting it collapse */
 @media (orientation: landscape) and (max-height: 32rem) and (pointer: coarse) {
   html,
@@ -917,9 +928,9 @@ html.intro-ready .page-shell {
     --crosshair-y: 2.75rem;
     --crosshair-copy-gap-x: 4.25rem;
     --crosshair-copy-gap-y: 3.75rem;
-    --horse-edge-gap: 1.25rem;
-    --horse-bottom-offset: 1.25rem;
-    --horse-copy-gap: 1.25rem;
+    --cheetah-edge-gap: 1.25rem;
+    --cheetah-bottom-offset: 1.25rem;
+    --cheetah-copy-gap: 1.25rem;
   }
 
   .page-shell {
@@ -951,7 +962,7 @@ html.intro-ready .page-shell {
     --crosshair-copy-gap-x: 1.85rem;
     --crosshair-copy-gap-y: 3.25rem;
     --nav-body-gap: 2.6rem;
-    --horse-clearance: 11.03rem;
+    --cheetah-clearance: 11.03rem;
   }
 
   /* No horizontal padding here: the fixed nav is positioned against the
@@ -1089,9 +1100,9 @@ html.intro-ready .page-shell {
     right: 0.85rem;
     bottom: 0.75rem;
     width: clamp(
-      calc(5.25rem * var(--horse-scale)),
-      calc(24vw * var(--horse-scale)),
-      calc(9rem * var(--horse-scale))
+      calc(5.25rem * var(--cheetah-scale)),
+      calc(24vw * var(--cheetah-scale)),
+      calc(9rem * var(--cheetah-scale))
     );
     height: auto;
     display: block;
@@ -1108,18 +1119,14 @@ html.intro-ready .page-shell {
     opacity: 0.82;
   }
 
-  .gif-ascii-scroll-cue {
-    display: none;
-  }
-
   /* Keep the narratives line clear of the fixed ascii art in the bottom-right
      corner: reserve the art's width (plus its 0.85rem inset) as padding. */
   .copy-column .currently-reading {
     padding-right: calc(
       clamp(
-        calc(5.25rem * var(--horse-scale)),
-        calc(24vw * var(--horse-scale)),
-        calc(9rem * var(--horse-scale))
+        calc(5.25rem * var(--cheetah-scale)),
+        calc(24vw * var(--cheetah-scale)),
+        calc(9rem * var(--cheetah-scale))
       ) + 0.4rem
     );
   }

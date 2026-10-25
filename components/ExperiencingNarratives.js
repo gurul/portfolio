@@ -206,7 +206,7 @@ export default function ExperiencingNarratives({ entries }) {
       const chars = splitGraphemes(fullText(entries[machine.idx]));
       const duration = chars.length * PER_CHAR_MS;
       // This line is the last text in the waterfall, so it owns the handoff to
-      // the horse: the lead a whole horse-entrance before this sweep lands, the
+      // the cheetah: the lead a whole cheetah-entrance before this sweep lands, the
       // done event as the final character settles.
       leadTimer = window.setTimeout(
         () => window.dispatchEvent(new Event(WATERFALL_LEAD_EVENT)),
