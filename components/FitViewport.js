@@ -10,17 +10,24 @@ import { useEffect } from "react";
 // lines. Below the floor the text stops shrinking and the page scrolls
 // instead, so nothing is ever unreachable.
 //
-// The cheetah in the bottom-right corner is never covered: copy that would
-// run across its box counts as not fitting. When the page has to scroll, the
-// cheetah docks at the end of the page (see .route-fit-overflow in the CSS)
-// so the copy can never scroll underneath it.
+// The cheetah in the bottom-right corner is never covered, and it gives way
+// before the text does: when copy would run across its box, the cheetah is
+// narrowed (down to a floor) until it clears the copy. Only when even the
+// floor collides does the copy count as not fitting and shrink. When the page
+// has to scroll, the cheetah docks at the end of the page (see
+// .route-fit-overflow in the CSS) so the copy can never scroll underneath it.
 const MIN_FIT = 0.74;
+// The smallest the cheetah gets before the copy has to shrink instead.
+const CHEETAH_FLOOR_PX = 150;
+// Halvings of the cheetah's width range: lands within ~1% of the widest fit.
+const CHEETAH_STEPS = 7;
 const BOTTOM_GAP_PX = 12;
 const CHEETAH_GAP_PX = 12;
 const SOLID_SELECTOR = "img, svg, canvas, video, .commit-history-viewport";
-// Lines that reserve their height before their text arrives (the narratives
-// line fills in after the page decode). Their content box counts as painted.
-const RESERVED_SELECTOR = ".currently-reading";
+// Lines whose text changes after the fit (the narratives line flips through
+// titles). They count as painted out to their widest text, which they state
+// in characters of their monospaced font as data-reserve-ch.
+const RESERVED_SELECTOR = "[data-reserve-ch]";
 
 // Where the cheetah sits while fixed to the viewport, worked out from its
 // computed offsets so the answer holds even while it is docked.
@@ -76,17 +83,25 @@ function paintedRects(column, area) {
     } else if (node.matches(SOLID_SELECTOR)) {
       boxes = node.getClientRects();
     } else if (node.matches(RESERVED_SELECTOR)) {
-      // Drop the right padding: on phones it is the gap that already keeps
-      // this line clear of the cheetah.
+      // Its widest text, capped at its content box (dropping the right
+      // padding: on phones that is the gap that already keeps the line clear
+      // of the cheetah). A monospaced advance is 0.6em.
       const box = node.getBoundingClientRect();
-      const padRight = parseFloat(getComputedStyle(node).paddingRight) || 0;
+      const style = getComputedStyle(node);
+      const zoom = box.width / (node.offsetWidth || box.width);
+      const widest =
+        Number(node.dataset.reserveCh) * parseFloat(style.fontSize) * 0.6 * zoom;
+      const right = Math.min(
+        box.right - (parseFloat(style.paddingRight) || 0) * zoom,
+        box.left + widest,
+      );
       boxes = [
         {
           left: box.left,
-          right: box.right - padRight,
+          right,
           top: box.top,
           bottom: box.bottom,
-          width: box.width - padRight,
+          width: right - box.left,
           height: box.height,
         },
       ];
@@ -136,6 +151,9 @@ export default function FitViewport() {
       if (!column) return;
 
       const cheetah = document.querySelector(".gif-ascii-block");
+      // Measure the cheetah at its full size; the fit below narrows it.
+      const fittedWidth = cheetah?.style.getPropertyValue("--cheetah-fit-width");
+      if (fittedWidth) cheetah.style.removeProperty("--cheetah-fit-width");
       const cheetahBox = cheetah ? cheetahRect(cheetah) : null;
       const limit = viewportHeight() - BOTTOM_GAP_PX;
       const overflowing = html.classList.contains("route-fit-overflow");
@@ -153,7 +171,10 @@ export default function FitViewport() {
         lastScale = 1;
         force = true;
       }
-      if (!force && key === lastKey) return;
+      if (!force && key === lastKey) {
+        if (fittedWidth) cheetah.style.setProperty("--cheetah-fit-width", fittedWidth);
+        return;
+      }
       lastKey = key;
 
       // Space the docked cheetah needs below the copy on a scrolling page:
@@ -168,6 +189,34 @@ export default function FitViewport() {
       const applyScale = (scale) => {
         column.style.zoom = scale === 1 ? "" : String(scale);
       };
+      const fullWidth = cheetah ? cheetah.offsetWidth : 0;
+      const cheetahAt = (width) => {
+        if (width >= fullWidth) {
+          cheetah.style.removeProperty("--cheetah-fit-width");
+        } else {
+          cheetah.style.setProperty("--cheetah-fit-width", `${width}px`);
+        }
+        return cheetahRect(cheetah);
+      };
+      // The widest cheetah that clears the copy at the current scale, or 0
+      // when even the floor collides. Narrowing it only moves its top-left
+      // corner in, so the copy is measured once, against the full-size box.
+      const cheetahWidthFor = () => {
+        if (!cheetahBox) return fullWidth;
+        const rects = paintedRects(column, cheetahBox);
+        const clear = (box) => !rects.some((r) => overlaps(r, box));
+        if (clear(cheetahBox)) return fullWidth;
+        const floor = Math.min(fullWidth, CHEETAH_FLOOR_PX);
+        if (!clear(cheetahAt(floor))) return 0;
+        let lo = floor;
+        let hi = fullWidth;
+        for (let step = 0; step < CHEETAH_STEPS; step += 1) {
+          const mid = Math.round((lo + hi) / 2);
+          if (clear(cheetahAt(mid))) lo = mid;
+          else hi = mid;
+        }
+        return lo;
+      };
       const fitsAt = (scale) => {
         applyScale(scale);
         // The column's own box, so space a line reserves before its text
@@ -175,10 +224,7 @@ export default function FitViewport() {
         if (column.getBoundingClientRect().bottom + window.scrollY > limit) {
           return false;
         }
-        return (
-          !cheetahBox ||
-          !paintedRects(column, cheetahBox).some((r) => overlaps(r, cheetahBox))
-        );
+        return cheetahWidthFor() > 0;
       };
       // Shrinking re-wraps lines, so height isn't linear in scale: search for
       // the largest scale that fits rather than dividing once. `lo` fits and
@@ -218,8 +264,10 @@ export default function FitViewport() {
       };
 
       const scale = search();
-      // Below the floor the copy stays at the floor and the page scrolls.
+      // Below the floor the copy stays at the floor and the page scrolls,
+      // with the cheetah docked after it at full size.
       applyScale(scale ?? MIN_FIT);
+      if (cheetah) cheetahAt(scale === null ? fullWidth : cheetahWidthFor());
       lastScale = scale;
       const overflows = scale === null;
       if (overflows !== overflowing) {
@@ -255,6 +303,11 @@ export default function FitViewport() {
     const cheetahObserver = new ResizeObserver(remeasure);
     const cheetah = document.querySelector(".gif-ascii-block");
     if (cheetah) cheetahObserver.observe(cheetah);
+    // The narratives line reserves its height after mount, which can push
+    // the copy past the bottom; re-fit when the copy changes size. A fit
+    // that lands on the same answer changes no size, so this settles.
+    const column = document.querySelector(".page-shell .copy-column");
+    if (column) cheetahObserver.observe(column);
 
     return () => {
       disposed = true;

@@ -84,6 +84,13 @@ function renderLine(segments) {
   );
 }
 
+function longestTitle(entries) {
+  return entries.reduce(
+    (max, entry) => Math.max(max, variableText(entry).length),
+    0,
+  );
+}
+
 export default function ExperiencingNarratives({ entries }) {
   const linesRef = useRef(null);
   const machineRef = useRef({ idx: 0, busy: false, raf: 0 });
@@ -257,7 +264,12 @@ export default function ExperiencingNarratives({ entries }) {
   };
 
   return (
-    <p className="currently-reading">
+    // The widest the line can get, in characters (the font is monospaced):
+    // FitViewport keeps the cheetah clear of this, not just of today's title.
+    <p
+      className="currently-reading"
+      data-reserve-ch={PREFIX.length + longestTitle(entries)}
+    >
       <button
         type="button"
         className="currently-reading__button"

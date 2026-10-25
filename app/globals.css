@@ -49,10 +49,6 @@
   /* The cheetah face's right edge (not the canvas rectangle's) sits as far
      from the right wall as the copy sits from the left wall: wall gap minus
      the canvas's blank right strip. */
-  --cheetah-right-offset: calc(
-    var(--crosshair-x) + var(--crosshair-copy-gap-x) - var(--cheetah-width) * 20 /
-      176
-  );
 }
 
 * {
@@ -791,12 +787,17 @@ html.intro-ready .page-shell {
   line-height: inherit;
 }
 
+/* --cheetah-fit-width is set by FitViewport on this element when the full
+   size would touch the copy: the cheetah gives way, the text keeps its size. */
 .gif-ascii-block {
   position: fixed;
-  right: var(--cheetah-right-offset);
+  right: calc(
+    var(--crosshair-x) + var(--crosshair-copy-gap-x) -
+      var(--cheetah-fit-width, var(--cheetah-width)) * 20 / 176
+  );
   bottom: var(--cheetah-bottom-offset);
   margin: 0;
-  width: var(--cheetah-width);
+  width: var(--cheetah-fit-width, var(--cheetah-width));
   z-index: 0;
   cursor: pointer;
 }
@@ -1097,10 +1098,13 @@ html.route-fit-overflow .page-shell {
     left: auto;
     right: 0.85rem;
     bottom: 0.75rem;
-    width: clamp(
-      calc(5.25rem * var(--cheetah-scale)),
-      calc(24vw * var(--cheetah-scale)),
-      calc(9rem * var(--cheetah-scale))
+    width: var(
+      --cheetah-fit-width,
+      clamp(
+        calc(5.25rem * var(--cheetah-scale)),
+        calc(24vw * var(--cheetah-scale)),
+        calc(9rem * var(--cheetah-scale))
+      )
     );
     height: auto;
     display: block;

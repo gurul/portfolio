@@ -11,8 +11,11 @@ import SiteNav from "../components/SiteNav";
 import { getMetadataBase, SITE_DESCRIPTION, SITE_NAME } from "../lib/site";
 import "./globals.css";
 
+// Italic is used on first view (the swipe hint, the contribution count, the
+// narratives line), so load the real face rather than a synthesized slant.
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 

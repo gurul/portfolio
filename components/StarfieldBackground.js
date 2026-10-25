@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { startStarfield } from "../lib/starfield";
 
 /**
  * The starfield background canvas. Fixed behind every other layer (negative
@@ -10,6 +9,9 @@ import { startStarfield } from "../lib/starfield";
  *
  * Reduced motion skips the whole thing — the render loop never starts, and
  * the CSS hides the canvas so the flat `--bg` background stands alone.
+ *
+ * The WebGPU renderer is fetched after mount, and only where WebGPU exists,
+ * so it never weighs on first paint and never downloads where it cannot run.
  */
 export default function StarfieldBackground() {
   const canvasRef = useRef(null);
@@ -18,7 +20,20 @@ export default function StarfieldBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    return startStarfield(canvas);
+    if (!navigator.gpu) return;
+
+    let stop = null;
+    let cancelled = false;
+    import("../lib/starfield")
+      .then(({ startStarfield }) => {
+        if (!cancelled) stop = startStarfield(canvas);
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+      stop?.();
+    };
   }, []);
 
   return <canvas ref={canvasRef} className="star-bg" aria-hidden="true" />;

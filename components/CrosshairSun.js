@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { startSunRadiance } from "../lib/sun/runner";
 
 /**
  * The sun on the crosshair intersection. The CSS sun (corona + spinning
@@ -11,6 +10,9 @@ import { startSunRadiance } from "../lib/sun/runner";
  * full radiance, then holding. The glyph never leaves; only the static CSS
  * corona bows out to the live light. If WebGPU is missing — or motion is
  * reduced — `onReady` never fires and the CSS sun simply stays whole.
+ *
+ * The renderer (and the WebGPU library under it) is fetched after mount, and
+ * only where WebGPU exists, so it stays off the first-paint path.
  *
  * The canvas is screen-blended: the field renders light on black, so black is
  * invisible and only the light lands on the page, whatever the theme.
@@ -23,7 +25,22 @@ export default function CrosshairSun() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    return startSunRadiance(canvas, { onReady: () => setLive(true) });
+    if (!navigator.gpu) return;
+
+    let stop = null;
+    let cancelled = false;
+    import("../lib/sun/runner")
+      .then(({ startSunRadiance }) => {
+        if (!cancelled) {
+          stop = startSunRadiance(canvas, { onReady: () => setLive(true) });
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+      stop?.();
+    };
   }, []);
 
   return (

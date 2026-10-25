@@ -3,7 +3,7 @@ import { buildPageMetadata } from "../../lib/metadata";
 
 export const metadata = buildPageMetadata({
   path: "/communities",
-  title: "Communities",
+  title: "communities",
   description: "Communities built and led by Gurucharan Lingamallu.",
 });
 
