@@ -421,7 +421,7 @@ export default function GifAsciiPlayer() {
     const loadFrames = async () => {
       const images = Array.from({ length: FRAME_COUNT }, (_, index) => {
         const image = new Image();
-        image.src = `/cheetah-frames/frame_${String(index + 1).padStart(3, "0")}.png`;
+        image.src = `/cheetah-frames/frame_${String(index + 1).padStart(3, "0")}.webp`;
         return image;
       });
 

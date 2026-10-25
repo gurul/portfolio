@@ -16,7 +16,9 @@ const SWIPE_MAX_SLOPE = 1.6;
 const SWIPE_HINT_KEY = "swipe-hint-done";
 
 export default function SiteNav() {
-  const pathname = usePathname();
+  // The root serves the about page, so it lights the about tab.
+  const rawPathname = usePathname();
+  const pathname = rawPathname === "/" ? "/about" : rawPathname;
   const router = useRouter();
   const [showHint, setShowHint] = useState(false);
 
