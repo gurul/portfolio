@@ -192,13 +192,22 @@ export default function ExperiencingNarratives({ entries }) {
       return () => window.clearTimeout(doneTimer);
     }
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return undefined;
+      // No entrance to play: the settled line is already up, so close the
+      // waterfall now rather than leave the cheetah on its fallback timer.
+      const doneTimer = window.setTimeout(
+        () => window.dispatchEvent(new Event(WATERFALL_DONE_EVENT)),
+        0
+      );
+      return () => window.clearTimeout(doneTimer);
     }
     let cancelled = false;
     let started = false;
     let timer = 0;
     let leadTimer = 0;
     setSegments({ settled: "", glow: "", noise: "", old: "" });
+    // The line is blank until the entrance runs; a tap in that window would
+    // start a flip sweep that races the entrance for the same segments.
+    machine.busy = true;
     const begin = () => {
       if (cancelled || started) return;
       started = true;

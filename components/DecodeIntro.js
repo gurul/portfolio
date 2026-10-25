@@ -51,18 +51,21 @@ export default function DecodeIntro({
         window.dispatchEvent(new Event(finalLeadEvent));
       }
     };
-    if (key && doneKeys.has(key)) {
-      // Already decoded this visit: skip the sweep but still report done
-      // (deferred past mount) so waterfall listeners settle instantly
-      // instead of waiting out their fallback timers.
+    // Skip the sweep but still report done (deferred past mount) so
+    // waterfall listeners settle instantly instead of waiting out their
+    // fallback timers.
+    const reportDoneWithoutSweep = () => {
       const timer = window.setTimeout(dispatchDone, 0);
       return () => window.clearTimeout(timer);
-    }
+    };
+    // Already decoded this visit.
+    if (key && doneKeys.has(key)) return reportDoneWithoutSweep();
+    // Reduced motion shows the text as served, so its step is already over.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return undefined;
+      return reportDoneWithoutSweep();
     }
     const roots = Array.from(document.querySelectorAll(selector));
-    if (!roots.length) return undefined;
+    if (!roots.length) return reportDoneWithoutSweep();
     return decodeSweep(roots, {
       exclude,
       reveal,
