@@ -152,15 +152,19 @@ export default async function AboutPage() {
           <img
             className="commit-history-image"
             src="https://ghchart.rshah.org/gurul"
+            width={663}
+            height={104}
             alt="GitHub contribution chart for gurul, cropped to the last six months"
           />
         </div>
 
         <div className="commit-history-meta">
-          <p className="commit-history-count">
-            <span>{yearContributionCount} contributions</span>
-            <span>in the last year</span>
-          </p>
+          {yearContributionCount !== null && (
+            <p className="commit-history-count">
+              <span>{yearContributionCount} contributions</span>
+              <span>in the last year</span>
+            </p>
+          )}
         </div>
       </section>
 

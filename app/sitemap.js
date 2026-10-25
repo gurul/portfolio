@@ -1,5 +1,8 @@
 import { getSiteUrl } from "../lib/site";
 
+// Only routes that exist under app/. "/" serves the about page, whose
+// canonical URL is /about, so "/" is not listed separately.
+
 const routes = [
   {
     path: "/about",
@@ -20,16 +23,6 @@ const routes = [
     path: "/research",
     changeFrequency: "monthly",
     priority: 0.9,
-  },
-  {
-    path: "/blog/cauldron",
-    changeFrequency: "yearly",
-    priority: 0.7,
-  },
-  {
-    path: "/blog/the-voice-with-vision",
-    changeFrequency: "yearly",
-    priority: 0.7,
   },
 ];
 

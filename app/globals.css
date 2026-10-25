@@ -403,6 +403,44 @@ html.intro-ready .star-bg {
   }
 }
 
+/* Same path, on the compositor: each head stays at its start edge and
+   translates by the full height/width of .crosshair (cqh/cqw), so the
+   motion no longer runs layout on the main thread every frame while the
+   page hydrates. Browsers without container units keep top/left above. */
+@supports (width: 1cqw) {
+  .crosshair {
+    container-type: size;
+  }
+
+  .crosshair::before {
+    top: -2px;
+    animation-name: crosshair-meteor-v-t, crosshair-meteor-settle;
+  }
+
+  .crosshair::after {
+    left: -2px;
+    animation-name: crosshair-meteor-h-t, crosshair-meteor-settle;
+  }
+}
+
+@keyframes crosshair-meteor-v-t {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100cqh);
+  }
+}
+
+@keyframes crosshair-meteor-h-t {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100cqw);
+  }
+}
+
 @keyframes crosshair-meteor-settle {
   from {
     opacity: 1;
@@ -644,9 +682,7 @@ html.intro-ready .page-shell {
 .cheetah-theme-active .currently-reading__label,
 .cheetah-theme-active .site-nav__link,
 .cheetah-theme-active .site-nav__link.is-active,
-.cheetah-theme-active .projects-page-title a,
-.cheetah-theme-active .blog-title-link,
-.cheetah-theme-active .blog-post-title {
+.cheetah-theme-active .projects-page-title a {
   font-weight: 700;
 }
 
@@ -800,25 +836,6 @@ html.route-fit-overflow .page-shell {
   transition: none;
 }
 
-.gif-ascii-source {
-  display: none;
-}
-
-.projects-page-section {
-  display: grid;
-  gap: 0.75rem;
-  margin: 0 0 1.65rem;
-}
-
-.projects-page-heading {
-  margin: 0;
-  color: var(--accent);
-  font-size: clamp(0.91rem, 0.78rem + 0.29vw, 1.24rem);
-  line-height: 1.45;
-  letter-spacing: 0.01em;
-  text-transform: lowercase;
-}
-
 .projects-page-list {
   display: grid;
   gap: 0.75rem;
@@ -832,20 +849,6 @@ html.route-fit-overflow .page-shell {
 }
 
 .projects-page-title a {
-  color: var(--accent);
-}
-
-.blog-list {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.blog-list-item {
-  margin: 0;
-}
-
-.blog-title-link,
-.blog-post-title {
   color: var(--accent);
 }
 
@@ -1058,11 +1061,6 @@ html.route-fit-overflow .page-shell {
     font-size: 0.8rem;
     line-height: 1.4;
     margin-bottom: 0.65rem;
-  }
-  .route-about .intro-grid {
-    margin-top: calc(
-      var(--crosshair-y) + var(--crosshair-copy-gap-y) + 2.4rem
-    );
   }
 
   .commit-history {
