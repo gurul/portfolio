@@ -176,7 +176,7 @@ a {
   z-index: 0;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 2000ms ease 900ms;
+  transition: opacity 1200ms ease 300ms;
 }
 
 html.intro-ready .star-bg {
@@ -297,8 +297,8 @@ html.intro-ready .star-bg {
   height: 100%;
   transform: translateX(-50%);
   animation:
-    crosshair-draw-v 1375ms cubic-bezier(0.22, 1, 0.36, 1) both,
-    crosshair-flash 1300ms ease-out 1375ms both;
+    crosshair-draw-v 900ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    crosshair-flash 900ms ease-out 900ms both;
 }
 
 .crosshair__line--h {
@@ -308,8 +308,8 @@ html.intro-ready .star-bg {
   height: var(--crosshair-rail, 18px);
   transform: translateY(-50%);
   animation:
-    crosshair-draw-h 1375ms cubic-bezier(0.22, 1, 0.36, 1) both,
-    crosshair-flash 1300ms ease-out 1375ms both;
+    crosshair-draw-h 900ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    crosshair-flash 900ms ease-out 900ms both;
 }
 
 .crosshair__helix {
@@ -366,8 +366,8 @@ html.intro-ready .star-bg {
     0 -18px 16px 2px rgba(var(--crosshair-dot), 0.1),
     0 -32px 22px 3px rgba(var(--crosshair-dot), 0.05);
   animation:
-    crosshair-meteor-v 1375ms cubic-bezier(0.22, 1, 0.36, 1) both,
-    crosshair-meteor-settle 350ms ease-out 1375ms forwards;
+    crosshair-meteor-v 900ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    crosshair-meteor-settle 350ms ease-out 900ms forwards;
 }
 
 .crosshair::after {
@@ -380,8 +380,8 @@ html.intro-ready .star-bg {
     -18px 0 16px 2px rgba(var(--crosshair-dot), 0.1),
     -32px 0 22px 3px rgba(var(--crosshair-dot), 0.05);
   animation:
-    crosshair-meteor-h 1375ms cubic-bezier(0.22, 1, 0.36, 1) both,
-    crosshair-meteor-settle 350ms ease-out 1375ms forwards;
+    crosshair-meteor-h 900ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    crosshair-meteor-settle 350ms ease-out 900ms forwards;
 }
 
 @keyframes crosshair-meteor-v {
@@ -422,8 +422,8 @@ html.intro-ready .star-bg {
   height: 2.42rem;
   margin: -1.21rem 0 0 -1.21rem;
   animation:
-    crosshair-sun-ignite 1000ms cubic-bezier(0.22, 1, 0.36, 1) 1375ms both,
-    crosshair-sun-breathe 5200ms ease-in-out 2375ms infinite;
+    crosshair-sun-ignite 700ms cubic-bezier(0.22, 1, 0.36, 1) 900ms both,
+    crosshair-sun-breathe 5200ms ease-in-out 1600ms infinite;
 }
 
 /* The original orb's radiant halo, burning behind the glyph — the same
@@ -584,7 +584,7 @@ html:not(.intro-ready) .crosshair::after {
 .site-nav,
 .page-shell {
   opacity: 0;
-  transition: opacity 800ms ease 200ms;
+  transition: opacity 300ms ease;
 }
 
 html.intro-ready .site-nav,
