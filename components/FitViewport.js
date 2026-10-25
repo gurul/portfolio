@@ -18,6 +18,9 @@ const MIN_FIT = 0.74;
 const BOTTOM_GAP_PX = 12;
 const CHEETAH_GAP_PX = 12;
 const SOLID_SELECTOR = "img, svg, canvas, video, .commit-history-viewport";
+// Lines that reserve their height before their text arrives (the narratives
+// line fills in after the page decode). Their content box counts as painted.
+const RESERVED_SELECTOR = ".currently-reading";
 
 // Where the cheetah sits while fixed to the viewport, worked out from its
 // computed offsets so the answer holds even while it is docked.
@@ -36,16 +39,32 @@ function cheetahRect(cheetah) {
   };
 }
 
-// Document-space boxes of what the copy actually paints: each line of text
-// and each solid element. Block boxes are skipped, so a short line beside
-// the cheetah does not count as touching it.
-function contentRects(column) {
+// Document-space boxes of what the copy actually paints near `area`: each
+// line of text and each solid element. Block boxes are skipped, so a short
+// line beside the cheetah does not count as touching it. Subtrees whose box
+// misses `area` are skipped whole, so a fit walks only the paragraph or two
+// that share space with the cheetah instead of every text node on the page.
+function paintedRects(column, area) {
   const rects = [];
   const offsetY = window.scrollY;
+  const toPage = (box) => ({
+    left: box.left,
+    right: box.right,
+    top: box.top + offsetY,
+    bottom: box.bottom + offsetY,
+  });
   const range = document.createRange();
   const walker = document.createTreeWalker(
     column,
     NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT,
+    {
+      acceptNode(node) {
+        if (node.nodeType !== Node.ELEMENT_NODE) return NodeFilter.FILTER_ACCEPT;
+        return overlaps(toPage(node.getBoundingClientRect()), area)
+          ? NodeFilter.FILTER_ACCEPT
+          : NodeFilter.FILTER_REJECT;
+      },
+    },
   );
   let node;
   while ((node = walker.nextNode())) {
@@ -56,18 +75,26 @@ function contentRects(column) {
       boxes = range.getClientRects();
     } else if (node.matches(SOLID_SELECTOR)) {
       boxes = node.getClientRects();
+    } else if (node.matches(RESERVED_SELECTOR)) {
+      // Drop the right padding: on phones it is the gap that already keeps
+      // this line clear of the cheetah.
+      const box = node.getBoundingClientRect();
+      const padRight = parseFloat(getComputedStyle(node).paddingRight) || 0;
+      boxes = [
+        {
+          left: box.left,
+          right: box.right - padRight,
+          top: box.top,
+          bottom: box.bottom,
+          width: box.width - padRight,
+          height: box.height,
+        },
+      ];
     } else {
       continue;
     }
     for (const box of boxes) {
-      if (box.width && box.height) {
-        rects.push({
-          left: box.left,
-          right: box.right,
-          top: box.top + offsetY,
-          bottom: box.bottom + offsetY,
-        });
-      }
+      if (box.width && box.height) rects.push(toPage(box));
     }
   }
   return rects;
@@ -143,10 +170,15 @@ export default function FitViewport() {
       };
       const fitsAt = (scale) => {
         applyScale(scale);
-        const rects = contentRects(column);
-        const bottom = rects.reduce((max, r) => Math.max(max, r.bottom), 0);
-        if (bottom > limit) return false;
-        return !cheetahBox || !rects.some((r) => overlaps(r, cheetahBox));
+        // The column's own box, so space a line reserves before its text
+        // arrives still has to fit on screen.
+        if (column.getBoundingClientRect().bottom + window.scrollY > limit) {
+          return false;
+        }
+        return (
+          !cheetahBox ||
+          !paintedRects(column, cheetahBox).some((r) => overlaps(r, cheetahBox))
+        );
       };
       // Shrinking re-wraps lines, so height isn't linear in scale: search for
       // the largest scale that fits rather than dividing once. `lo` fits and

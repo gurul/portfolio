@@ -641,9 +641,9 @@ export default function GifAsciiPlayer() {
 
       // Process frames in short time slices, yielding to the next animation
       // frame in between. A single synchronous pass over every frame blocks
-      // the main thread long enough that the crosshair meteors (which
-      // animate top/left on the main thread) skip their opening frames and
-      // appear to start mid-screen instead of from the corner. A slow phone
+      // the main thread long enough to drop visible frames from the intro
+      // (and, where the meteors fall back to animating top/left, to make
+      // them start mid-screen instead of from the corner). A slow phone
       // still gets one frame per slice; a fast one finishes in fewer
       // animation frames, so the frames are ready before the reveal cue.
       const frames = [];

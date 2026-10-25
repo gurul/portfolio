@@ -2,12 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  experimental: {
-    // The whole stylesheet is ~18 KB (5 KB gzipped). Inlining it into the
-    // HTML removes the one render-blocking request before first paint, which
-    // is a full round trip on a phone.
-    inlineCss: true,
-  },
+  // experimental.inlineCss was tried and left off: it saves the stylesheet
+  // request, but the CSS then ships twice in the HTML (style tag + RSC
+  // payload) and parsing it adds a ~100 ms main-thread task at load on a
+  // throttled phone.
   // Files in public/ are served with max-age=0 by default, so every repeat
   // visit revalidates each cheetah frame and the sun mask. They change only
   // with a deploy; an hour fresh plus a week of background revalidation
