@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
+import { isPhone } from "../lib/phone";
+
 /**
  * The starfield background canvas. Fixed behind every other layer (negative
  * z-index keeps it under even the z-0 ascii art), pointer-transparent, and
@@ -20,7 +22,7 @@ export default function StarfieldBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (!navigator.gpu) return;
+    if (!navigator.gpu || isPhone()) return;
 
     let stop = null;
     let cancelled = false;

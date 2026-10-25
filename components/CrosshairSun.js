@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { isPhone } from "../lib/phone";
+
 /**
  * The sun on the crosshair intersection. The CSS sun (corona + spinning
  * glyph) ignites exactly as before; once the radiance-cascades field has
@@ -25,7 +27,7 @@ export default function CrosshairSun() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (!navigator.gpu) return;
+    if (!navigator.gpu || isPhone()) return;
 
     let stop = null;
     let cancelled = false;

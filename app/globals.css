@@ -186,6 +186,15 @@ html.intro-ready .star-bg {
   }
 }
 
+/* Phones get the lighter page (see lib/phone.js): the starfield never draws
+   there, and fading in its empty full-screen canvas alone froze iOS Safari
+   for ~120 ms just as the cheetah arrived. */
+@media (hover: none) and (pointer: coarse) {
+  .star-bg {
+    display: none;
+  }
+}
+
 .page-shell {
   position: relative;
   z-index: 1;
