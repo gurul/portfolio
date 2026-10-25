@@ -50,6 +50,11 @@ const DECODE_BAND = 18;
 // with a soft halo — the same phosphor trail the text decode uses.
 const DECODE_GLOW = 10;
 const DECODE_GLOW_BLUR = 7;
+// Room around each glyph in the glow sprite sheet for the blur to spread.
+const GLOW_PAD = 10;
+// The sweep repaints the whole grid every frame; cap it at 60fps so a 120Hz
+// screen does not pay twice for motion nobody can tell apart.
+const SWEEP_MIN_FRAME_MS = 15;
 // Noise glyphs re-roll on this clock instead of every frame, so the band
 // shimmers instead of strobing.
 const DECODE_TICK_MS = 90;
@@ -183,6 +188,11 @@ export default function GifAsciiPlayer() {
   const gridHeightRef = useRef(0);
   const themeRef = useRef("default");
   const needsRedrawRef = useRef(true);
+  // The theme accent, read once per theme change: reading computed style on
+  // every drawn frame forces a style recalc while the text decode is still
+  // mutating the page.
+  const accentRef = useRef("#ffffff");
+  const lastDrawRef = useRef(0);
   const reducedMotionRef = useRef(false);
   const decodeRef = useRef({ started: 0, eased: 1, tick: 0 });
   const [theme, setTheme] = useState("default");
@@ -232,6 +242,10 @@ export default function GifAsciiPlayer() {
 
   useEffect(() => {
     themeRef.current = theme;
+    accentRef.current =
+      getComputedStyle(document.documentElement)
+        .getPropertyValue("--accent")
+        .trim() || "#ffffff";
     needsRedrawRef.current = true;
   }, [theme]);
 
@@ -282,6 +296,47 @@ export default function GifAsciiPlayer() {
       waterfallTimer = window.setTimeout(onWaterfallCue, DECODE_FALLBACK_MS);
     });
 
+    // Device pixels per grid pixel; set by sizeCanvas.
+    let canvasScale = 1;
+    let glowSheet = null;
+    const glowSprites = (accent) => {
+      if (
+        glowSheet &&
+        glowSheet.accent === accent &&
+        glowSheet.scale === canvasScale &&
+        glowSheet.font === asciiFont
+      ) {
+        return glowSheet;
+      }
+      // Each sprite spans whole device pixels, so copying one never samples
+      // the edge of its neighbour.
+      const cellWidth = Math.ceil((CELL_WIDTH + GLOW_PAD * 2) * canvasScale);
+      const cellHeight = Math.ceil((CELL_HEIGHT + GLOW_PAD * 2) * canvasScale);
+      const sheet = document.createElement("canvas");
+      sheet.width = cellWidth * ASCII_CHARS.length;
+      sheet.height = cellHeight;
+      const sheetContext = sheet.getContext("2d");
+      sheetContext.font = asciiFont;
+      sheetContext.textBaseline = "top";
+      sheetContext.fillStyle = accent;
+      sheetContext.shadowColor = accent;
+      // shadowBlur ignores the transform, exactly as on the live canvas.
+      sheetContext.shadowBlur = DECODE_GLOW_BLUR;
+      for (let index = 0; index < ASCII_CHARS.length; index += 1) {
+        sheetContext.setTransform(canvasScale, 0, 0, canvasScale, index * cellWidth, 0);
+        sheetContext.fillText(ASCII_CHARS[index], GLOW_PAD, GLOW_PAD);
+      }
+      glowSheet = {
+        canvas: sheet,
+        cellWidth,
+        cellHeight,
+        accent,
+        scale: canvasScale,
+        font: asciiFont,
+      };
+      return glowSheet;
+    };
+
     const drawFrame = (frame) => {
       if (!frame) return;
 
@@ -289,9 +344,7 @@ export default function GifAsciiPlayer() {
       const cssWidth = GRID_WIDTH * CELL_WIDTH;
       const cssHeight = gridHeight * CELL_HEIGHT;
 
-      const rootStyles = getComputedStyle(document.documentElement);
-      const themeAccent =
-        rootStyles.getPropertyValue("--accent").trim() || "#ffffff";
+      const themeAccent = accentRef.current;
       // Transparent clear, not a --bg fill: the starfield lives beneath this
       // canvas and must show through between the glyphs.
       context.clearRect(0, 0, cssWidth, cssHeight);
@@ -404,13 +457,25 @@ export default function GifAsciiPlayer() {
       }
 
       if (glowCells.length > 0) {
+        // Blurred shadows are slow to draw (Safari most of all), so each
+        // glyph's glow is drawn once into a sprite sheet and copied from there.
+        const sprites = glowSprites(themeAccent);
+        const spriteWidth = sprites.cellWidth / sprites.scale;
+        const spriteHeight = sprites.cellHeight / sprites.scale;
         context.save();
-        context.fillStyle = themeAccent;
-        context.shadowColor = themeAccent;
-        context.shadowBlur = DECODE_GLOW_BLUR;
         for (const [x, y, charIndex, alpha] of glowCells) {
           context.globalAlpha = alpha;
-          context.fillText(ASCII_CHARS[charIndex], x * CELL_WIDTH, y * CELL_HEIGHT);
+          context.drawImage(
+            sprites.canvas,
+            charIndex * sprites.cellWidth,
+            0,
+            sprites.cellWidth,
+            sprites.cellHeight,
+            x * CELL_WIDTH - GLOW_PAD,
+            y * CELL_HEIGHT - GLOW_PAD,
+            spriteWidth,
+            spriteHeight,
+          );
         }
         context.restore();
       }
@@ -442,7 +507,7 @@ export default function GifAsciiPlayer() {
       );
       gridHeightRef.current = gridHeight;
 
-      // Process frames in small batches with a rAF yield between them. A
+      // Process one frame per animation frame, yielding in between. A
       // single synchronous pass over every frame blocks the main thread
       // long enough that the crosshair meteors (which animate top/left on
       // the main thread) skip their opening frames and appear to start
@@ -454,10 +519,8 @@ export default function GifAsciiPlayer() {
         const usable = image.naturalWidth > 0;
         frames.push(usable ? computeFrameCells(image, offscreenContext, gridHeight) : null);
         ghosts.push(usable ? buildGhost(image) : null);
-        if ((index + 1) % 3 === 0) {
-          await new Promise((resolve) => requestAnimationFrame(resolve));
-          if (!active) return;
-        }
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+        if (!active) return;
       }
 
       // Hold the reveal until the shared intro gate opens, so the cheetah
@@ -498,6 +561,7 @@ export default function GifAsciiPlayer() {
       canvas.width = Math.round(GRID_WIDTH * CELL_WIDTH * scale);
       canvas.height = Math.round(gridHeight * CELL_HEIGHT * scale);
       context.setTransform(scale, 0, 0, scale, 0, 0);
+      canvasScale = scale;
       needsRedrawRef.current = true;
     };
 
@@ -520,7 +584,7 @@ export default function GifAsciiPlayer() {
       }
 
       const decode = decodeRef.current;
-      if (decode.eased < 1) {
+      if (decode.eased < 1 && time - lastDrawRef.current >= SWEEP_MIN_FRAME_MS) {
         const t = clamp((time - decode.started) / DECODE_MS, 0, 1);
         decode.eased = t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
         decode.tick = (time / DECODE_TICK_MS) | 0;
@@ -543,6 +607,7 @@ export default function GifAsciiPlayer() {
       if (needsRedrawRef.current) {
         drawFrame(frames[frameIndexRef.current] ?? frames.find(Boolean));
         needsRedrawRef.current = false;
+        lastDrawRef.current = time;
       }
     };
 

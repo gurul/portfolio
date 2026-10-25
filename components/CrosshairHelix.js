@@ -387,8 +387,26 @@ export default function CrosshairHelix({ orientation = "horizontal" }) {
     gl.enableVertexAttribArray(aInfoLoc);
     gl.enableVertexAttribArray(aOffLoc);
 
+    // The rail's box, refreshed only when it actually resizes. Reading it on
+    // every frame forced a layout per frame while the text decode was still
+    // rewriting the page.
+    // Kept in page coordinates: the crosshair scrolls with the page.
+    const measure = () => {
+      const box = canvas.getBoundingClientRect();
+      return {
+        width: box.width,
+        height: box.height,
+        left: box.left + window.scrollX,
+        top: box.top + window.scrollY,
+      };
+    };
+    let rect = measure();
+    const sizeObserver = new ResizeObserver(() => {
+      rect = measure();
+    });
+    sizeObserver.observe(canvas);
+
     const syncSize = () => {
-      const rect = canvas.getBoundingClientRect();
       if (rect.width < 1 || rect.height < 1) return false;
 
       dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
@@ -473,11 +491,10 @@ export default function CrosshairHelix({ orientation = "horizontal" }) {
       gl.uniform3f(uColor, color[0], color[1], color[2]);
 
       if (pointer.seen) {
-        const rect = canvas.getBoundingClientRect();
         gl.uniform2f(
           uCursor,
-          (pointer.x - rect.left) * dpr - canvas.width / 2,
-          -((pointer.y - rect.top) * dpr - canvas.height / 2),
+          (pointer.x - (rect.left - window.scrollX)) * dpr - canvas.width / 2,
+          -((pointer.y - (rect.top - window.scrollY)) * dpr - canvas.height / 2),
         );
         gl.uniform1f(uHover, 1);
       } else {
@@ -492,6 +509,7 @@ export default function CrosshairHelix({ orientation = "horizontal" }) {
 
     return () => {
       cancelAnimationFrame(raf);
+      sizeObserver.disconnect();
       themeObserver.disconnect();
       window.removeEventListener("pointermove", onPointerMove);
       document.removeEventListener("pointerleave", onPointerLeave);
