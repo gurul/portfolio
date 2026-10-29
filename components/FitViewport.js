@@ -29,6 +29,29 @@ const SOLID_SELECTOR = "img, svg, canvas, video, .commit-history-viewport";
 // in characters of their monospaced font as data-reserve-ch.
 const RESERVED_SELECTOR = "[data-reserve-ch]";
 
+// The narrowest cheetah any route has needed at each viewport size. Every
+// route uses it, so the cheetah keeps one size across tabs instead of
+// growing back on pages whose copy leaves it more room. Narrowing only moves
+// its top-left corner in, so a width that cleared one page clears them all.
+const WIDTH_STORE_KEY = "cheetah-fit-widths";
+let sharedWidths = null;
+function loadSharedWidths() {
+  if (sharedWidths) return sharedWidths;
+  try {
+    sharedWidths = JSON.parse(window.sessionStorage.getItem(WIDTH_STORE_KEY)) || {};
+  } catch {
+    sharedWidths = {};
+  }
+  return sharedWidths;
+}
+function saveSharedWidths() {
+  try {
+    window.sessionStorage.setItem(WIDTH_STORE_KEY, JSON.stringify(sharedWidths));
+  } catch {
+    // Private mode or blocked storage: the in-memory copy still covers tabs.
+  }
+}
+
 // Where the cheetah sits while fixed to the viewport, worked out from its
 // computed offsets so the answer holds even while it is docked.
 function cheetahRect(cheetah) {
@@ -267,7 +290,20 @@ export default function FitViewport() {
       // Below the floor the copy stays at the floor and the page scrolls,
       // with the cheetah docked after it at full size.
       applyScale(scale ?? MIN_FIT);
-      if (cheetah) cheetahAt(scale === null ? fullWidth : cheetahWidthFor());
+      if (cheetah) {
+        if (scale === null) {
+          cheetahAt(fullWidth);
+        } else {
+          const widths = loadSharedWidths();
+          const sizeKey = `${html.clientWidth}x${window.innerHeight}`;
+          const width = Math.min(cheetahWidthFor(), widths[sizeKey] ?? fullWidth);
+          if (widths[sizeKey] !== width) {
+            widths[sizeKey] = width;
+            saveSharedWidths();
+          }
+          cheetahAt(width);
+        }
+      }
       lastScale = scale;
       const overflows = scale === null;
       if (overflows !== overflowing) {
