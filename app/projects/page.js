@@ -27,6 +27,12 @@ const projects = [
     lines: [],
   },
   {
+    name: "debrief",
+    href: "https://github.com/gurul/claude-debrief",
+    description: "self-curating memory for coding agents",
+    lines: [],
+  },
+  {
     name: "heylily",
     href: "https://heylily.vercel.app/",
     description: "real-time call safety",
@@ -36,12 +42,6 @@ const projects = [
     name: "harborline",
     href: "https://github.com/gurul/harborline",
     description: "natural disaster response",
-    lines: [],
-  },
-  {
-    name: "debrief",
-    href: "https://github.com/gurul/claude-debrief",
-    description: "self-curating memory for coding agents",
     lines: [],
   },
   {
