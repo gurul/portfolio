@@ -8,7 +8,8 @@ import GifAsciiPlayer from "../components/GifAsciiPlayer";
 import IntroGate from "../components/IntroGate";
 import RouteMode from "../components/RouteMode";
 import SiteNav from "../components/SiteNav";
-import { getMetadataBase, SITE_DESCRIPTION, SITE_NAME } from "../lib/site";
+import { PERSON, PROFILES } from "../lib/content";
+import { getMetadataBase, getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from "../lib/site";
 import "./globals.css";
 
 // Italic is used on first view (the swipe hint, the contribution count, the
@@ -23,6 +24,12 @@ export const metadata = {
   metadataBase: getMetadataBase(),
   title: SITE_NAME,
   description: SITE_DESCRIPTION,
+  authors: [{ name: PERSON.name, url: `${getSiteUrl()}/about` }],
+  creator: PERSON.name,
+  // Bing Webmaster Tools ownership check; set the token in Vercel's env.
+  ...(process.env.BING_SITE_VERIFICATION
+    ? { verification: { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } } }
+    : {}),
   openGraph: {
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
@@ -48,6 +55,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={jetBrainsMono.className}>
+        {/* React hoists these into <head>: each profile is the same person. */}
+        {PROFILES.map((profile) => (
+          <link key={profile.key} rel="me" href={profile.href} />
+        ))}
         <noscript>
           <style>{`.site-nav, .page-shell { opacity: 1 !important; }`}</style>
         </noscript>

@@ -1,107 +1,22 @@
+import LinkList from "../../components/LinkList";
 import PageScaffold from "../../components/PageScaffold";
+import { PROJECTS } from "../../lib/content";
 import { buildPageMetadata } from "../../lib/metadata";
+import { JsonLd } from "../../lib/structuredData";
 
+// The list itself lives in lib/content.js, shared with the JSON-LD and /llms.txt.
 export const metadata = buildPageMetadata({
   path: "/projects",
   title: "projects",
-  description: "Projects built by Gurucharan Lingamallu.",
+  description:
+    "Projects built by Gurucharan Lingamallu (Guru): personal agents, memory infrastructure for AI, robotics, hardware tooling and developer tools.",
 });
-
-const projects = [
-  {
-    name: "eve",
-    href: "https://github.com/gurul/eve_01",
-    description: "embodied personal agent",
-    lines: [],
-  },
-  {
-    name: "storeybox",
-    href: "https://storeybox.co",
-    description: "multimodal memory infrastructure",
-    lines: [],
-  },
-  {
-    name: "handyman",
-    href: "https://github.com/gurul/handyman",
-    description: "self-generating product tours",
-    lines: [],
-  },
-  {
-    name: "debrief",
-    href: "https://github.com/gurul/claude-debrief",
-    description: "self-curating memory for coding agents",
-    lines: [],
-  },
-  {
-    name: "heylily",
-    href: "https://heylily.vercel.app/",
-    description: "real-time call safety",
-    lines: [],
-  },
-  {
-    name: "harborline",
-    href: "https://github.com/gurul/harborline",
-    description: "natural disaster response",
-    lines: [],
-  },
-  {
-    name: "pika",
-    href: "https://github.com/gurul/pika",
-    description: "autonomous car",
-    lines: [],
-  },
-  {
-    name: "cameraboi",
-    href: "https://github.com/gurul/cameraboi",
-    description: "any camera as a tool call",
-    lines: [],
-  },
-  {
-    name: "hwlog",
-    href: "https://github.com/gurul/hardware-logging",
-    description: "serial logging for debugging firmware",
-    lines: [],
-  },
-  {
-    name: "gencad",
-    href: "https://github.com/gurul/gencad",
-    description: "parametric cad from a prompt",
-    lines: [],
-  },
-  {
-    name: "leap",
-    href: "https://github.com/gurul/Leap",
-    description: "hand gestures as macos input",
-    lines: [],
-  },
-  {
-    name: "slideflow",
-    href: "https://slideflow1.vercel.app/",
-    description: "simple presentation helper",
-    lines: [],
-  },
-];
 
 export default function ProjectsPage() {
   return (
     <PageScaffold>
-      <div className="projects-page-list" aria-label="Projects">
-        {projects.map((item) => (
-          <article key={item.name} className="projects-page-item">
-            <p className="projects-page-title">
-              <a href={item.href} target="_blank" rel="noreferrer">
-                {item.name}
-              </a>{" "}
-              — {item.description}
-            </p>
-            {item.lines.map((line) => (
-              <p key={line} className="projects-page-line">
-                {line}
-              </p>
-            ))}
-          </article>
-        ))}
-      </div>
+      <JsonLd path="/projects" />
+      <LinkList items={PROJECTS} label="Projects" />
     </PageScaffold>
   );
 }

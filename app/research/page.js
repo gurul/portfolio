@@ -1,41 +1,22 @@
+import LinkList from "../../components/LinkList";
 import PageScaffold from "../../components/PageScaffold";
+import { RESEARCH } from "../../lib/content";
 import { buildPageMetadata } from "../../lib/metadata";
+import { JsonLd } from "../../lib/structuredData";
 
+// The list itself lives in lib/content.js, shared with the JSON-LD and /llms.txt.
 export const metadata = buildPageMetadata({
   path: "/research",
   title: "research",
-  description: "Research and academic publications by Gurucharan Lingamallu.",
+  description:
+    "Research and academic publications by Gurucharan Lingamallu (Guru), including work on open data and diversity in clinical AI (PLOS Digital Health).",
 });
-
-const research = [
-  {
-    name: "diversity",
-    href: "https://doi.org/10.1371/journal.pdig.0000486",
-    description: "open data in clinical ai",
-    lines: [],
-  },
-];
 
 export default function ResearchPage() {
   return (
     <PageScaffold>
-      <div className="projects-page-list" aria-label="Research">
-        {research.map((item) => (
-          <article key={item.name} className="projects-page-item">
-            <p className="projects-page-title">
-              <a href={item.href} target="_blank" rel="noreferrer">
-                {item.name}
-              </a>{" "}
-              — {item.description}
-            </p>
-            {item.lines.map((line) => (
-              <p key={line} className="projects-page-line">
-                {line}
-              </p>
-            ))}
-          </article>
-        ))}
-      </div>
+      <JsonLd path="/research" />
+      <LinkList items={RESEARCH} label="Research" />
     </PageScaffold>
   );
 }

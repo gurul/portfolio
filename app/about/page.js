@@ -1,7 +1,10 @@
+import { Fragment } from "react";
 import ExperiencingNarratives from "../../components/ExperiencingNarratives";
 import PageScaffold from "../../components/PageScaffold";
 import { getYearContributionCount } from "../../lib/github";
+import { INSPIRATION_LINKS, NAME_LINK, PERSON, PROFILES } from "../../lib/content";
 import { buildPageMetadata } from "../../lib/metadata";
+import { JsonLd } from "../../lib/structuredData";
 
 // Newest first; shown after the static "narratives experienced:" label.
 const NARRATIVES = [
@@ -44,7 +47,7 @@ export const revalidate = 3600;
 export const metadata = buildPageMetadata({
   path: "/about",
   description:
-    "About Gurucharan Lingamallu: builder, designer, and computer science student focused on AI, memory, and human experience.",
+    "Gurucharan Lingamallu (Guru) builds at the intersection of AI, memory, and human experience while studying Computer Science at the University of Washington.",
 });
 
 export default async function AboutPage() {
@@ -52,15 +55,16 @@ export default async function AboutPage() {
 
   return (
     <PageScaffold>
+      <JsonLd path="/about" />
       <p>
         My name is{" "}
         <a
           className="name-link"
-          href="https://www.instagram.com/gurulingamallu/"
+          href={NAME_LINK}
           target="_blank"
           rel="noreferrer"
         >
-          Sri Surya Gurucharan Lingamallu
+          {PERSON.fullName}
         </a>
         , <span className="inline-nowrap">or Guru (గురు) for short.</span>
       </p>
@@ -76,7 +80,7 @@ export default async function AboutPage() {
         I'm heavily inspired by{" "}
         <a
           className="name-link"
-          href="https://en.wikipedia.org/wiki/Leonardo_da_Vinci"
+          href={INSPIRATION_LINKS.daVinci}
           target="_blank"
           rel="noreferrer"
         >
@@ -85,7 +89,7 @@ export default async function AboutPage() {
         , the original{" "}
         <a
           className="name-link"
-          href="https://www.studentsofhistory.com/what-is-a-renaissance-man?srsltid=AfmBOoqp3BEKdw8gJWkRdU4-Q-Vm2hmjxKhM0o4dltRK-EAJcw4iiUnr"
+          href={INSPIRATION_LINKS.renaissanceMan}
           target="_blank"
           rel="noreferrer"
         >
@@ -96,55 +100,29 @@ export default async function AboutPage() {
         discipline I can reach.
       </p>
 
+      {/* rel="me" tells crawlers each profile is the same person as this site. */}
       <p>
-        <span className="inline-nowrap">
-          you can find my code on{" "}
-          <a
-            className="commit-history-link"
-            href="https://github.com/gurul"
-            target="_blank"
-            rel="noreferrer"
-          >
-            github
-          </a>
-          ,
-        </span>{" "}
-        <span className="inline-nowrap">
-          my research on{" "}
-          <a
-            className="commit-history-link"
-            href="https://orcid.org/0009-0004-5574-4696"
-            target="_blank"
-            rel="noreferrer"
-          >
-            orcid
-          </a>
-          ,
-        </span>{" "}
-        <span className="inline-nowrap">
-          my thoughts on{" "}
-          <a
-            className="commit-history-link"
-            href="https://substack.com/@gurulingamallu"
-            target="_blank"
-            rel="noreferrer"
-          >
-            substack
-          </a>
-          ,
-        </span>{" "}
-        <span className="inline-nowrap">
-          and my career on{" "}
-          <a
-            className="commit-history-link"
-            href="https://www.linkedin.com/in/gurul"
-            target="_blank"
-            rel="noreferrer"
-          >
-            linkedin
-          </a>
-          .
-        </span>
+        {PROFILES.map((profile, i) => {
+          const isLast = i === PROFILES.length - 1;
+          return (
+            <Fragment key={profile.key}>
+              <span className="inline-nowrap">
+                {isLast ? "and " : i === 0 ? "you can find " : ""}
+                {profile.lead}{" "}
+                <a
+                  className="commit-history-link"
+                  href={profile.href}
+                  target="_blank"
+                  rel="me noreferrer"
+                >
+                  {profile.label}
+                </a>
+                {isLast ? "." : ","}
+              </span>
+              {isLast ? null : " "}
+            </Fragment>
+          );
+        })}
       </p>
 
       <section className="commit-history" aria-label="GitHub commit history">

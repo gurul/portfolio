@@ -1,59 +1,22 @@
+import LinkList from "../../components/LinkList";
 import PageScaffold from "../../components/PageScaffold";
+import { COMMUNITIES } from "../../lib/content";
 import { buildPageMetadata } from "../../lib/metadata";
+import { JsonLd } from "../../lib/structuredData";
 
+// The list itself lives in lib/content.js, shared with the JSON-LD and /llms.txt.
 export const metadata = buildPageMetadata({
   path: "/communities",
   title: "communities",
-  description: "Communities built and led by Gurucharan Lingamallu.",
+  description:
+    "Communities built and led by Gurucharan Lingamallu (Guru): Shapers AI, AI Collective Seattle, Youth Tech Assembly and CSEED.",
 });
-
-const communities = [
-  {
-    name: "shapers ai",
-    href: "https://shapersai.com/",
-    description: "smb consulting",
-    lines: [],
-  },
-  {
-    name: "ai collective seattle",
-    href: "https://www.aicseattle.com/",
-    description: "local ai community",
-    lines: [],
-  },
-  {
-    name: "youth tech assembly",
-    href: "https://www.youthtechassembly.org/",
-    description: "global voice on ai",
-    lines: [],
-  },
-  {
-    name: "cseed",
-    href: "https://cseed.co",
-    description: "student innovation",
-    lines: [],
-  },
-];
 
 export default function CommunitiesPage() {
   return (
     <PageScaffold>
-      <div className="projects-page-list" aria-label="Communities">
-        {communities.map((item) => (
-          <article key={item.name} className="projects-page-item">
-            <p className="projects-page-title">
-              <a href={item.href} target="_blank" rel="noreferrer">
-                {item.name}
-              </a>{" "}
-              — {item.description}
-            </p>
-            {item.lines.map((line) => (
-              <p key={line} className="projects-page-line">
-                {line}
-              </p>
-            ))}
-          </article>
-        ))}
-      </div>
+      <JsonLd path="/communities" />
+      <LinkList items={COMMUNITIES} label="Communities" />
     </PageScaffold>
   );
 }
