@@ -39,7 +39,11 @@ export function GET() {
     ...PROJECTS.map(item),
     "",
     "## Communities",
-    ...COMMUNITIES.map(item),
+    ...COMMUNITIES.map(
+      (c) =>
+        `- [${c.name}](${c.href}): ${c.description}; Guru's role: ${c.role}` +
+        (c.start ? ` (${c.start} – ${c.end || "present"})` : ""),
+    ),
     "",
     "## Research",
     ...RESEARCH.map(
@@ -52,6 +56,10 @@ export function GET() {
     "## Background",
     ...BACKGROUND.experience.map((e) => `- ${e.title}, ${e.org} (${e.when}): ${e.what}`),
     `- ${BACKGROUND.education.degree}, ${BACKGROUND.education.school} (${BACKGROUND.education.when})`,
+    "",
+    "## Leadership",
+    ...COMMUNITIES.map((c) => `- ${c.role}, ${c.name}`),
+    ...BACKGROUND.leadership.map((l) => `- ${l.role}, ${l.org} (${l.context})`),
     "",
     "## Awards",
     ...BACKGROUND.awards.map((a) => `- ${a}`),
