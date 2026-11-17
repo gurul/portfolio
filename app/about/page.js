@@ -8,6 +8,7 @@ import { JsonLd } from "../../lib/structuredData";
 
 // Newest first; shown after the static "narratives experienced:" label.
 const NARRATIVES = [
+  { title: "you can see everything" },
   { title: "small giants" },
   { title: "peddi" },
   { title: "the joy of mathematics" },
