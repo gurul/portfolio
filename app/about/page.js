@@ -6,10 +6,15 @@ import { INSPIRATION_LINKS, NAME_LINK, PERSON, PROFILES } from "../../lib/conten
 import { buildPageMetadata } from "../../lib/metadata";
 import { JsonLd } from "../../lib/structuredData";
 
-// Newest first; shown after the static "narratives experienced:" label.
+// Shown after the static "narratives experienced:" label. The line opens on
+// the first entry, and that is locked to PINNED_NARRATIVE: it is spread in
+// ahead of the list, so adding to the list can never displace it. Everything
+// after it is newest first; add new entries at the top of the list below.
+const PINNED_NARRATIVE = { title: "small giants" };
 const NARRATIVES = [
+  PINNED_NARRATIVE,
+  { title: "islamic art" },
   { title: "you can see everything" },
-  { title: "small giants" },
   { title: "peddi" },
   { title: "the joy of mathematics" },
   { title: "machines of loving grace" },
