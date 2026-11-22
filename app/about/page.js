@@ -53,7 +53,7 @@ export const revalidate = 3600;
 export const metadata = buildPageMetadata({
   path: "/about",
   description:
-    "Gurucharan Lingamallu (Guru) builds at the intersection of AI, memory, and human experience while studying Computer Science at the University of Washington.",
+    "Gurucharan Lingamallu (Guru) builds at the intersection of AI, memory, human experience, and the physical world while studying Computer Science at the University of Washington.",
 });
 
 export default async function AboutPage() {
@@ -75,8 +75,9 @@ export default async function AboutPage() {
         , <span className="inline-nowrap">or Guru (గురు) for short.</span>
       </p>
       <p>
-        I build at the intersection of AI, memory, and human experience while
-        studying Computer Science at the University of Washington.
+        I build at the intersection of AI, memory, human experience, and the
+        physical world while studying Computer Science at the University of
+        Washington.
       </p>
       <p>
         I love reading, writing, designing, dancing, working out, playing
