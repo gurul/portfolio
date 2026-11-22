@@ -664,6 +664,8 @@ html.intro-ready .page-shell {
 
 .copy-column {
   max-width: min(100%, var(--copy-column-max-width));
+  /* Every section's first line starts the same distance under the nav. */
+  padding-top: 0.9rem;
   text-align: left;
 }
 
@@ -849,7 +851,7 @@ html.route-fit-overflow .page-shell {
 .projects-page-list {
   display: grid;
   gap: 0.3rem;
-  margin-top: 0.9rem;
+  margin-top: 0;
   max-width: 40rem;
 }
 
