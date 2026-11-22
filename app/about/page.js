@@ -53,7 +53,7 @@ export const revalidate = 3600;
 export const metadata = buildPageMetadata({
   path: "/about",
   description:
-    "Gurucharan Lingamallu (Guru) builds at the intersection of AI, memory, human experience, and the physical world while studying Computer Science at the University of Washington.",
+    "Gurucharan Lingamallu (Guru) builds at the intersection of AI, memory, human experience, and the physical world and studied Computer Science at the University of Washington.",
 });
 
 export default async function AboutPage() {
@@ -76,7 +76,7 @@ export default async function AboutPage() {
       </p>
       <p>
         I build at the intersection of AI, memory, human experience, and the
-        physical world while studying Computer Science at the University of
+        physical world and studied Computer Science at the University of
         Washington.
       </p>
       <p>
