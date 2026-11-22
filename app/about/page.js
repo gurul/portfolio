@@ -76,7 +76,7 @@ export default async function AboutPage() {
       </p>
       <p>
         I build at the intersection of AI, memory, human experience, and the
-        physical world and studied CS at the University of Washington.
+        physical world. I studied CS at the University of Washington.
       </p>
       <p>
         I love reading, writing, designing, dancing, working out, playing
