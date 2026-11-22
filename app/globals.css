@@ -848,8 +848,8 @@ html.route-fit-overflow .page-shell {
 
 .projects-page-list {
   display: grid;
-  gap: 0.75rem;
-  margin-top: 0;
+  gap: 0.3rem;
+  margin-top: 0.9rem;
   max-width: 40rem;
 }
 
